@@ -17,8 +17,8 @@ export async function renderSite(request:Request,services:Services){
  const mobile=pathname.startsWith('/wap/')||url.searchParams.get('phone')==='1'||(/Mobile|Android|iPhone|iPad/i.test(request.headers.get('user-agent')||'')&&url.searchParams.get('view')!=='desktop');
  pathname=pathname.replace(/^\/wap(?=\/|$)/,'')||'/';
  const page=Math.min(10000,Math.max(1,Number(url.searchParams.get('page')||url.searchParams.get('p'))||1));
- const repo=new ContentRepository(services.db,locale);
- const cfg=Object.fromEntries((await services.db.all('SELECT varname,value FROM jzw_config WHERE lang=1')).map(r=>[r.varname,r.value]));
+ const cfg=Object.fromEntries((await services.db.all("SELECT varname,value FROM jzw_config WHERE lang=1 UNION ALL SELECT name AS varname,value FROM cms_settings WHERE name IN ('site.revision','ui.en')")).map(r=>[r.varname,r.value]));
+ const repo=new ContentRepository(services.db,locale,cfg['site.revision']?services.config.siteUrl+'|'+cfg['site.revision']:'');
  const cats=await repo.query('SELECT * FROM jzw_category');
  const Categorys=Object.fromEntries(cats.map(r=>[r.id,{...r,catid:r.id}]));
  let route=(routes as Record<string,{entity:string,id:number}>)[pathname];
@@ -80,7 +80,7 @@ export async function renderSite(request:Request,services:Services){
  html=html.replace(/https?:\/\/(?:www\.)?hnaan\.cn(?=[/"'\s<])/gi,'');
  html=html.replace(/https?:\/\/(?:www\.)?hnionic\.cn(?=\/Uploads\/)/gi,'');
  html=html.replace(/http:\/\/(api\.map\.baidu\.com|player\.youku\.com|bdimg\.share\.baidu\.com)/g,'https://$1');
- if(locale==='en')html=await englishHTML(localizeMarketingGraphics(html),services);
+ if(locale==='en')html=await englishHTML(localizeMarketingGraphics(html),services,String(cfg['ui.en']||''));
  html=html.replace(/<html(?:\s+lang="[^"]*")?/i,'<html lang="'+locale+'"');
  const base=services.config.siteUrl.replace(/\/$/,''),canonical=base+(locale==='en'?'/en':'')+pathname;
  const translationRecord=entity==='category'&&cat?.module==='Page'?(pageRecord||record):record;
@@ -88,7 +88,7 @@ export async function renderSite(request:Request,services:Services){
  const legacyCarousel=template==='Page_about'?'<script src="/legacy-carousel.js"></script>':'';
  const seo=legacyCarousel+`<link rel="canonical" href="${escapeHTML(canonical)}"><link rel="alternate" hreflang="zh-CN" href="${escapeHTML(base+pathname)}"><link rel="alternate" hreflang="en" href="${escapeHTML(base+'/en'+pathname)}">${fallback?'<meta name="robots" content="noindex,follow">':''}<link rel="stylesheet" href="/site-migration.css"><script defer src="/site-migration.js"></script>`;
  html=html.replace('</head>',seo+'</head>');
- const other=locale==='en'?pathname:'/en'+pathname;
+ const other=(locale==='en'?pathname:'/en'+pathname)+url.search;
  html=html.replace('</body>',`<a class="site-language" href="${escapeHTML(other)}" lang="${locale==='en'?'zh-CN':'en'}">${locale==='en'?'简体中文':'English'}</a>${fallback?'<div class="translation-notice">English translation is being prepared. This page currently shows the Chinese original.</div>':''}</body>`);
  return new Response(html,{headers:{'content-type':'text/html; charset=utf-8','content-language':locale,'cache-control':'no-store','vary':'User-Agent','x-content-type-options':'nosniff','referrer-policy':'strict-origin-when-cross-origin'}});
 }
@@ -104,9 +104,9 @@ function compileEnglishUI(value:string){
  return {value,dict,pattern,script};
 }
 let compiledUI:ReturnType<typeof compileEnglishUI>|undefined;
-export async function englishHTML(html:string,services:Services){
- const custom=(await services.db.all('SELECT value FROM cms_settings WHERE name=?',['ui.en']))[0];
- const value=String(custom?.value||'');
+export async function englishHTML(html:string,services:Services,prefetchedValue?:string){
+ const custom=prefetchedValue===undefined?(await services.db.all('SELECT value FROM cms_settings WHERE name=?',['ui.en']))[0]:undefined;
+ const value=prefetchedValue??String(custom?.value||'');
  if(!compiledUI||compiledUI.value!==value)compiledUI=compileEnglishUI(value);
  const {dict,pattern,script}=compiledUI;
  if(!pattern)return html;

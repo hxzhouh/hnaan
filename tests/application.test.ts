@@ -7,6 +7,7 @@ import {passwordHash} from '../src/auth';
 import {D1DatabaseAdapter} from '../src/adapters/d1';
 import {ContentRepository} from '../src/model';
 import {englishHTML} from '../src/render';
+import {cleanHTML} from '../src/api';
 import vm from 'node:vm';
 import {localizeMarketingGraphics} from '../src/english-media';
 import type {Services} from '../src/ports';
@@ -143,4 +144,25 @@ test('English marketing artwork keeps its original photo and leaves replacement 
  assert.ok(localized.includes(original));assert.ok(localized.includes('15+ Years in Signage'));
  const custom='<img src="/Uploads/cms/new-english-banner.png" alt="New banner">';assert.equal(localizeMarketingGraphics(custom),custom);
  assert.ok(localizeMarketingGraphics('<img src="/Jzw/Tpl/Wap/Default/images/zh2.png">').includes('Unreliable quality'));
+});
+
+test('list projections omit unused rich bodies while details and explicit body queries retain them',async()=>{
+ const repo=new ContentRepository(db);
+ const list=await repo.query('SELECT * FROM jzw_article WHERE id=323');assert.equal(list.length,1);assert.ok(!('content'in list[0]));assert.ok(!('wap_content'in list[0]));assert.ok(list[0].title);
+ const detail=await repo.record('article',323);assert.ok(detail.content);
+ const explicit=await repo.query('SELECT content FROM jzw_article WHERE id=323');assert.equal(explicit[0].content,detail.content);
+});
+test('HTML cleanup preserves legacy inline styles and still rejects executable markup and URLs',()=>{
+ const style='color: #123456; font-family: Arial';
+ const safe=cleanHTML(`<p style="${style}" onclick="bad()">Safe <b>text</b></p><img src="/safe.png" onerror="bad()"><a href="javascript:bad()">link</a><script>bad()</script>`);
+ assert.ok(safe.includes(`style="${style}"`));assert.ok(safe.includes('<b>text</b>'));assert.doesNotMatch(safe,/onclick|onerror|javascript:|<script/);assert.equal(cleanHTML('Plain > text'),'Plain > text');assert.equal(cleanHTML('A & B'),'A &amp; B');
+});
+test('compiled English UI updates immediately when its stored dictionary changes',async()=>{
+ const html='<html><head></head><body>测试品牌</body></html>';
+ try{
+  await db.upsert('cms_settings',['name'],{name:'ui.en',value:JSON.stringify({'测试品牌':'First Brand'})});
+  const first=await englishHTML(html,services);assert.ok(first.includes('<body>First Brand</body>'));assert.equal(await englishHTML(html,services),first);
+  await db.upsert('cms_settings',['name'],{name:'ui.en',value:JSON.stringify({'测试品牌':'Updated Brand'})});
+  assert.ok((await englishHTML(html,services)).includes('<body>Updated Brand</body>'));
+ }finally{await db.run('DELETE FROM cms_settings WHERE name=?',['ui.en']);}
 });

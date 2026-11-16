@@ -198,3 +198,15 @@ test('mobile header icons do not defer the first banner',()=>{
  const html=prepareImageLoading('<img src="logo"><img src="phone"><img src="menu"><img src="banner"><img src="body">',4);
  assert.match(html,/<img src="banner" loading="eager">/);assert.match(html,/<img src="body" loading="lazy">/);
 });
+
+test('English title searches count and select published translations without leaking drafts',async()=>{
+ for(const entity of ['article','case','biaoshi']){
+  const source=[{id:590021,title:'中文公开标题',status:1},{id:590022,title:'中文草稿标题',status:0},{id:590023,title:'中文未译标题',status:1},{id:590024,title:'中文损坏译文',status:1}];
+  for(const row of source)await db.run(`INSERT INTO jzw_${entity} (id,title,status) VALUES (?,?,?)`,[row.id,row.title,row.status]);
+  for(const row of source)await db.upsert('cms_translations',['entity','entity_id','locale'],{entity,entity_id:row.id,locale:'en',fields:row.id===590024?'{':JSON.stringify({title:`Harbor O'Connell "North" ${row.id}`}),published:row.id===590023?0:1,updated_at:1});
+  const search=(locale:string,key:string)=>new ContentRepository(db,locale).model(entity).where({title:['like','%'+key+'%']});
+  assert.equal(await search('en','Harbor').count(),1);assert.equal(await search('en','harbor').count(),1);const rows=await search('en','Harbor').select();assert.equal(rows.length,1);assert.equal(rows[0].id,590021);assert.match(rows[0].title,/Harbor/);
+  assert.equal(await search('zh-CN','Harbor').count(),0);assert.equal(await search('en','中文公开').count(),1);assert.equal(await search('en',`O'Connell`).count(),1);assert.equal(await search('en','"North"').count(),1);
+  await db.run('UPDATE cms_translations SET published=0 WHERE entity=? AND entity_id=?',[entity,590021]);assert.equal(await search('en','Harbor').count(),0);
+ }
+});

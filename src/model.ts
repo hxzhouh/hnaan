@@ -84,7 +84,15 @@ export class LegacyModel {
  async query(sql:string){return this.repo.query(sql);}
  private build(count=false){
   const args:unknown[]=[];
-  const cond=typeof this.condition==='string'?this.condition:Object.entries(this.condition).filter(([k])=>k!=='state').map(([k,v])=>{if(Array.isArray(v)){args.push(v[1]);return identifier(k)+' LIKE ?';}args.push(v);return identifier(k)+'=?';}).join(' AND ')||'1';
+  const cond=typeof this.condition==='string'?this.condition:Object.entries(this.condition).filter(([k])=>k!=='state').map(([k,v])=>{if(Array.isArray(v)){
+   if(k==='title'&&this.repo.locale==='en'&&['article','case','biaoshi'].includes(this.table)){
+    args.push(v[1],this.table,'en',v[1]);
+    // Both adapters support ->> for unquoted JSON text. Keep the source-title
+    // match for Chinese keywords and only search explicitly published translations.
+    return "(title LIKE ? OR id IN (SELECT entity_id FROM cms_translations WHERE entity=? AND locale=? AND published=1 AND LOWER(CASE WHEN JSON_VALID(fields) THEN fields ->> '$.title' ELSE NULL END) LIKE LOWER(?)))";
+   }
+   args.push(v[1]);return identifier(k)+' LIKE ?';
+  }args.push(v);return identifier(k)+'=?';}).join(' AND ')||'1';
   if(!/^[a-z_]+$/.test(this.table))throw Error('Invalid model');
   return {sql:`SELECT ${count?'COUNT(*) AS count':this.fields==='*'?'*':'id,'+this.fields} FROM ${identifier('jzw_'+this.table)} WHERE ${cond}${!count&&this.ordering?' ORDER BY '+this.ordering:''}${!count&&this.window?' LIMIT '+this.window:''}`,args};
  }

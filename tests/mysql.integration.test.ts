@@ -2,6 +2,7 @@ import test from 'node:test';
 import assert from 'node:assert/strict';
 import fs from 'node:fs';
 import {MySQLDatabaseAdapter} from '../src/adapters/mysql';
+import {ContentRepository} from '../src/model';
 import {fetchApplication} from '../src/app';
 import {passwordHash} from '../src/auth';
 import type {Services} from '../src/ports';
@@ -26,6 +27,8 @@ test('MySQL 8 content, translation, draft and rate-limit lifecycle',{skip:!proce
   for(const title of ['English draft','Published English'])assert.equal((await call(`/api/admin/content/article/${id}?locale=en`,{fields:{title,content:'<p>MySQL English body</p>'},published:true},'PUT')).status,200);
   const beforeTranslation=await revision();await db.run("UPDATE cms_translations SET fields=fields WHERE entity='article' AND entity_id=?",[id]);assert.notEqual(await revision(),beforeTranslation);
   const html=await(await call('/en'+row.url)).text();assert.ok(html.includes('Published English'));assert.ok(html.includes('MySQL English body'));
+  const search=()=>new ContentRepository(db,'en').model('article').where({title:['like','%published english%']});assert.equal(await search().count(),1);assert.equal((await search().select())[0].id,id);
+  await db.run("UPDATE cms_translations SET published=0 WHERE entity='article' AND entity_id=?",[id]);assert.equal(await search().count(),0);
   await db.upsert('cms_rate_limits',['id'],{id:'mysql-test-rate',attempts:1,expires_at:9999999999},['attempts']);await db.upsert('cms_rate_limits',['id'],{id:'mysql-test-rate',attempts:1,expires_at:9999999999},['attempts']);assert.equal(Number((await db.all('SELECT attempts FROM cms_rate_limits WHERE id=?',['mysql-test-rate']))[0].attempts),2);
  }finally{await db.pool.end();}
 });

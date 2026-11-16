@@ -1,11 +1,12 @@
 import sanitize from 'sanitize-html';
 import schema from './generated/schema.json';
+import columnTypes from './generated/column-types.json';
 import { validEntity, entities, escapeHTML,ContentRepository } from './model';
 import { authenticated,cookie,equal,limited,passwordHash,sessionToken } from './auth';
 import { identifier,type Services,type Row,type Database } from './ports';
 export const json=(value:unknown,status=200,headers:Record<string,string>={})=>new Response(JSON.stringify(value),{status,headers:{'content-type':'application/json; charset=utf-8','cache-control':'no-store','x-content-type-options':'nosniff',...headers}});
 export function cleanHTML(value:string){return sanitize(value,{allowedTags:[...sanitize.defaults.allowedTags,'img','h1','h2','span','video','source','font','center'],allowedAttributes:{'*':['class','style','title'],'a':['href','target','rel'],'img':['src','alt','width','height','loading'],'video':['src','controls','poster','width','height'],'source':['src','type'],'font':['color','face','size']},allowedSchemes:['http','https','mailto','tel'],allowProtocolRelative:false});}
-const numeric=new Set(['id','catid','parentid','status','listorder','createtime','updatetime','hits','ismenu','lang','fid']);
+const isNumeric=(entity:string,key:string)=>(columnTypes as Record<string,Record<string,string>>)['jzw_'+entity]?.[key]==='number';
 async function rebuildCategories(db:Database){
  const rows=await db.all('SELECT id,parentid,child,arrparentid,arrchildid FROM jzw_category');
  for(const row of rows){
@@ -21,7 +22,7 @@ function cleanFields(entity:string,row:Row){
  const allowed=fieldsFor(entity),out:Row={};
  for(const [k,v]of Object.entries(row)){
   if(!allowed.includes(k)||k==='id')continue;
-  if(numeric.has(k)){const n=Number(v);if(!Number.isFinite(n))throw Error('Invalid number: '+k);out[k]=n;}
+  if(isNumeric(entity,k)){const n=Number(v);if(!Number.isFinite(n))throw Error('Invalid number: '+k);out[k]=n;}
   else if(['content','wap_content'].includes(k))out[k]=cleanHTML(String(v).slice(0,1500000));
   else{out[k]=sanitize(String(v),{allowedTags:[],allowedAttributes:{}}).slice(0,10000);if(['url','thumb','pic','small','link'].includes(k)&&/^\s*(javascript|data|vbscript):/i.test(out[k]))throw Error('Invalid URL');}
  }
@@ -115,7 +116,12 @@ export async function handleAPI(request:Request,s:Services){
    await s.db.upsert('cms_translations',['entity','entity_id','locale'],{entity,entity_id:id,locale:'en',fields:JSON.stringify(fields),published:body.published?1:0,updated_at:now});
    await s.db.run('INSERT INTO cms_revisions (id,entity,entity_id,locale,data,created_at) VALUES (?,?,?,?,?,?)',[crypto.randomUUID(),entity,id,locale,JSON.stringify(fields),now]);return json({ok:true,id});
   }
-  const recordId=id||1000000+crypto.getRandomValues(new Uint32Array(1))[0];
+  let recordId=id||1000000+crypto.getRandomValues(new Uint32Array(1))[0];
+  if(!id&&entity==='page'){
+   const category=(await s.db.all("SELECT id FROM jzw_category WHERE id=? AND module='Page'",[Number(body.categoryId)||0]))[0];
+   if(!category)return json({error:'请选择单页所属栏目'},400);recordId=Number(category.id);
+   if((await s.db.all('SELECT id FROM jzw_page WHERE id=?',[recordId])).length)return json({error:'该栏目已有单页，请直接编辑'},409);
+  }
   if(entity==='category'&&fields.parentid!==undefined){const rows=await s.db.all('SELECT id,parentid FROM jzw_category');let parent=Number(fields.parentid);const seen=new Set<number>();while(parent){if(parent===recordId||seen.has(parent))return json({error:'栏目不能放在自身或子栏目下面'},400);seen.add(parent);const row=rows.find(r=>Number(r.id)===parent);if(!row)return json({error:'父栏目不存在'},400);parent=Number(row.parentid);}}
   if(!id&&['article','case','biaoshi'].includes(entity)&&!(await s.db.all('SELECT id FROM jzw_category WHERE id=?',[Number(fields.catid)||0])).length)return json({error:'请选择有效的所属栏目'},400);
   if(!id&&entity==='category'){
@@ -123,7 +129,13 @@ export async function handleAPI(request:Request,s:Services){
    fields.arrchildid=String(recordId);fields.arrparentid=fields.parentid?'0,'+fields.parentid:'0';fields.child=0;fields.ismenu=1;
    fields.template_list=fields.module==='Page'?'tongdao':'list';fields.template_show='show';fields.pagesize=9;
   }
-  if(!id){const full=Object.fromEntries(fieldsFor(entity).map(k=>[k,numeric.has(k)?0:'']));Object.assign(full,fields,{id:recordId,createtime:now,updatetime:now,status:1,lang:1});if(fieldsFor(entity).includes('url')&&!full.url)full.url=`/${entity}/${recordId}.html`;await s.db.run(`INSERT INTO ${identifier(table)} (${Object.keys(full).map(identifier)}) VALUES (${Object.keys(full).map(()=>'?')})`,Object.values(full));}
+  if(!id){
+   const allowed=fieldsFor(entity),full=Object.fromEntries(allowed.map(k=>[k,isNumeric(entity,k)?0:'']));
+   for(const [k,v]of Object.entries({createtime:now,updatetime:now,status:1,lang:1}))if(allowed.includes(k))full[k]=v;
+   Object.assign(full,fields,{id:recordId});
+   if(allowed.includes('url')&&!full.url)full.url=`/${entity}/${recordId}.html`;
+   await s.db.run(`INSERT INTO ${identifier(table)} (${Object.keys(full).map(identifier)}) VALUES (${Object.keys(full).map(()=>'?')})`,Object.values(full));
+  }
   else{
    const old=(await s.db.all(`SELECT * FROM ${identifier(table)} WHERE id=?`,[id]))[0];if(!old)return json({error:'内容不存在'},404);
    await s.db.run('INSERT INTO cms_revisions (id,entity,entity_id,locale,data,created_at) VALUES (?,?,?,?,?,?)',[crypto.randomUUID(),entity,id,locale,JSON.stringify(old),now]);

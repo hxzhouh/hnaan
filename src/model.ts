@@ -17,6 +17,11 @@ export class ContentRepository {
   if(!/^\s*select\b/i.test(sql)||/;|--|\/\*|\b(union|information_schema|sqlite_master|pragma)\b/i.test(sql))throw Error('Only template SELECT queries are allowed');
   const table=sql.match(/\bfrom\s+`?(jzw_[a-z_]+)/i)?.[1];
   if(!table||!(table in schema))throw Error('Unknown public table');
+  // Old previous/next queries omitted status. Drafts must never leak through public template queries.
+  if(['jzw_article','jzw_case','jzw_biaoshi'].includes(table)){
+   const tailAt=sql.search(/\s+(ORDER\s+BY|LIMIT|OFFSET|GROUP\s+BY)\b/i),head=tailAt<0?sql:sql.slice(0,tailAt),tail=tailAt<0?'':sql.slice(tailAt);
+   sql=(/\sWHERE\s/i.test(head)?head.replace(/\sWHERE\s+([\s\S]*)/i,' WHERE ($1) AND status=1'):head+' WHERE status=1')+tail;
+  }
   const key=sql+JSON.stringify(args);if(!this.queries.has(key))this.queries.set(key,this.db.all(sql,args).then(rows=>this.translate(table,rows)));
   return this.queries.get(key)!;
  }

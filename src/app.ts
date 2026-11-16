@@ -9,7 +9,7 @@ export async function fetchApplication(request:Request,services:Services):Promis
   if(url.pathname==='/healthz')return json({ok:true});
   if(url.pathname==='/cms'||url.pathname==='/cms/')return services.assets.fetch(request);
   if(url.pathname.startsWith('/cms/')){const r=await services.assets.fetch(request);const headers=new Headers(r.headers);headers.set('cache-control','no-store');return new Response(r.body,{status:r.status,headers});}
-  if(url.pathname.startsWith('/Uploads/cms/'))return services.media.get(url.pathname,request);
+  if(url.pathname.startsWith('/Uploads/')){const asset=await services.assets.fetch(request);return asset.status===404?services.media.get(url.pathname,request):asset;}
   if(/\.(?:css|js|png|jpe?g|gif|webp|avif|svg|ico|woff2?|ttf|eot|mp4|pdf|swf)$/i.test(url.pathname))return services.assets.fetch(request);
   if(url.pathname==='/robots.txt')return new Response('User-agent: *\nAllow: /\nDisallow: /cms\nDisallow: /api/\nSitemap: '+services.config.siteUrl+'/sitemap.xml\n');
   if(url.pathname==='/sitemap.xml'){

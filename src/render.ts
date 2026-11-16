@@ -29,10 +29,12 @@ export async function renderSite(request:Request,services:Services){
  }
  if(pathname!=='/'&&pathname!=='/index.php'&&!route)return new Response(locale==='en'?'Page not found':'页面不存在',{status:404});
  const c:Row={...cfg,Categorys,_GET:Object.fromEntries(url.searchParams),_COOKIE:{},list:[],lister:[],listerb:[],listerc:[],isxcx:'',catid:0,module_name:'Article',pages:'',site_title:cfg.site_title||cfg.site_name,seo_title:cfg.site_title||cfg.site_name};
- let template='Index_index',entity='',record:Row|undefined,cat:Row|undefined;
+ let template='Index_index',entity='',record:Row|undefined,cat:Row|undefined,pageRecord:Row|undefined;
  if(route){
   entity=route.entity.replace('jzw_','');record=await repo.record(entity,route.id);
   if(!record||(entity!=='category'&&record.status!==undefined&&Number(record.status)!==1))return new Response('Not found',{status:404});
+  const savedURL=String(record.url||'').replace(/^https?:\/\/(?:www\.)?hnaan\.cn/i,'');
+  if(savedURL.startsWith('/')&&!savedURL.startsWith('//')&&savedURL!==pathname)return Response.redirect(url.origin+(locale==='en'?'/en':'')+(url.pathname.includes('/wap/')?'/wap':'')+savedURL+url.search,301);
   cat=entity==='category'?record:Categorys[record.catid];
   if(!cat)return new Response('Category not found',{status:404});
   Object.assign(c,cat,{catid:cat.id,catname:cat.catname,seo_title:cat.title||cat.catname,seo_description:cat.description||cfg.seo_description,seo_keywords:cat.keywords||cfg.seo_keywords});
@@ -40,7 +42,7 @@ export async function renderSite(request:Request,services:Services){
   if(['casebiao',''].includes(String(cat.template_list))&&String(cat.module)==='Page'){return Response.redirect(url.origin+(locale==='en'?'/en':'')+(cat.template_list==='casebiao'?'/casesearch/':'/sitemap/'),301);}
   const mod=String(cat.module||'Page');c.module_name=mod;
   if(entity==='category'){
-   if(mod==='Page'){const row=await repo.record('page',Number(cat.id));Object.assign(c,row||{});template='Page_'+(cat.template_list||'about');}
+   if(mod==='Page'){pageRecord=await repo.record('page',Number(cat.id));Object.assign(c,pageRecord||{});template='Page_'+(cat.template_list||'about');}
    else{
     const tab='jzw_'+mod.toLowerCase();
     const ids=String(cat.arrchildid||cat.id).split(',').map(Number).filter(n=>Number.isInteger(n)&&n>0);
@@ -79,8 +81,9 @@ export async function renderSite(request:Request,services:Services){
  if(locale==='en')html=await englishHTML(html,services);
  html=html.replace(/<html(?:\s+lang="[^"]*")?/i,'<html lang="'+locale+'"');
  const base=services.config.siteUrl.replace(/\/$/,''),canonical=base+(locale==='en'?'/en':'')+pathname;
- const fallback=locale==='en'&&record&&!record._translated;
- const legacyCarousel=template==='Page_about'?'<script src="/Jzw/Tpl/Home/Default/js/jquery.jcarousel.js"></script>':'';
+ const translationRecord=entity==='category'&&cat?.module==='Page'?pageRecord:record;
+ const fallback=locale==='en'&&record&&!translationRecord?._translated;
+ const legacyCarousel=template==='Page_about'?'<script src="/legacy-carousel.js"></script>':'';
  const seo=legacyCarousel+`<link rel="canonical" href="${escapeHTML(canonical)}"><link rel="alternate" hreflang="zh-CN" href="${escapeHTML(base+pathname)}"><link rel="alternate" hreflang="en" href="${escapeHTML(base+'/en'+pathname)}">${fallback?'<meta name="robots" content="noindex,follow">':''}<link rel="stylesheet" href="/site-migration.css"><script defer src="/site-migration.js"></script>`;
  html=html.replace('</head>',seo+'</head>');
  const other=locale==='en'?pathname:'/en'+pathname;

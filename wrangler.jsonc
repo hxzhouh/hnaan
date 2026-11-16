@@ -3,10 +3,32 @@
   "name": "hnaan-website",
   "main": "src/index.ts",
   "compatibility_date": "2026-11-16",
-  "compatibility_flags": ["nodejs_compat"],
-  "assets": {"directory": "./public", "binding": "ASSETS", "run_worker_first": true},
-  "d1_databases": [{"binding": "DB", "database_name": "hnaan-content", "database_id": "56da3495-984d-461c-a314-0b8a750609fb", "migrations_dir": "migrations"}],
-  "r2_buckets": [{"binding": "MEDIA", "bucket_name": "hnaan-media"}],
-  "vars": {"SITE_URL": "http://localhost:8787"},
-  "observability": {"enabled": true}
+  "compatibility_flags": [
+    "nodejs_compat"
+  ],
+  "assets": {
+    "directory": "./public",
+    "binding": "ASSETS",
+    "run_worker_first": true
+  },
+  "d1_databases": [
+    {
+      "binding": "DB",
+      "database_name": "hnaan-content",
+      "database_id": "096a71c4-910a-4578-94f1-714ff0193765",
+      "migrations_dir": "migrations"
+    }
+  ],
+  "r2_buckets": [
+    {
+      "binding": "MEDIA",
+      "bucket_name": "hnaan-media"
+    }
+  ],
+  "vars": {
+    "SITE_URL": "https://hnaan-website.372405779.workers.dev"
+  },
+  "observability": {
+    "enabled": true
+  }
 }

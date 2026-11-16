@@ -5,6 +5,7 @@ import argparse, collections, gzip, json, mimetypes, re, shutil, tarfile
 ROOT = Path(__file__).resolve().parents[1]
 parser = argparse.ArgumentParser()
 parser.add_argument('--source', default='/Users/hxzhouh/Downloads/201810aiaoni')
+parser.add_argument('--skip-assets', action='store_true')
 parser.add_argument('--backup', default='/Users/hxzhouh/Downloads/20261113143924.nb3')
 args = parser.parse_args()
 source = Path(args.source)
@@ -91,16 +92,21 @@ for dialect in ['d1','mysql']:
             statements.append('INSERT INTO cms_media (path,name,size,type,created_at) VALUES ('+','.join(literal(v,dialect) for v in row)+');')
     dest=ROOT/('migrations' if dialect=='d1' else 'migrations-mysql')
     dest.mkdir(exist_ok=True)
-    (dest/'0001_original_content.sql').write_text('\n'.join(statements)+'\n')
+    schema_statements=[s for s in statements if not s.startswith('INSERT INTO')];seed_statements=[s for s in statements if s.startswith('INSERT INTO')]
+    (dest/'0001_schema.sql').write_text('\n'.join(schema_statements)+'\n')
+    (ROOT/'seeds').mkdir(exist_ok=True)
+    (ROOT/'seeds'/('original-'+dialect+'.sql')).write_text('\n'.join(seed_statements)+'\n')
 
 allowed={'.jpg','.jpeg','.png','.gif','.webp','.svg','.ico','.css','.js','.woff','.woff2','.ttf','.eot','.otf','.mp4','.swf'}
 count=0
-for folder in ['Uploads','Jzw/Tpl/Home/Default','Jzw/Tpl/Wap/Default','Public']:
+for folder in ([] if args.skip_assets else ['Uploads','Jzw/Tpl/Home/Default','Jzw/Tpl/Wap/Default','Public']):
     for f in (source/folder).rglob('*'):
         if f.is_file() and f.suffix.lower() in allowed:
             dest=ROOT/'public'/f.relative_to(source);dest.parent.mkdir(parents=True,exist_ok=True)
             shutil.copy2(f,dest);count+=1
 shutil.copy2(source/'aiaoni.ico',ROOT/'public/aiaoni.ico')
+if args.skip_assets:
+    count=sum(1 for folder in ['Uploads','Jzw/Tpl/Home/Default','Jzw/Tpl/Wap/Default','Public'] for f in (source/folder).rglob('*') if f.is_file() and f.suffix.lower() in allowed)
 # Keep a small route manifest in application code; article bodies stay in the database.
 routes={}
 for table in ['jzw_category','jzw_article','jzw_case','jzw_biaoshi']:
@@ -108,6 +114,8 @@ for table in ['jzw_category','jzw_article','jzw_case','jzw_biaoshi']:
         url=re.sub(r'^https?://(?:www\.)?hnaan\.cn','',str(r.get('url','')))
         if url.startswith('/'):routes[url]={'entity':table,'id':r['id']}
 (ROOT/'src/generated/routes.json').write_text(json.dumps(routes,ensure_ascii=False,separators=(',',':')))
+column_types={n:{f:('number' if re.search(r'`'+re.escape(f)+r'`\s+(?:\w*int|decimal|float|double)\b',m['DDL'],re.I) else 'string') for f in m['Fields']} for n,m in meta.items()}
+(ROOT/'src/generated/column-types.json').write_text(json.dumps(column_types))
 (ROOT/'src/generated/schema.json').write_text(json.dumps({n:m['Fields'] for n,m in meta.items()},ensure_ascii=False))
 (ROOT/'src/generated/seed-summary.json').write_text(json.dumps({'tables':{n:len(rows) for n,rows in data.items()},'assets':count,'sourceDatabase':manifest['Schema']},ensure_ascii=False,indent=2))
 print(json.dumps({'tables':{n:len(rows) for n,rows in data.items()},'assets':count},ensure_ascii=False))

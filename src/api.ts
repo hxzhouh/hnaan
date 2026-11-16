@@ -5,7 +5,10 @@ import { validEntity, entities, escapeHTML,ContentRepository } from './model';
 import { authenticated,cookie,equal,limited,passwordHash,sessionToken } from './auth';
 import { identifier,type Services,type Row,type Database } from './ports';
 export const json=(value:unknown,status=200,headers:Record<string,string>={})=>new Response(JSON.stringify(value),{status,headers:{'content-type':'application/json; charset=utf-8','cache-control':'no-store','x-content-type-options':'nosniff',...headers}});
-export function cleanHTML(value:string){return sanitize(value,{allowedTags:[...sanitize.defaults.allowedTags,'img','h1','h2','span','video','source','font','center'],allowedAttributes:{'*':['class','style','title'],'a':['href','target','rel'],'img':['src','alt','width','height','loading'],'video':['src','controls','poster','width','height'],'source':['src','type'],'font':['color','face','size']},allowedSchemes:['http','https','mailto','tel'],allowProtocolRelative:false});}
+const htmlOptions={allowedTags:[...sanitize.defaults.allowedTags,'img','h1','h2','span','video','source','font','center'],allowedAttributes:{'*':['class','style','title'],'a':['href','target','rel'],'img':['src','alt','width','height','loading'],'video':['src','controls','poster','width','height'],'source':['src','type'],'font':['color','face','size']},allowedSchemes:['http','https','mailto','tel'],allowProtocolRelative:false,parseStyleAttributes:false};
+// Inline CSS is allowed by the existing policy; no CSS allowlist is configured.
+// Keep it verbatim instead of building a PostCSS tree for every legacy span.
+export function cleanHTML(value:string){return /[<&]/.test(value)?sanitize(value,htmlOptions):value;}
 export function cleanInlineHTML(value:string){return sanitize(value,{allowedTags:['span','strong','b','em','i','br'],allowedAttributes:{}});}
 const mediaURL=(path:string,s:Services)=>new URL(path,s.config.siteUrl).href;
 const isNumeric=(entity:string,key:string)=>(columnTypes as Record<string,Record<string,string>>)['jzw_'+entity]?.[key]==='number';

@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+	<include file="./Jzw/Tpl/Wap/Default/model_head.html" />
+	<link rel="stylesheet" href="/Jzw/Tpl/Wap/Default/css/Ke.css" />
+</head>
+
+<body>
+	<!--主内容-->
+	<include file="./Jzw/Tpl/Wap/Default/model_top.html" />
+	<div class="topzhanwei"></div>
+	<!--内容区-->
+	<div class="xqbt">
+		{$title}
+	</div>
+	<div class="chuanzuo">
+		<div class="chuanzuo-top">
+			创作时间：{$createtime|toDate=###,'Y-m-d'}<br />
+			项目标题：{$title}<br />
+			项目介绍：{$description}
+		</div>
+		<div class="chuanzuo-bot">
+			服务内容：<br />
+			<p> {$content}</p>
+		</div>
+	</div>
+	<div class="news-zuoze" style="padding: 0 .4rem;">
+		<p>湖南爱奥尼标识工程有限公司拥有15年标识设计经验，100多名专业生产团队。<br /><span style="color: #c31a0b;font-weight: bold;font-size: 22px;">电话：{$phone_a}</span><br /><span
+			 style="color: #c31a0b ;font-size: 22px;">网址：<a style="color: #c31a0b;" href="http://www.hnaan.cn" title="爱奥尼">www.hnaan.cn</a></span>
+			<div style="text-align: center;">
+				<img src="/Jzw/Tpl/Home/Default/images/topecode.png" style="width:160px;" />
+			</div>
+		</p>
+	</div>
+	<br />
+	<!--推荐案例-->
+	<div class="foot-case">
+		<div class="foot-case-title">推荐案例</div>
+		<div class="foot-case-main">
+			<div class="swiper-container foot-case-swi">
+				<div class="swiper-wrapper">
+					<?php
+                $Pdata=M()->query("select arrchildid from `jzw_category` where id=136");
+					$t1Arr=M('article')->query("SELECT * FROM `jzw_biaoshi` WHERE catid  in (".$Pdata[0]["arrchildid"].") and status=1 order by                                    listorder desc,createtime desc limit 0,4");
+					for($i=0;$i<count($t1Arr);$i++){
+					echo '
+					
+					<div class="swiper-slide">
+					 	<a href="'.$t1Arr[$i]["url"].'">
+						 <div class="foot-swi-in">
+				      	 	<span class="foot-swi-in-span">
+				      	 		<img src="'.$t1Arr[$i]["thumb"].'" />
+				      	 	</span>
+			      	 		<h3>'.str_cut($t1Arr[$i]["title"],30).'</h3>
+			      	 		<p>'.str_cut($t1Arr[$i]["description"],30).'</p>
+			      		 </div>
+			      	 	<a/>
+					 </div>';
+					}
+					?>
+				</div>
+				<div class="swiper-pagination"></div>
+			</div>
+		</div>
+	</div>
+	<script>
+		setTimeout(function () {
+			var swiper16 = new Swiper('.foot-case-swi', {
+				slidesPerView: 2,
+				spaceBetween: 6,
+				slidesPerGroup: 2,
+				pagination: {
+					el: '.swiper-pagination',
+				},
+			});
+		}, 100)
+	</script>
+
+
+
+
+	<div class="botzhanwei"></div>
+	<!--置顶-->
+	<div class="zhiding max-img" id="zhiding">
+		<img alt="" src="/Jzw/Tpl/Wap/Default/images/zhiding.png" />
+	</div>
+	<include file="./Jzw/Tpl/Wap/Default/model_foot.html" />
+	<!--侧导航-->
+
+
+	<!--底部样式js控制-->
+	<script>
+		$(function () {
+			$('.foot:nth-child(1)').addClass("active");
+		});
+	</script>
+	<script>
+		$(function () {
+			$(".chuanzuo-bot img").removeAttr("width");
+			$(".chuanzuo-bot img").removeAttr("height");
+			$(".chuanzuo-bot img").attr("style", "");
+		});        
+	</script>
+</body>
+
+</html>

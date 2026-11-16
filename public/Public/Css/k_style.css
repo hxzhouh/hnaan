@@ -1,0 +1,128 @@
+@charset "utf-8";
+/* CSS Document */
+
+/*全局公用样式*/
+body,h1,h2,h3,h4,h5,h6,p,ul,li,dl,dd,dt,em,i,span,a{ margin:0; padding:0;}
+h1,h2,h3,h4,h5,h6{ font-size:12px;}
+ol,li,ul{ list-style:none;}
+em,i ,span,strong{ font-style:normal;}
+body{ font-size:12px; color:#434343; font-family: "Microsoft Yahei", "sans-serif", SimSun, Arial;}
+a{ color:#434343; text-decoration:none;}
+img,input{ border: 0 none; vertical-align:middle;outline: none;}
+.clear{ width:100%; height:0; clear:both; overflow:hidden;}
+
+.nomarg { margin:0!important;}
+.nopadd { padding:0!important;}
+.nobord { border:none!important; border-bottom:none!important;}
+.noback { background:none!important;}
+
+.relative { position:relative;}
+.absolute { position:absolute;}
+.fl { float:left;}
+.fr { float:right;}
+
+
+button, input[type="button"], input[type="reset"], input[type="submit"] {
+    cursor: pointer;
+    -webkit-appearance: button;
+    -moz-appearance: button}
+button,input,select,textarea{font-size:100%;font-family:Microsoft YaHei,Tahoma,Arial,Hiragino Sans GB,\5b8b\4f53,sans-serif;outline:none}
+table{border-collapse:collapse;border-spacing:0}
+caption,em,i,th{font-style:normal;font-weight:400;}
+
+
+/*后台登陆*/
+.pc_main{
+    width:100%;
+    min-width: 1200px;
+    position: relative;
+}
+.pc_a{
+    width:100%;
+}
+.pc_a img{
+    width:100%;
+    height:auto;
+}
+.pc_b{
+    width:482px;
+    height:296px;
+    position: absolute;
+    left:50%;
+    margin-left: -241px;
+    top: 50%;
+    margin-top: -148px;
+    border:1px solid #c3cbd3;
+    box-sizing: border-box;
+    box-shadow: 0 0 40px #5d8ac1;
+    background:#fff;
+    border-radius: 10px;
+}
+.pc_b1{
+    width:100%;
+    text-align: center;
+    margin: 25px 0;
+}
+.pc_b1 img{
+    width:142px;
+    height:34px;
+    display: inline-block;
+}
+.pc_b2{
+    width:339px;
+    margin: 0 auto;
+}
+.pc_b2 li{
+    width:339px;
+    height:42px;
+    line-height: 42px;
+    margin-bottom: 24px;
+}
+.pc_b2a{
+    width:339px;
+    height:42px;
+    line-height: 42px;
+    border:none;
+    background:none;
+    padding-left: 70px;
+    box-sizing: border-box;
+    font-size: 16px;
+    color:#959094;
+    padding-right: 6px;
+}
+
+.pc_b3{
+    width:100%;
+    text-align: center;
+    margin-top: 30px;
+}
+.pc_b3 .btn{
+    width:216px;
+    height:40px;
+    display: inline-block;
+    border-radius: 6px;
+    text-align: center;
+    line-height: 40px;
+    font-size: 20px;
+    color:#fff;
+    FILTER: progid:DXImageTransform.Microsoft.Gradient(gradientType=0,startColorStr=#ffc254,endColorStr=#ff7f02); /*IE*/ 
+background:-moz-linear-gradient(top,#ffc254,#ff7f02);/*火狐*/ 
+background:-webkit-gradient(linear, 0% 0%, 0% 100%,from(#ffc254), to(#ff7f02));/*谷歌*/ 
+background-image: -webkit-gradient(linear,left bottom,left top,color-start(0, #ffc254),color-stop(1, #ff7f02));/* Safari & Chrome*/ 
+filter: progid:DXImageTransform.Microsoft.gradient(GradientType=0,startColorstr='#ffc254', endColorstr='#ff7f02'); /*IE6 & IE7*/ 
+-ms-filter: "progid:DXImageTransform.Microsoft.gradient(GradientType=0,startColorstr='#ffc254', endColorstr='#ff7f02')"; /* IE8 */ 
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+

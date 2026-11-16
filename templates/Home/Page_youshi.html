@@ -1,0 +1,629 @@
+<!DOCTYPE html>
+<html lang="zh">
+
+	<head>
+		<include file='model:head' />
+	</head>
+
+	<body>
+		<!--头部  -->
+		<header>
+			<include file='model:header' />
+		</header>
+		<!--导航-->
+		<include file='model:top' />
+		<div style='display:none;'><h1>{$catname}</h1></div> 
+		<!--banner-->
+		<div class="zt-banner">
+			<include file="model:banner" />
+			<div class="zt-banner3" style="background: none;box-shadow: none;">
+			</div>
+		</div>
+		
+
+		<!--内容-->
+		<section>
+			<!--当前位置-->
+			<div class="zt-weizhi">
+				<ul>
+					<li><a href="/" title="{$site_name}">首页</a><span> > </span> </li>
+					<li><a href="{$Categorys[136]['url']}" title="服务项目">服务项目</a><span> > </span></li>
+					<li>{$catname}</li>
+				</ul>
+				<div class="clear"></div>
+			</div>
+
+			<span class="zt3-changjia" style="width: 327px;margin-bottom: 70px;">制作案例</span>
+			
+			
+			<div class="dzinb-bottom">
+				<div class="dzinb-bottom-left">
+					<span>标识标牌分类</span>
+					<ul>
+						<li class="bs-active">景区标识标牌制作</li>
+						<li>商业标识标牌制作</li>
+						<li>医院标识标牌制作</li>
+						<li>学校标识标牌制作</li>
+						<li>工业标识标牌制作</li>
+						<li>静态标识标牌制作</li>
+						<li>党建宣传栏制作</li>
+					</ul>
+					<p><a style="display:block;width:100%;height:45px;margin:0;background:none;" href="#zxyy">我要制作</a></p>
+					<a href="http://p.qiao.baidu.com/cps/chat?siteId=9999511&userId=20499162"  title="在线咨询">
+						<h1>联系客服</h1>
+						<h2>{$tel}</h2>
+					</a>
+				</div>
+				<div class="dzinb-bottom-right">
+					<div class="fenlei">
+						<JW:list sql="SELECT * FROM `jzw_case` WHERE catid=96 and status=1 order by listorder desc,createtime desc limit 0,9">
+							<div class="fenlei-in">
+								<a href="{$r.url}" title="{$r.title}">
+									<div class="fenlei-in-tup"><img alt="{$r.title}" src="{$r.thumb}" /></div>
+									<p>{$r.title}</p>
+								</a>
+							</div>
+						</JW:list>
+
+					</div>
+					<div class="fenlei">
+						<JW:list sql="SELECT * FROM `jzw_case` WHERE catid=123 and status=1 order by listorder desc,createtime desc limit 0,9">
+							<div class="fenlei-in">
+								<a href="{$r.url}" title="{$r.title}">
+									<div class="fenlei-in-tup"><img alt="{$r.title}" src="{$r.thumb}" /></div>
+									<p>{$r.title}</p>
+								</a>
+							</div>
+						</JW:list>
+
+					</div>
+					<div class="fenlei">
+						<JW:list sql="SELECT * FROM `jzw_case` WHERE catid=97 and status=1 order by listorder desc,createtime desc limit 0,9">
+							<div class="fenlei-in">
+								<a href="{$r.url}" title="{$r.title}">
+									<div class="fenlei-in-tup"><img alt="{$r.title}" src="{$r.thumb}" /></div>
+									<p>{$r.title}</p>
+								</a>
+							</div>
+						</JW:list>
+
+					</div>
+					<div class="fenlei">
+						<JW:list sql="SELECT * FROM `jzw_case` WHERE catid=118 and status=1 order by listorder desc,createtime desc limit 0,9">
+							<div class="fenlei-in">
+								<a href="{$r.url}" title="{$r.title}">
+									<div class="fenlei-in-tup"><img alt="{$r.title}" src="{$r.thumb}" /></div>
+									<p>{$r.title}</p>
+								</a>
+							</div>
+						</JW:list>
+
+					</div>
+					<div class="fenlei">
+						<JW:list sql="SELECT * FROM `jzw_case` WHERE catid=119 and status=1 order by listorder desc,createtime desc limit 0,9">
+							<div class="fenlei-in">
+								<a href="{$r.url}" title="{$r.title}">
+									<div class="fenlei-in-tup"><img alt="{$r.title}" src="{$r.thumb}" /></div>
+									<p>{$r.title}</p>
+								</a>
+							</div>
+						</JW:list>
+
+					</div>
+					<div class="fenlei">
+						<JW:list sql="SELECT * FROM `jzw_case` WHERE catid=120 and status=1 order by listorder desc,createtime desc limit 0,9">
+							<div class="fenlei-in">
+								<a href="{$r.url}" title="{$r.title}">
+									<div class="fenlei-in-tup"><img alt="{$r.title}" src="{$r.thumb}" /></div>
+									<p>{$r.title}</p>
+								</a>
+							</div>
+						</JW:list>
+					</div>
+					<div class="fenlei">
+						<JW:list sql="SELECT * FROM `jzw_case` WHERE catid=121 and status=1 order by listorder desc,createtime desc limit 0,9">
+							<div class="fenlei-in">
+								<a href="{$r.url}" title="{$r.title}">
+									<div class="fenlei-in-tup"><img alt="{$r.title}" src="{$r.thumb}" /></div>
+									<p>{$r.title}</p>
+								</a>
+							</div>
+						</JW:list>
+
+					</div>
+
+					
+
+				</div>
+				<div style="clear: both;"></div>
+				<a class="more" href="{$Categorys[93]['url']}" title="{$Categorys[93]['catname']}">更多案例</a>
+			</div>
+
+				
+			<!--在线预约-->
+			<span class="zt3-yuyue-title" id="zxyy">在线预约</span>
+			<div class="zt3-yuyue">
+				<div class="width1200">
+					<div class="zt3-yuyue-top">
+						<h3>现在预约，即可定制一套专属设计方案  <span>预约热线：{$tel}</span></h3>
+					</div>
+					<form action="" method="" onsubmit="return dosub2();">
+					<div class="zt3-yuyue-main">
+						<span><em>姓名：</em><input id="t_name" type="text"  placeholder="必填"/></span>
+						<span><em>电话：</em><input id="t_phone" type="text" placeholder="必填"/></span>
+						<span><em>邮箱：</em><input id="t_email" type="text" /></span>
+					</div>
+					<button type="submit" class="zt3-tijiao" >立即提交</button>
+					</form>
+				</div>
+			</div>
+
+
+			<!--专题标题-->
+			<div class="zt3-title">
+				<h3>爱奥尼标识厂 V<span>S 其它标识厂家区别</span></h3>
+			</div>
+			<div class="zt3-vs">
+				<div class="zt3-vs-list">
+					<span><img src="/Jzw/Tpl/Home/Default/zt-images/vs@2x.png" /></span>
+                    <?php
+                $Ad=M('slide_data')->query("SELECT * FROM `jzw_slide_data` WHERE fid=3 order by listorder asc");
+                    for($i=0;$i<count($Ad);$i++){
+                    echo '
+                    <div>
+                        <span><img alt="'.$Ad[$i]["title"].'" src="'.$Ad[$i]["pic"].'" /></span>
+                        <div class="zt3-vs-list-in">
+                            <h3><span><img alt="'.$Ad[$i]["title"].'" src="'.$Ad[$i]["small"].'" /></span><em>'.$Ad[$i]["title"].'</em></h3>
+                            <p>'.$Ad[$i]["subtitle"].'</p>
+                        </div>
+                    </div>
+                    ';
+                    }
+                    ?>
+				</div>
+				
+				<div class="zt3-vs-list">
+					<span><img src="/Jzw/Tpl/Home/Default/zt-images/vs@2x.png"  /></span>
+                    <?php
+                $Ad=M('slide_data')->query("SELECT * FROM `jzw_slide_data` WHERE fid=4 order by listorder asc");
+                    for($i=0;$i<count($Ad);$i++){
+                    echo '
+                    <div>
+                        <span><img alt="'.$Ad[$i]["title"].'" src="'.$Ad[$i]["pic"].'" /></span>
+                        <div class="zt3-vs-list-in">
+                            <h3><span><img alt="'.$Ad[$i]["title"].'" src="'.$Ad[$i]["small"].'" /></span><em>'.$Ad[$i]["title"].'</em></h3>
+                            <p>'.$Ad[$i]["subtitle"].'</p>
+                        </div>
+                    </div>
+                    ';
+                    }
+                    ?>
+				</div>
+				
+				<div class="zt3-vs-list">
+					<span><img src="/Jzw/Tpl/Home/Default/zt-images/vs@2x.png" /></span>
+                    <?php
+                $Ad=M('slide_data')->query("SELECT * FROM `jzw_slide_data` WHERE fid=5 order by listorder asc");
+                    for($i=0;$i<count($Ad);$i++){
+                    echo '
+                    <div>
+                        <span><img alt="'.$Ad[$i]["title"].'" src="'.$Ad[$i]["pic"].'" /></span>
+                        <div class="zt3-vs-list-in">
+                            <h3><span><img alt="'.$Ad[$i]["title"].'" src="'.$Ad[$i]["small"].'" /></span><em>'.$Ad[$i]["title"].'</em></h3>
+                            <p>'.$Ad[$i]["subtitle"].'</p>
+                        </div>
+                    </div>
+                    ';
+                    }
+                    ?>
+				</div>
+				
+				<div class="zt3-vs-list">
+					<span><img src="/Jzw/Tpl/Home/Default/zt-images/vs@2x.png" /></span>
+                    <?php
+                $Ad=M('slide_data')->query("SELECT * FROM `jzw_slide_data` WHERE fid=6 order by listorder asc");
+                    for($i=0;$i<count($Ad);$i++){
+                    echo '
+                    <div>
+                        <span><img alt="'.$Ad[$i]["title"].'" src="'.$Ad[$i]["pic"].'" /></span>
+                        <div class="zt3-vs-list-in">
+                            <h3><span><img alt="'.$Ad[$i]["title"].'" src="'.$Ad[$i]["small"].'" /></span><em>'.$Ad[$i]["title"].'</em></h3>
+                            <p>'.$Ad[$i]["subtitle"].'</p>
+                        </div>
+                    </div>
+                    ';
+                    }
+                    ?>
+				</div>
+				
+				<div class="zt3-vs-list">
+					<span><img src="/Jzw/Tpl/Home/Default/zt-images/vs@2x.png" /></span>
+                    <?php
+                $Ad=M('slide_data')->query("SELECT * FROM `jzw_slide_data` WHERE fid=7 order by listorder asc");
+                    for($i=0;$i<count($Ad);$i++){
+                    echo '
+                    <div>
+                        <span><img alt="'.$Ad[$i]["title"].'" src="'.$Ad[$i]["pic"].'" /></span>
+                        <div class="zt3-vs-list-in">
+                            <h3><span><img alt="'.$Ad[$i]["title"].'" src="'.$Ad[$i]["small"].'" /></span><em>'.$Ad[$i]["title"].'</em></h3>
+                            <p>'.$Ad[$i]["subtitle"].'</p>
+                        </div>
+                    </div>
+                    ';
+                    }
+                    ?>
+				</div>
+				
+				<div class="zt3-vs-list">
+					<span><img src="/Jzw/Tpl/Home/Default/zt-images/vs@2x.png" /></span>
+                    <?php
+                $Ad=M('slide_data')->query("SELECT * FROM `jzw_slide_data` WHERE fid=8 order by listorder asc");
+                    for($i=0;$i<count($Ad);$i++){
+                    echo '
+                    <div>
+                        <span><img alt="'.$Ad[$i]["title"].'" src="'.$Ad[$i]["pic"].'" /></span>
+                        <div class="zt3-vs-list-in">
+                            <h3><span><img alt="'.$Ad[$i]["title"].'" src="'.$Ad[$i]["small"].'" /></span><em>'.$Ad[$i]["title"].'</em></h3>
+                            <p>'.$Ad[$i]["subtitle"].'</p>
+                        </div>
+                    </div>
+                    ';
+                    }
+                    ?>
+				</div>
+				
+				<div class="zt3-vs-list">
+					<span><img src="/Jzw/Tpl/Home/Default/zt-images/vs@2x.png" /></span>
+                    <?php
+                $Ad=M('slide_data')->query("SELECT * FROM `jzw_slide_data` WHERE fid=9 order by listorder asc");
+                    for($i=0;$i<count($Ad);$i++){
+                    echo '
+                    <div>
+                        <span><img alt="'.$Ad[$i]["title"].'" src="'.$Ad[$i]["pic"].'" /></span>
+                        <div class="zt3-vs-list-in">
+                            <h3><span><img alt="'.$Ad[$i]["title"].'" src="'.$Ad[$i]["small"].'" /></span><em>'.$Ad[$i]["title"].'</em></h3>
+                            <p>'.$Ad[$i]["subtitle"].'</p>
+                        </div>
+                    </div>
+                    ';
+                    }
+                    ?>
+				</div>
+				
+			</div>
+			
+			
+			<!--广告位-->
+			<a href="#zxyy"><div class="zt-rexian"><img alt="全国服务热线" src="/Jzw/Tpl/Home/Default/zt-images/标题广告@2x.png"  /></div></a>
+			<!-- <map name="testmap" id="testmap">
+				<area shape="circle" coords="1103,73,60" href ="http://aan.528k.cn/fuwu/sheji/#zxyy" alt="立即预约" />
+			</map> -->
+			
+			<span class="zt3-changjia">厂家展示</span>
+			
+			<div class="zt3-zhanhsi">
+                <?php
+                $Ad=M('slide_data')->query("SELECT * FROM `jzw_slide_data` WHERE fid=10 order by listorder asc");
+                for($i=0;$i<count($Ad);$i++){
+                echo '
+                <div>
+                    <span><img alt="'.$Ad[$i]["title"].'" src="'.$Ad[$i]["small"].'" /></span>
+                    <span><img alt="'.$Ad[$i]["title"].'" src="'.$Ad[$i]["pic"].'"  /></span>
+                    <div class="zt3-zhanshi-in">'.$Ad[$i]["title"].'</div>
+                </div>
+                ';
+                }
+                ?>
+
+			</div>
+			
+			<!--制作工艺-->
+			<div class="zt3-gongyi">
+				<?php
+                $Ad=M('slide_data')->query("SELECT * FROM `jzw_slide_data` WHERE fid=11 order by listorder asc");
+				for($i=0;$i<count($Ad);$i++){
+				if($i%2==0){
+				echo '
+				<div class="zt3-gongyi-in">
+					<span><img alt="'.$Ad[$i]["subtitle"].'" src="'.$Ad[$i]["pic"].'" /></span>
+					<div class="zt3-gongyi-main">
+						<h4>'.$Ad[$i]["subtitle"].'</h4>
+						<p>'.$Ad[$i]["description"].'</p>
+					</div>
+				</div>
+				';
+				}else{
+				echo '
+				<div class="zt3-gongyi-in">
+
+					<div class="zt3-gongyi-main">
+						<h4>'.$Ad[$i]["subtitle"].'</h4>
+						<p>'.$Ad[$i]["description"].'</p>
+					</div>
+					<span><img alt="'.$Ad[$i]["subtitle"].'" src="'.$Ad[$i]["pic"].'" /></span>
+				</div>
+				';
+				}
+				}
+				?>
+				<?php
+                $Ad=M('slide_data')->query("SELECT * FROM `jzw_slide_data` WHERE fid=12 order by listorder asc");
+				for($i=0;$i<count($Ad);$i++){
+				if($i%2==0){
+				echo '
+				<div class="zt3-gongyi-in">
+					<div class="zt3-gongyi-main">
+						<h4>'.$Ad[$i]["subtitle"].'</h4>
+						<p>'.$Ad[$i]["description"].'</p>
+					</div>
+					<span><img alt="'.$Ad[$i]["subtitle"].'" src="'.$Ad[$i]["pic"].'" /></span>
+				</div>
+				';
+				}else{
+				echo '
+				<div class="zt3-gongyi-in">
+					<span><img alt="'.$Ad[$i]["subtitle"].'" src="'.$Ad[$i]["pic"].'" /></span>
+					<div class="zt3-gongyi-main">
+						<h4>'.$Ad[$i]["subtitle"].'</h4>
+						<p>'.$Ad[$i]["description"].'</p>
+					</div>
+				</div>
+				';
+				}
+				}
+				?>
+
+				<?php
+                $Ad=M('slide_data')->query("SELECT * FROM `jzw_slide_data` WHERE fid=13 order by listorder asc");
+				for($i=0;$i<count($Ad);$i++){
+				if($i%2==0){
+				echo '
+				<div class="zt3-gongyi-in">
+					<div class="zt3-gongyi-main">
+						<h4>'.$Ad[$i]["subtitle"].'</h4>
+						<p>'.$Ad[$i]["description"].'</p>
+					</div>
+					<span><img alt="'.$Ad[$i]["subtitle"].'" src="'.$Ad[$i]["pic"].'" /></span>
+				</div>
+				';
+				}else{
+				echo '
+				<div class="zt3-gongyi-in">
+					<span><img alt="'.$Ad[$i]["subtitle"].'" src="'.$Ad[$i]["pic"].'" /></span>
+					<div class="zt3-gongyi-main">
+						<h4>'.$Ad[$i]["subtitle"].'</h4>
+						<p>'.$Ad[$i]["description"].'</p>
+					</div>
+				</div>
+				';
+				}
+				}
+				?>
+
+				<?php
+                $Ad=M('slide_data')->query("SELECT * FROM `jzw_slide_data` WHERE fid=14 order by listorder asc");
+				for($i=0;$i<count($Ad);$i++){
+				if($i%2==0){
+				echo '
+				<div class="zt3-gongyi-in">
+					<span><img alt="'.$Ad[$i]["subtitle"].'" src="'.$Ad[$i]["pic"].'" /></span>
+					<div class="zt3-gongyi-main">
+						<h4>'.$Ad[$i]["subtitle"].'</h4>
+						<p>'.$Ad[$i]["description"].'</p>
+					</div>
+				</div>
+				';
+				}else{
+				echo '
+				<div class="zt3-gongyi-in">
+
+					<div class="zt3-gongyi-main">
+						<h4>'.$Ad[$i]["subtitle"].'</h4>
+						<p>'.$Ad[$i]["description"].'</p>
+					</div>
+					<span><img alt="'.$Ad[$i]["subtitle"].'" src="'.$Ad[$i]["pic"].'" /></span>
+				</div>
+				';
+				}
+				}
+				?>
+				
+				<span class="zt3-changjia">制作工艺</span>
+				
+			</div>
+			<!--广告位-->
+			<a href="#zxyy"><div class="zt-rexian"><img alt="全国服务热线" src="/Jzw/Tpl/Home/Default/zt-images/标题广告@2x.png" /></div></a>
+			<!-- <map name="testmap2" id="testmap2">
+				<area shape="circle" coords="1103,73,60" href ="http://aan.528k.cn/fuwu/sheji/#zxyy" alt="立即预约" />
+			</map> -->
+			
+			<span class="zt3-changjia" style="width: 327px;margin-bottom: 70px;">七步四项定制标准</span>
+			
+			<div class="width1200">
+				<div class="ydy-in-b">
+					<div class="ydy-in-b-left">
+						<div class="ydy-in-b-left-in">
+							<h1>01       前期调研</h1>
+							<p>对现场环境进行实地调研，与客户探讨设计方向，确定概念立意与设计风格；</p>
+						</div>
+						<h2>七步定制流程</h2>
+						<h3>IONIC</h3>
+					</div>
+					<div class="ydy-in-b-right">
+						<?php
+                $Ad=M('slide_data')->query("SELECT * FROM `jzw_slide_data` WHERE fid=15 order by listorder asc");
+						for($i=0;$i<count($Ad);$i++){
+						echo '
+						<div class="ydy-in-b-right-in">
+							<h4><img alt="'.$Ad[$i]["title"].'" src="'.$Ad[$i]["small"].'" />
+								<img alt="'.$Ad[$i]["title"].'" src="'.$Ad[$i]["pic"].'" />
+							</h4>
+							<h5>'.$Ad[$i]["title"].'</h5>
+							<div style="clear: both;"></div>
+							<p>'.$Ad[$i]["subtitle"].'</p>
+						</div>
+						';
+						}
+						?>
+
+					</div>
+				</div>
+			</div>
+			
+			<!--四项服务标准 -->
+			<div class="sixian">
+				<div class="sixian-top">
+					<?php
+                $Ad=M('slide_data')->query("SELECT * FROM `jzw_slide_data` WHERE fid=16 order by listorder asc");
+					for($i=0;$i<count($Ad);$i++){
+					echo '
+					<div class="sixian-top-left">
+						<div class="sixian-top-left-in"><img alt="'.$Ad[$i]["title"].'" src="'.$Ad[$i]["pic"].'" /></div>
+						<div class="sxbz">'.$Ad[$i]["title"].'</div>
+					</div>
+					';
+					}
+					?>
+					<?php
+                $Ad=M('slide_data')->query("SELECT * FROM `jzw_slide_data` WHERE fid=17 order by listorder asc limit 0,1");
+					for($i=0;$i<count($Ad);$i++){
+					echo '
+					<div class="sixian-top-right">
+						<div class="sixian-top-right-in"><img alt="'.$Ad[$i]["title"].'" src="'.$Ad[$i]["pic"].'" /></div>
+						<div class="sixian-top-right-bot">
+							<h1>'.$Ad[$i]["title"].'</h1>
+							<p>'.$Ad[$i]["subtitle"].'</p>
+						</div>
+					</div>
+					';
+					}
+					?>
+				</div>
+				<div class="sixian-top">
+					<?php
+                $Ad=M('slide_data')->query("SELECT * FROM `jzw_slide_data` WHERE fid=17 order by listorder asc limit 1,3");
+					for($i=0;$i<count($Ad);$i++){
+					echo '
+					<div class="sixian-top-right">
+						<div class="sixian-top-right-in"><img alt="'.$Ad[$i]["title"].'" src="'.$Ad[$i]["pic"].'" /></div>
+						<div class="sixian-top-right-bot">
+							<h1>'.$Ad[$i]["title"].'</h1>
+							<p>'.$Ad[$i]["subtitle"].'</p>
+						</div>
+					</div>
+					';
+					}
+					?>
+				</div>
+
+			</div>
+			
+			<!--广告位-->
+			<a href="#zxyy"><div class="zt-rexian"><img alt="全国服务热线" src="/Jzw/Tpl/Home/Default/zt-images/标题广告@2x.png" /></div></a>
+			<!-- <map name="testmap2" id="testmap2">
+				<area shape="circle" coords="1103,73,60" href ="http://aan.528k.cn/fuwu/sheji/#zxyy" alt="立即预约" />
+			</map> -->
+			
+			
+						
+			<!--厂家资质-->
+			<div class="zt3-zizhi">
+				<span class="zt3-changjia" style="margin-bottom: 72px;margin-top: 0;">公司资质</span>
+				
+				<div class="zt3-xianjin1">
+					<ul>
+						<?php
+                $Ad=M('slide_data')->query("SELECT * FROM `jzw_slide_data` WHERE fid=18 order by listorder asc");
+						for($i=0;$i<count($Ad);$i++){
+						echo '
+						<li>
+							<span><img alt="'.$Ad[$i]["title"].'" src="'.$Ad[$i]["pic"].'" /></span>
+							<p>'.$Ad[$i]["title"].'</p>
+						</li>
+						';
+						}
+						?>
+					</ul>
+					<div class="clear"></div>
+				</div>
+				
+				<div class="zt3-xianjin2">
+					<ul>
+						<?php
+                $Ad=M('slide_data')->query("SELECT * FROM `jzw_slide_data` WHERE fid=19 order by listorder asc");
+						for($i=0;$i<count($Ad);$i++){
+						echo '
+						<li>
+							<span><img alt="'.$Ad[$i]["title"].'" src="'.$Ad[$i]["pic"].'" /></span>
+							<p>'.$Ad[$i]["title"].'</p>
+						</li>
+						';
+						}
+						?>
+
+					</ul>
+					<div class="clear"></div>
+				</div>
+				
+			</div>
+		
+			
+		</section>
+		<script type="text/javascript">
+            //验证手机格式
+            function isPhone(str) {
+                var pattern = "^0?(13[0-9]|15[0-9]|18[0-9]|17[0-9]|14[0-9])[0-9]{8}$";
+                var check = new RegExp(pattern);
+                return check.test(str);
+            }
+
+            function dosub2(){
+
+                var phone = $("#t_phone").val();
+                var name = $("#t_name").val();
+                var email = $("#t_email").val();
+                var catid = 70;
+                if (phone == "" || name == "" ) {
+                    alert("请填写相关信息");
+                    return false;
+                }
+                if (!isPhone(phone)) {
+                    alert("请输入正确的手机号码");
+                    return false;
+                }
+
+
+                submitMessage({
+                    title: name,
+                    phone: phone,
+                    email: email,
+
+                    catid: catid,
+                     ctype:"来自在线预约"
+                }, "liuyan", function () {
+                    alert("提交成功");
+                    window.location.reload();
+                });
+                return false;
+            }
+		</script>
+		<!--底部导航-->
+		<include file='model:foot' />
+		
+		
+		
+		<!--侧导航-->
+		<include file='model:right' />
+		<script>
+            $(".nav-in li:nth-child(2)").addClass("nav-active");
+		</script>
+		<script>
+			$(".zt-qibu-list:nth-child(2n-1) .zt-qibu-in .zt-qibu-in1").addClass("slideInLeft");
+			$(".zt-qibu-list:nth-child(2n-1) .zt-qibu-in .zt-qibu-in2").addClass("slideInRight");
+			$(".zt-qibu-list:nth-child(2n) .zt-qibu-in .zt-qibu-in1").addClass("slideInRight");
+			$(".zt-qibu-list:nth-child(2n) .zt-qibu-in .zt-qibu-in2").addClass("slideInLeft");
+		</script>
+		
+	</body>
+
+</html>

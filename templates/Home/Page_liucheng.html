@@ -1,0 +1,195 @@
+<!DOCTYPE html>
+<html lang="zh">
+
+	<head>
+  <include file='model:head' />
+	</head>
+
+	<body>
+		<!--头部  -->
+		<header>
+			<include file='model:header' />
+		</header>
+		<!--导航-->
+		<include file='model:top' />
+		<div style='display:none;'><h1>{$catname}</h1></div> 
+		<!--banner-->
+		<div class="zt-banner">
+			<include file="model:banner" />
+			<div class="zt-banner-in">
+				<h3>好的标识标牌设计与制作标准是什么？</h3>
+				<p>爱奥尼<span>7步4项</span>标识定制标准是决定工程品质的<span>核心要素</span></p>
+			</div>
+		</div>
+		
+
+		<!--内容-->
+		<section>
+			<!--当前位置-->
+			<div class="zt-weizhi">
+				<ul>
+					<li><a href="/" title="{$site_title}">首页</a><span> > </span> </li>
+					<li>{$catname}</li>
+				</ul>
+				<div class="clear"></div>
+			</div>
+			<!--广告位-->
+			<a href="#liuyan"><div class="zt-rexian"><img alt="七步流程定制" src="/Jzw/Tpl/Home/Default/zt-images/七步流程定制标题@2x.png" /></div></a>
+			<!--七步流程列表-->
+			<div class="zt-qibu">
+				<?php
+                $Ad=M('slide_data')->query("SELECT * FROM `jzw_slide_data` WHERE fid=1 order by listorder asc");
+				for($i=0;$i<count($Ad);$i++){
+				echo '
+				<div class="zt-qibu-list">
+					<div class="zt-qibu-in">
+						<div class="zt-qibu-in1 wow">
+							<div class="zt-qibu-head">
+								<span>'.$Ad[$i]["title"].'</span>
+								<h3>'.$Ad[$i]["subtitle"].'</h3>
+							</div>
+							<div class="zt-qibu-main">
+								<p>'.$Ad[$i]["description"].'</p>
+							</div>
+							<div class="zt-qibu-img">
+								<a href="#liuyan" ><img alt="'.$Ad[$i]["subtitle"].'" src="'.$Ad[$i]["small"].'" /></a>
+							</div>
+						</div>
+						<div class="zt-qibu-in2 wow"><img alt="'.$Ad[$i]["subtitle"].'" src="'.$Ad[$i]["pic"].'" /></div>
+					</div>
+				</div>
+				';
+				}
+				?>
+
+				
+			</div>
+			
+			<!--广告位-->
+			<a href="#liuyan"><div class="zt-rexian" style="margin-top: 40px;"><img alt="四项服务标准" src="/Jzw/Tpl/Home/Default/zt-images/4项服务标准标题@2x.png" /></div></a>
+			<!--四项服务标准-->
+			<div class="zt-sixiang">
+				<?php
+                $Ad=M('slide_data')->query("SELECT * FROM `jzw_slide_data` WHERE fid=2 order by listorder asc");
+				for($i=0;$i<count($Ad);$i++){
+				if($i%2==0){
+				echo '
+				<div class="zt-sixiang-in">
+					<div class="zt-sixiang-in1 wow slideInDown"><img alt="'.$Ad[$i]["title"].'" src="'.$Ad[$i]["pic"].'" /></div>
+					<div class="zt-sixiang-in2 wow slideInUp">
+						<h3>'.$Ad[$i]["title"].'</h3>
+						<p>'.$Ad[$i]["subtitle"].'</p>
+					</div>
+				</div>';
+				}else{
+				echo '
+				<div class="zt-sixiang-in">
+
+					<div class="zt-sixiang-in2 wow slideInDown">
+						<h3>'.$Ad[$i]["title"].'</h3>
+						<p>'.$Ad[$i]["subtitle"].'</p>
+					</div>
+					<div class="zt-sixiang-in1 wow slideInUp"><img alt="'.$Ad[$i]["title"].'" src="'.$Ad[$i]["pic"].'" /></div>
+				</div>';
+				}
+				}
+				?>
+				
+				
+				<div class="clear"></div>
+			</div>
+			
+			<!--广告位-->
+			<a href="#liuyan"><div class="zt-rexian"><img alt="案例推荐" src="/Jzw/Tpl/Home/Default/zt-images/爱奥尼标识标牌项目案例@2x.png" /></div></a>
+			<!--案例列表推荐-->
+			<div class="zt-anli">
+				<div class="zt-anli-in">
+					<?php
+                $Pdata=M()->query("select arrchildid from `jzw_category` where id=93");
+					$t1Arr=M('article')->query("SELECT * FROM `jzw_case` WHERE catid  in (".$Pdata[0]["arrchildid"].") and status=1 order by                                    listorder desc,createtime desc limit 0,6");
+					for($i=0;$i<count($t1Arr);$i++){
+					echo '<a class="zt-amli-list" href="'.$t1Arr[$i]["url"].'" title="'.$t1Arr[$i]["title"].'">
+					<span><img title="'.$t1Arr[$i]["title"].'" src="'.$t1Arr[$i]["thumb"].'" /></span>
+					<p>'.$t1Arr[$i]["title"].'</p>
+					</a>';
+					}
+					?>
+
+					<div class="clear"></div>
+				</div>
+				<a class="zt-more" href="{$Categorys[93]['url']}" title="{$Categorys[93]['catname']}">更多案例</a>
+			</div>
+<!--在线预约-->
+			<span class="zt3-yuyue-title" id="liuyan">在线预约</span>
+			<div class="zt3-yuyue">
+				<div class="width1200">
+					<div class="zt3-yuyue-top">
+						<h3>现在预约，即可定制一套专属设计方案  <span>预约热线：{$tel}</span></h3>
+					</div>
+					<form action="" method="" onsubmit="return dosub2();">
+					<div class="zt3-yuyue-main">
+						<span><em>姓名：</em><input id="t_name" type="text"  placeholder="必填"/></span>
+						<span><em>电话：</em><input id="t_phone" type="text" placeholder="必填"/></span>
+						<span><em>邮箱：</em><input id="t_email" type="text" /></span>
+					</div>
+					<button type="submit" class="zt3-tijiao" >立即提交</button>
+					</form>
+				</div>
+			</div>
+		</section>
+		<script type="text/javascript">
+            //验证手机格式
+            function isPhone(str) {
+                var pattern = "^0?(13[0-9]|15[0-9]|18[0-9]|17[0-9]|14[0-9])[0-9]{8}$";
+                var check = new RegExp(pattern);
+                return check.test(str);
+            }
+
+            function dosub2(){
+
+                var phone = $("#t_phone").val();
+                var name = $("#t_name").val();
+                var email = $("#t_email").val();
+                var catid = 70;
+                if (phone == "" || name == "") {
+                    alert("请填写相关信息");
+                    return false;
+                }
+                if (!isPhone(phone)) {
+                    alert("请输入正确的手机号码");
+                    return false;
+                }
+
+
+                submitMessage({
+                    title: name,
+                    phone: phone,
+                    email: email,
+
+                    catid: catid,
+                     ctype:"来自在线预约"
+                }, "liuyan", function () {
+                    alert("提交成功");
+                    window.location.reload();
+                });
+                return false;
+            }
+		</script>
+		<!--底部导航-->
+		<include file='model:foot' />
+		
+		<!--侧导航-->
+		<include file='model:right' />
+		
+		<script>
+			$(".zt-qibu-list:nth-child(2n-1) .zt-qibu-in .zt-qibu-in1").addClass("slideInLeft");
+			$(".zt-qibu-list:nth-child(2n-1) .zt-qibu-in .zt-qibu-in2").addClass("slideInRight");
+			$(".zt-qibu-list:nth-child(2n) .zt-qibu-in .zt-qibu-in1").addClass("slideInRight");
+			$(".zt-qibu-list:nth-child(2n) .zt-qibu-in .zt-qibu-in2").addClass("slideInLeft");
+		</script>
+		<script>
+            $(".nav-in li:nth-child(6)").addClass("nav-active");
+		</script>
+	</body>
+
+</html>

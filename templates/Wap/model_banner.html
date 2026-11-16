@@ -1,0 +1,143 @@
+<?php
+    $pc_img="/Jzw/Tpl/Home/Default/picture/banner_2.jpg";
+    $wap_img="";
+    //主营标识
+    $cate=M('category')->where("id=107")->find();
+    $catid1=$cate["arrchildid"];
+  $arr=explode(',',$catid1);
+    if(in_array($catid,$arr)){
+        
+        $datawap=M('slide_data')->where("id=361")->find();
+       
+        $wap_img=$datawap["pic"];
+         $wap_link=$datawap["link"];
+        $wap_title=$datawap["title"];
+    }
+     //主营标识
+    $cate=M('category')->where("id=108")->find();
+    $catid1=$cate["arrchildid"];
+  $arr=explode(',',$catid1);
+    if(in_array($catid,$arr)){
+        
+        $datawap=M('slide_data')->where("id=361")->find();
+       
+        $wap_img=$datawap["pic"];
+         $wap_link=$datawap["link"];
+        $wap_title=$datawap["title"];
+    }
+     //主营标识
+    $cate=M('category')->where("id=109")->find();
+    $catid1=$cate["arrchildid"];
+  $arr=explode(',',$catid1);
+    if(in_array($catid,$arr)){
+        
+        $datawap=M('slide_data')->where("id=361")->find();
+       
+        $wap_img=$datawap["pic"];
+         $wap_link=$datawap["link"];
+        $wap_title=$datawap["title"];
+    }
+     //主营标识
+    $cate=M('category')->where("id=110")->find();
+    $catid1=$cate["arrchildid"];
+  $arr=explode(',',$catid1);
+    if(in_array($catid,$arr)){
+        
+        $datawap=M('slide_data')->where("id=361")->find();
+       
+        $wap_img=$datawap["pic"];
+         $wap_link=$datawap["link"];
+        $wap_title=$datawap["title"];
+    }
+     //主营标识
+    $cate=M('category')->where("id=111")->find();
+    $catid1=$cate["arrchildid"];
+  $arr=explode(',',$catid1);
+    if(in_array($catid,$arr)){
+        
+        $datawap=M('slide_data')->where("id=361")->find();
+       
+        $wap_img=$datawap["pic"];
+         $wap_link=$datawap["link"];
+        $wap_title=$datawap["title"];
+    }
+
+
+    //新闻中心
+    $cate=M('category')->where("id=83")->find();
+    $catid1=$cate["arrchildid"];
+  $arr=explode(',',$catid1);
+    if(in_array($catid,$arr)){
+        
+        $datawap=M('slide_data')->where("id=365")->find();
+       
+        $wap_img=$datawap["pic"];
+         $wap_link=$datawap["link"];
+        $wap_title=$datawap["title"];
+    }
+
+    // 成功案例
+    $cate=M('category')->where("id=93")->find();  
+    $catid1=$cate["arrchildid"];
+  $arr=explode(',',$catid1);
+    if(in_array($catid,$arr)){
+       
+        $datawap=M('slide_data')->where("id=360")->find();
+        $pc_img=$datapc["pic"];
+        $wap_img=$datawap["pic"];
+         $wap_link=$datawap["link"];
+        $wap_title=$datawap["title"];
+    }
+    //联系爱奥尼 
+    $cate=M('category')->where("id=66")->find();
+    $catid1=$cate["arrchildid"];
+  $arr=explode(',',$catid1);
+    if(in_array($catid,$arr)){
+      
+        $datawap=M('slide_data')->where("id=363")->find();
+        
+        $wap_img=$datawap["pic"];
+         $wap_link=$datawap["link"];
+        $wap_title=$datawap["title"];
+    }
+    //关于爱奥尼
+    $cate=M('category')->where("id=72")->find();
+     $catid1=$cate["arrchildid"];
+  $arr=explode(',',$catid1);
+    if(in_array($catid,$arr)){
+       
+        $datawap=M('slide_data')->where("id=362")->find();
+    
+        $wap_img=$datawap["pic"];
+         $wap_link=$datawap["link"];
+        $wap_title=$datawap["title"];
+    }
+
+
+    //  资源整合
+    $cate=M('category')->where("id=105")->find();
+    $catid1=$cate["arrchildid"];
+  $arr=explode(',',$catid1);
+    if(in_array($catid,$arr)){
+        
+        $datawap=M('slide_data')->where("id=364")->find();
+        
+        $wap_img=$datawap["pic"];
+         $wap_link=$datawap["link"];
+        $wap_title=$datawap["title"];
+    }
+
+
+    
+?>
+
+ <div class="cl_banner">
+      <div class="swiper-container swiper1">
+           <ul class="swiper-wrapper">
+              <li class='swiper-slide  last'><a href="{$wap_link}" target='_blank' title="{$wap_title}"><img src="{$wap_img}" alt="{$wap_title}" /></a></li>
+           </ul>
+           <div class="swiper-pagination pagination1"></div>
+        </div>
+        
+     </div>
+

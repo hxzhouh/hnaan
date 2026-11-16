@@ -1,0 +1,167 @@
+<?php
+    $Model=new Model();
+    $catInfo=$Model->query("select * from jzw_category where id=".$catid);
+    $catname=$catInfo[0]["catname"];
+    $pageInfo=$Model->query("select * from jzw_page where id=".$catid);
+	$content=$pageInfo[0]["content"];
+	$wap_content=$pageInfo[0]["wap_content"];
+	$title=$pageInfo[0]["title"];
+?>
+<!DOCTYPE html>
+<html>
+
+<head>
+	<include file="./Jzw/Tpl/Wap/Default/model_head.html" />
+</head>
+
+<body>
+	<!--主内容-->
+	<include file="./Jzw/Tpl/Wap/Default/model_top.html" />
+
+	<!--内容区-->
+	<section>
+		<!--banner图-->
+		<div class="banner Maximg">
+			<JW:list sql="SELECT * FROM `jzw_slide_data` WHERE fid=34 order by listorder asc">
+				<img src="{$r.pic}" />
+			</JW:list>
+		</div>
+
+		<div class="width">
+			<!--标题-->
+			<div class="particulars-title">
+				<h3>{$title}</h3>
+
+			</div>
+			<div class="particulars-mian">
+				<p>
+
+					{$wap_content}</p>
+			</div>
+		</div>
+		<div class="news-zuoze" style="padding: 0 .4rem;">
+			<p>湖南爱奥尼标识工程有限公司拥有15年标识设计经验，100多名专业生产团队。<br/><span style="color: #c31a0b;font-weight: bold;font-size: 22px;">电话：{$phone_a}</span><br/><span
+				 style="color: #c31a0b ;font-size: 22px;">网址：<a style="color: #c31a0b;" href="http://www.hnaan.cn" title="爱奥尼">www.hnaan.cn</a></span>
+				<div style="text-align: center;">
+					<img src="/Jzw/Tpl/Home/Default/images/topecode.png" style="width:160px;" />
+				</div>
+			</p>
+		</div>
+		<br/>
+		<!--分享-->
+		<div class="share">
+			<em>分享：</em>
+			<div class="share-a bdsharebuttonbox">
+				<a href="javascript:wx_share();" class="WeChat bk" title="分享到微信"></a>
+				<a href="javascript:;" class="WeChat bk" data-cmd="sqq" title="分享到QQ好友"></a>
+				<a href="javascript:;" class="WeChat bk" data-cmd="tsina" title="分享到新浪微博"></a>
+			</div>
+			<a class="share-fan" href="/wap{$Categorys[$catid]['url']}" title="">返回列表</a>
+			<script>window._bd_share_config = { "common": { "bdSnsKey": {}, "bdText": "", "bdMini": "2", "bdMiniList": false, "bdPic": "", "bdStyle": "0", "bdSize": "16" }, "share": {} }; with (document) 0[(getElementsByTagName('head')[0] || body).appendChild(createElement('script')).src = 'http://bdimg.share.baidu.com/static/api/js/share.js?v=89860593.js?cdnversion=' + ~(-new Date() / 36e5)];</script>
+
+		</div>
+
+
+		<!--推荐案例-->
+		<div class="foot-case">
+			<div class="foot-case-title">推荐案例</div>
+			<div class="foot-case-main">
+				<div class="swiper-container foot-case-swi">
+					<div class="swiper-wrapper">
+						<?php
+                $Pdata=M()->query("select arrchildid from `jzw_category` where id=93");
+					$t1Arr=M('article')->query("SELECT * FROM `jzw_case` WHERE catid  in (".$Pdata[0]["arrchildid"].") and status=1 order by                                    listorder desc,createtime desc limit 0,4");
+					for($i=0;$i<count($t1Arr);$i++){
+					echo '
+					
+					 <div class="swiper-slide">
+					 	<a href="'.$t1Arr[$i]["url"].'">
+					 <div class="foot-swi-in">
+		      	 	<span class="foot-swi-in-span">
+		      	 		<img src="'.$t1Arr[$i]["thumb"].'" />
+		      	 	</span>
+		      	 	<h3>'.str_cut($t1Arr[$i]["title"],30).'</h3>
+		      	 	<p>'.str_cut($t1Arr[$i]["description"],30).'</p>
+		      	 </div>
+		      	 </a>
+				 </div>';
+					}
+					?>
+					</div>
+					<div class="swiper-pagination"></div>
+				</div>
+			</div>
+		</div>
+		<script>
+			setTimeout(function () {
+				var swiper16 = new Swiper('.foot-case-swi', {
+					slidesPerView: 2,
+					spaceBetween: 6,
+					slidesPerGroup: 2,
+					pagination: {
+						el: '.swiper-pagination',
+					},
+				});
+			}, 100)
+		</script>
+
+
+	</section>
+
+	<!--置顶-->
+	<div class="zhiding max-img" id="zhiding">
+		<img alt="" src="/Jzw/Tpl/Wap/Default/images/zhiding.png" />
+	</div>
+	<include file="./Jzw/Tpl/Wap/Default/model_foot.html" />
+	<!--侧导航-->
+
+	<!--底部样式js控制-->
+	<script>
+		$(function () {
+			$('.foot:nth-child(1)').addClass("active");
+		});
+	</script>
+	<script>
+		$(function () {
+			$(".width img").removeAttr("width");
+			$(".width img").removeAttr("height");
+			$(".width img").attr("style", "");
+		});        
+	</script>
+
+	<!-- 微信分享 -->
+	<style>
+		.oy_share {
+			background-color: rgba(0, 0, 0, 0.7);
+			width: 100%;
+			height: 100%;
+			position: fixed;
+			top: 0px;
+			left: 0px;
+			z-index: 999999;
+		}
+
+		.oy_share img {
+			width: 60%;
+			right: 20px;
+			position: absolute;
+		}
+
+
+		.oy_share_hide {
+			display: none;
+		}
+	</style>
+	<script>
+		//微信分享提示
+		function wx_share() {
+			$(".oy_share").removeClass("oy_share_hide");
+		}
+	</script>
+	<div class="oy_share oy_share_hide" onclick="$(this).addClass('oy_share_hide');">
+		<img src="/Jzw/Tpl/Wap/Default/images/wx_share.png" style="top: 0px;" id="imgShare" runat="server" />
+	</div>
+
+</body>
+
+</html>

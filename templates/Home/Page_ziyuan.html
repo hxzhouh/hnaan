@@ -1,0 +1,178 @@
+<!DOCTYPE html>
+<html lang="zh">
+
+<head>
+    <include file='model:head'/>
+</head>
+
+<body>
+<!--头部  -->
+<header>
+    <include file='model:header'/>
+</header>
+<!--导航-->
+<include file='model:top'/>
+<!--banner-->
+<div class="zt-banner">
+    <include file="model:banner" />
+</div>
+<div style='display:none;'><h1>标识合作厂家	</h1></div> 
+
+<!--内容-->
+<section>
+    <!--当前位置-->
+    <div class="zt-weizhi">
+        <ul>
+            <li><a href="/" title="{$site_name}">首页</a><span> > </span></li>
+            <li>{$catname}</li>
+        </ul>
+        <div class="clear"></div>
+    </div>
+
+    <div class="zt-ziyuan-title">
+        <h3>你是否经历或者面临以下几个<span>问题？</span></h3>
+    </div>
+    <!--几大问题-->
+    <div class="zt-wenti">
+        <?php
+        $Ad=M('slide_data')->query("SELECT * FROM `jzw_slide_data` WHERE fid=20 order by listorder asc");
+        for($i=0;$i<count($Ad);$i++){
+        echo '
+        <div class="zt-wenti-list">
+            <span><img alt="'.$Ad[$i]["title"].'" src="'.$Ad[$i]["pic"].'" /></span>
+            <div class="zt-wenti-list-p"><p>'.$Ad[$i]["subtitle"].'</p></div>
+        </div>
+        ';
+        }
+        ?>
+
+        <div class="clear"></div>
+    </div>
+
+    <!--为什么选择爱奥尼-->
+    <div class="zt-xuan">
+        <div class="zt-xuan-title">
+            <h4>为什么<span>选择</span>爱奥尼标识？</h4>
+        </div>
+        <div class="zt-xuan-main">
+            <?php
+        $Ad=M('slide_data')->query("SELECT * FROM `jzw_slide_data` WHERE fid=21 order by listorder asc");
+            for($i=0;$i<count($Ad);$i++){
+            echo '
+            <div class="zt-xuan-main-list">
+                <span><img alt="'.$Ad[$i]["subtitle"].'" src="'.$Ad[$i]["pic"].'" /></span>
+                <div class="zt-xuan-list-in">
+                    <h3><span><img alt="'.$Ad[$i]["subtitle"].'" src="'.$Ad[$i]["small"].'" /></span>'.$Ad[$i]["subtitle"].'
+                    </h3>
+                    <p>'.$Ad[$i]["description"].'</p>
+                </div>
+            </div>
+            ';
+            }
+            ?>
+        </div>
+
+        <!---->
+        <div class="zt-xuan-bot">
+					<span>
+						<h3>优先定制设计</h3>
+						<p>20名优秀设计师 <br/>为您所用</p>
+					</span>
+            <span>
+						<h3>源头厂家供货</h3>
+						<p>高性价比产品<br/> 利润增值</p>
+					</span>
+            <span>
+						<h3>客户商谈支持</h3>
+						<p>全力协助只为<br/> 成交客户</p>
+					</span>
+            <span>
+						<h3>品牌授权体系</h3>
+						<p>资质实力品牌 <br/>为您加分</p>
+					</span>
+            <span>
+						<h3>全程售后服务</h3>
+						<p>为您解决服务 <br/>后顾之忧</p>
+					</span>
+        </div>
+
+    </div>
+
+    <!--加入流程-->
+    <div class="zt-liu">
+        <div class="zt-xuan-title zt-title1">
+            <h4>合作伙伴<span>加入</span>流程</h4>
+        </div>
+
+        <a class="zt-liu-more" href="http://p.qiao.baidu.com/cps/chat?siteId=9999511&userId=20499162" target="_blank" title="立即咨询">立即咨询</a>
+    </div>
+
+    <div class="zt-xuan-title zt-title1" style="margin-top: 60px;margin-bottom: 48px;">
+        <h4><span>我们</span>的联系方式</h4>
+    </div>
+    <style>
+       .zt-ditu .zt-ditu-in img{max-width:none;max-height:none;}
+    </style>
+    <div class="zt-ditu">
+
+            <script type="text/javascript" src="http://api.map.baidu.com/api?v=1.2"></script>
+        <div class="zt-ditu-in" id="dituContent">
+            </div>
+            <!--<div style="width:673px;height:478px;border:#ccc solid 1px;" id="dituContent"></div>-->
+            <script type="text/javascript" >
+                //创建和初始化地图函数：
+
+                loadContactMap('dituContent', '{$site_name}', '{$address}', '{$tel}', '{$baiduxy}'.split(',')[0], '{$baiduxy}'.split(',')[1]);
+
+            </script>
+
+        <div class="zt-ditu-left">
+            <h4>联系方法</h4>
+            <h3>爱奥尼（湖南）文化创意有限公司</h3>
+            <p>联系电话：{$tel}</p>
+            <p>客服电话：{$phone_a}<br/><span>周一到周六（08:30-17:30）</span></p>
+            <p>公司邮箱：{$site_email}</p>
+            <p>公司地址：{$address}</p>
+
+        </div>
+
+    </div>
+
+    <div class="zt-xuan-title zt-title1" style="margin-top: 60px;margin-bottom: 48px;">
+        <h4>他们都选择了<span>爱奥尼</span></h4>
+    </div>
+    <div class="zt-img-heji">
+        <ul>
+            <?php
+        $Ad=M('slide_data')->query("SELECT * FROM `jzw_slide_data` WHERE fid=22 order by listorder asc");
+            for($i=0;$i<count($Ad);$i++){
+            echo '
+            <li><a href="'.$Ad[$i]["link"].'"><img alt="'.$Ad[$i]["title"].'" src="'.$Ad[$i]["pic"].'" /><a/></li>
+            ';
+            }
+            ?>
+        </ul>
+        <div class="clear"></div>
+    </div>
+
+</section>
+
+<!--底部导航-->
+<include file='model:foot'/>
+
+
+<!--侧导航-->
+<include file='model:right'/>
+<script>
+    $(".nav-in li:nth-child(4)").addClass("nav-active");
+</script>
+<script>
+    $(".zt-qibu-list:nth-child(2n-1) .zt-qibu-in .zt-qibu-in1").addClass("slideInLeft");
+    $(".zt-qibu-list:nth-child(2n-1) .zt-qibu-in .zt-qibu-in2").addClass("slideInRight");
+    $(".zt-qibu-list:nth-child(2n) .zt-qibu-in .zt-qibu-in1").addClass("slideInRight");
+    $(".zt-qibu-list:nth-child(2n) .zt-qibu-in .zt-qibu-in2").addClass("slideInLeft");
+</script>
+
+</body>
+
+</html>

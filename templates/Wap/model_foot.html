@@ -1,0 +1,49 @@
+
+<!--电话浮窗-->
+	<!--<a href="tel:{$tel}" title="" class="phone_alert">
+		<img alt="" src="/Jzw/Tpl/Wap/Default/images/telh.png" />
+		电话咨询
+	</a>-->
+
+<footer>
+	<a href="tel:{$tel}" class="foot-in">
+		<span class="maximg"><img src="/Jzw/Tpl/Wap/Default/images/foot1.png" /></span>
+		<p>电话咨询</p>
+	</a>
+	<a href="/wap{$Categorys[136]['url']}" class="foot-in">
+		<span class="maximg"><img src="/Jzw/Tpl/Wap/Default/images/foot2.png" /></span>
+		<p>标识设计</p>
+	</a>
+	<a href="/" class="foot-in">
+		<span class="foot-center"><img src="/Jzw/Tpl/Wap/Default/images/foot3.png" /></span>
+	</a>
+	<a href="/wap{$Categorys[116]['url']}" class="foot-in">
+		<span class="maximg"><img src="/Jzw/Tpl/Wap/Default/images/foot4.png" /></span>
+		<p>标识制作</p>
+	</a>
+	<a href="/wap{$Categorys[72]['url']}" class="foot-in">
+		<span class="maximg"><img src="/Jzw/Tpl/Wap/Default/images/foot5.png" /></span>
+		<p>关于我们</p>
+	</a>
+
+</footer>
+<?php
+	$isxcx=$_GET['isxcx'];
+	if($isxcx==""){
+		$isxcx=$_COOKIE['isxcx'];
+	}
+	else{
+		setCookie('isxcx',$isxcx);
+	}	
+?>
+<if condition="$isxcx!=1">
+	<script>
+		var _hmt = _hmt || [];
+		(function () {
+			var hm = document.createElement("script");
+			hm.src = "https://hm.baidu.com/hm.js?6c8a0f091453260f405e2fe10046079d";
+			var s = document.getElementsByTagName("script")[0];
+			s.parentNode.insertBefore(hm, s);
+		})();
+	</script>
+</if>

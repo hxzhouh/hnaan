@@ -1,0 +1,19 @@
+   <div class="case_two">
+      <div class="tpleft">推荐案例</div>
+      <a href="/wap{$Categorys[95]['url']}" title="{$Categorys[95]['catname']}" class="tpright">更多&gt;&gt;</a>
+  </div>
+     <div class="cl_case one">
+       <ul>
+        <?php
+             $Pdata=M()->query("select arrchildid from `jzw_category` where id=94");
+            $Data=M()->query("SELECT * FROM `jzw_case` WHERE catid in (".$Pdata[0]["arrchildid"].") order by listorder desc,createtime desc limit 0,2");
+            for($i=0;$i<count($Data);$i++){
+            echo '   <li><a href="/wap'.$Data[$i]['url'].'" title="'.$Data[$i]['title'].'">
+           <div class="tp" style="background-image:url('.$Data[$i]['thumb'].');"></div>
+           <div class="bt ellipsis">'.$Data[$i]['title'].'</div></a>
+           </li>';
+            }
+            ?>  
+           
+       </ul>
+     </div>

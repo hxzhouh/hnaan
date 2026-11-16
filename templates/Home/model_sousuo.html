@@ -1,0 +1,54 @@
+<div class="b_bottom">
+   <div class="row">
+      <div class="b_news yc">
+       <?php
+            $Pdata=M()->query("select arrchildid from `jzw_category` where id=94");
+            $Data=M()->query("SELECT * FROM `jzw_case` WHERE catid in (".$Pdata[0]["arrchildid"].") order by listorder desc,createtime desc limit 0,1");
+            
+            echo ' <a href="'.$Data[0]['url'].'" title="'.$Data[00]['title'].'">['.$Categorys[$Data[0]['catid']]['catname'].']&nbsp;&nbsp;&nbsp;'.$Data[0]['title'].'</a>';
+                 
+        ?>      
+      </div>
+      <div class="gjc">
+
+
+      关键词： 
+    <?php
+   $str=M()->query("select value from `jzw_config` where varname='between'"); 
+   $array=explode(",",$str[0]['value']);
+    foreach($array as $key=>$val) {
+      echo ' <a href="'.$Categorys[63]['url'].'?key='.$val.'" title="'.$val.'">'.$val.'</a> ';
+  }
+   ?>
+   
+      </div>
+      <div class="search">
+      <input type="text" class="ser_text" id="key" value="请输入搜索内容" onfocus="javascript:if(this.value=='请输入搜索内容')this.value='';"
+onblur="javascript:if(this.value=='')this.value='请输入搜索内容';" />
+<input class="ser_btn" type="button" onclick="chazhao();" />
+      </div>
+   </div>
+</div>
+
+<script>
+$(function () {
+    /*关键字搜索*/
+    $(".gjc").delegate("a", "click", function () {
+                
+         window.location.href = '/search.aspx?keyword=' + encodeURI($(this).text());
+       });
+ });
+  </script>
+
+       
+        <script>
+          function chazhao() {
+            var key = $("#key").val();
+            if (key == "") {
+              alert("请输入关键词");
+            }
+            else {
+              window.location.href = "{$Categorys[63]['url']}?key=" + encodeURI(key);
+            }
+          }
+        </script>

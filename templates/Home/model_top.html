@@ -1,0 +1,99 @@
+<div class="nav">
+
+    <div class="nav-in">
+
+        <ul>
+
+            <li> <a href="/" title="{$site_name}">首页</a></li>
+
+            <li>
+
+                <a href="{$Categorys[136]['url']}" title="{$Categorys[136]['catname']}">服务项目</a>
+
+               <div class="nav-in-in">
+
+                   <JW:list sql="SELECT * FROM `jzw_category` WHERE 1 and `ismenu`=1 and `parentid`=115 order by listorder asc">
+
+                       <a href="{$r.url}" title="{$r.catname}">{$r.catname}</a>
+
+                   </JW:list>
+
+
+
+                </div>
+
+            </li>
+
+
+
+
+
+            <li>
+
+                <a href="{$Categorys[120]['url']}" title="{$Categorys[93]['catname']}">服务案例</a>
+
+                <div class="nav-in-in">
+
+                   <JW:list sql="SELECT * FROM `jzw_category` WHERE 1 and `ismenu`=1 and `parentid`=93 order by listorder asc limit 10">
+
+                        <a href="{$r.url}" target="_blank" title="{$r.catname}">{$r.catname}</a>
+
+                   </JW:list>
+
+                </div> 
+
+            </li>
+
+            <li>
+
+                <a href="{$Categorys[117]['url']}" title="{$Categorys[117]['catname']}">资源整合</a>
+
+            </li>
+
+            <li>
+
+                <a href="{$Categorys[84]['url']}" title="{$Categorys[83]['catname']}">新闻资讯</a>
+
+                <div class="nav-in-in">
+
+                    <JW:list sql="SELECT * FROM `jzw_category` WHERE 1 and `ismenu`=1 and `parentid`=83 order by listorder asc">
+
+                        <a href="{$r.url}" title="{$r.catname}">{$r.catname}</a>
+
+                    </JW:list>
+
+                </div>
+
+            </li>
+
+            <li>
+
+                <a href="{$Categorys[72]['url']}" title="{$Categorys[72]['catname']}">关于爱奥尼</a>
+
+                <div class="nav-in-in">
+
+                    <JW:list sql="SELECT * FROM `jzw_category` WHERE 1 and `ismenu`=1 and `parentid`=72 order by listorder asc">
+
+                        <a href="{$r.url}" title="{$r.catname}">{$r.catname}</a>
+
+                    </JW:list>
+
+
+
+
+
+                </div>
+
+            </li>
+
+            <li>
+
+                <a href="{$Categorys[66]['url']}" title="{$Categorys[66]['catname']}">联系我们</a>
+
+            </li>
+
+        </ul>
+
+    </div>
+
+</div>

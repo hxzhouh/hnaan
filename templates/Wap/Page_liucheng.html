@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		  <include file='model:head' />
+	</head>
+	<body>
+		<!--主内容-->
+	<include file='model:top' />
+		
+		<!--内容区-->
+		<section>
+			<!--banner图-->
+			<div class="maxwimg">
+			   <JW:list sql="SELECT * FROM `jzw_slide_data` WHERE fid=37 order by listorder asc">
+											<img src="{$r.pic}" />
+								</JW:list>
+			</div>
+			
+			<!--标题-->
+			<div class="qibu-title">
+				<h3>项目定制流程</h3>
+				<p>Custom process</p>
+			</div>
+			<!--七步流程-->
+			<div class="qibu-lc">
+			<?php
+                $Ad=M('slide_data')->query("SELECT * FROM `jzw_slide_data` WHERE fid=1 order by listorder asc");
+				for($i=0;$i<count($Ad);$i++){
+				echo '
+				<div>
+					<div class="qibu-left"><img src="'.$Ad[$i]["pic"].'" /></div>
+					<div class="qibu-right">
+						<h3><span>'.$Ad[$i]["title"].'</span>'.$Ad[$i]["title"].'</h3>
+						<p>'.$Ad[$i]["subtitle"].'</p>
+					</div>
+				</div>
+				';
+				}
+				?>
+			</div>
+			<div class="qb-zhan"></div>
+			
+			<!--标题-->
+			<div class="qibu-title">
+				<h3>服务标准</h3>
+				<p>Service standards</p>
+			</div>
+			<!--服务标准-->
+			<div class="qibu-fuwu">
+					<?php
+                $Ad=M('slide_data')->query("SELECT * FROM `jzw_slide_data` WHERE fid=2 order by listorder asc");
+				for($i=0;$i<count($Ad);$i++){
+				echo '
+					<div>
+					<img src="'.$Ad[$i]["pic"].'" />
+					<div class="qibu-fuwu-in">
+						<h2>'.$Ad[$i]["title"].'</h2>
+						<p>'.$Ad[$i]["subtitle"].'</p>
+					</div>
+				</div>
+				
+				';
+				}
+				?>
+			</div>
+			<div class="clear"></div>
+			<div class="qb-zhan"></div>
+			<!--标题-->
+			<div class="qibu-title" style="border: none;">
+				<h3>项目<span>案例</span></h3>
+				<p>Project case</p>
+			</div>
+			<!--项目案例-->
+			<div class="qibu-case">
+				<div class="swiper-container qibu-swiper">
+				    <div class="swiper-wrapper">
+				        <?php
+               $t1Arr=M('product')->query("SELECT * FROM `jzw_case` WHERE catid=96 and status=1 order by listorder desc,createtime desc limit 0,4");
+               for($i=0;$i<count($t1Arr);$i++){
+                 echo '
+				  <div class="swiper-slide">
+				        	<a class="qibu-bot" href="'.$t1Arr[$i]["url"].'">
+				        		<img src="'.$t1Arr[$i]["thumb"].'" />
+				        		<p>'.$t1Arr[$i]["title"].'</p>
+				        	</a>
+				        </div>';
+				}
+				?>
+				        
+				        <!--占位盒-->
+				        <div class="swiper-slide last-swiper"></div>
+				    </div>
+				</div>
+				
+				<a href="/wap{$Categorys[93]['url']}" class="qibu-more">查看更多</a>
+			</div>
+			
+			
+		</section>
+		
+		<!--置顶-->
+		<div class="zhiding max-img" id="zhiding">
+			<img alt="" src="/Jzw/Tpl/Wap/Default/images/zhiding.png" />
+		</div>
+		<include file='model:foot' />
+		<!--侧导航-->
+		
+		
+		<!--底部样式js控制-->
+		<script>
+			$(function(){
+				$('.foot:nth-child(1)').addClass("active");
+			});
+		</script>
+	</body>
+</html>

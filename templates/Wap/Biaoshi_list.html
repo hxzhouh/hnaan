@@ -1,0 +1,297 @@
+<!DOCTYPE html>
+<html>
+	<head>
+<include file="./Jzw/Tpl/Wap/Default/model_head.html" />
+	<link rel="stylesheet" href="/Jzw/Tpl/Wap/Default/css/Ke.css" />
+	</head>
+	<body>
+		<!--主内容-->
+	<include file="./Jzw/Tpl/Wap/Default/model_top.html" />
+		
+		<!--内容区-->
+		<section>
+			<!--banner图-->
+			<div class="banner Maximg">
+			   <JW:list sql="SELECT * FROM `jzw_slide_data` WHERE fid=39 order by listorder asc">
+							<img src="{$r.pic}" />
+				</JW:list>
+			</div>
+			<!--设计理念-->
+			<!--小标题-->
+			<!-- <div class="xbiaoti">
+				<img src="/Jzw/Tpl/Wap/Default/images/title1.png"/>
+			</div> -->
+	
+			<!--设计案例-->
+			<!--小标题-->
+			<div class="xbiaoti">
+				<img src="/Jzw/Tpl/Wap/Default/images/title2.png">
+			</div>
+			<div class="jianjie">
+				<img src="/Jzw/Tpl/Wap/Default/images/jinqu.png"/>
+			</div>
+			
+		
+			
+		<div class="al">
+			<div class="anli swiper-container yiwei">
+				<div class="anli-swiper swiper-wrapper">
+					<?php
+               $t1Arr=M('biaoshi')->query("SELECT * FROM `jzw_biaoshi` WHERE catid=139 and status=1 order by listorder desc,createtime desc limit 0,4");
+               for($i=0;$i<count($t1Arr);$i++){
+                 echo '
+				 	<div class="anli-in swiper-slide"><a href="'.$t1Arr[$i]["url"].'">
+						<div class="linian-top">
+						<img src="'.$t1Arr[$i]["thumb"].'" />
+					</div>
+						<div class="linian-bot anli-bot">
+						<h2>'.$t1Arr[$i]["title"].'</h2>
+						<p>项目介绍：'.str_cut($t1Arr[$i]["description"],30).'<br />服务内容：'.str_cut($t1Arr[$i]["neiron"],100).'</p>
+					</div></a>
+					</div>';
+				}
+				?>
+				</div>
+				<div class="yiwei-jianjie swiper-pagination"></div>
+			</div>
+		</div>
+	<!--地产-->	
+	<!--小简介-->
+	<div class="jianjie">
+		<img src="/Jzw/Tpl/Wap/Default/images/dichan.png"/>
+	</div>
+	<div class="al dc">
+		<div class="anli swiper-container yiwei">
+			<div class="anli-swiper swiper-wrapper">
+				<?php
+               $t1Arr=M('biaoshi')->query("SELECT * FROM `jzw_biaoshi` WHERE catid=140 and status=1 order by listorder desc,createtime desc limit 0,4");
+               for($i=0;$i<count($t1Arr);$i++){
+                 echo '
+				 	<div class="anli-in swiper-slide"><a href="'.$t1Arr[$i]["url"].'">
+						<div class="linian-top">
+						<img src="'.$t1Arr[$i]["thumb"].'" />
+					</div>
+						<div class="linian-bot anli-bot">
+						<h2>'.$t1Arr[$i]["title"].'</h2>
+						<p>项目介绍：'.str_cut($t1Arr[$i]["description"],30).'<br />服务内容：'.str_cut($t1Arr[$i]["neiron"],100).'</p>
+					</div></a>
+					</div>';
+				}
+				?>
+			</div>
+			<div class="swiper-pagination yiwei-jianjie"></div>
+		</div>
+	</div>
+	
+	<!--医卫-->		
+		<!--小简介-->
+		<div class="jianjie">
+			<img src="/Jzw/Tpl/Wap/Default/images/yiwei.png"/>
+		</div>
+		<div class="al yw">
+			<div class="anli swiper-container yiwei">
+				<div class="anli-swiper swiper-wrapper">
+					<?php
+               $t1Arr=M('biaoshi')->query("SELECT * FROM `jzw_biaoshi` WHERE catid=141 and status=1 order by listorder desc,createtime desc limit 0,4");
+               for($i=0;$i<count($t1Arr);$i++){
+                 echo '
+				 	<div class="anli-in swiper-slide"><a href="'.$t1Arr[$i]["url"].'">
+						<div class="linian-top">
+						<img src="'.$t1Arr[$i]["thumb"].'" />
+					</div>
+						<div class="linian-bot anli-bot">
+						<h2>'.$t1Arr[$i]["title"].'</h2>
+						<p>项目介绍：'.str_cut($t1Arr[$i]["description"],30).'<br />服务内容：'.str_cut($t1Arr[$i]["neiron"],100).'</p>
+					</div></a>
+					</div>';
+				}
+				?>
+				</div>
+				<div class="swiper-pagination yiwei-jianjie"></div>
+			</div>
+		</div>
+				
+	<!--校园-->		
+		<!--小简介-->
+		<div class="jianjie">
+			<img src="/Jzw/Tpl/Wap/Default/images/xiaoyuanbt.png"/>
+		</div>
+		<div class="al xy">
+			<div class="anli swiper-container xiaoyuan">
+				<div class="anli-swiper swiper-wrapper">
+				<?php
+               $t1Arr=M('biaoshi')->query("SELECT * FROM `jzw_biaoshi` WHERE catid=142 and status=1 order by listorder desc,createtime desc limit 0,4");
+               for($i=0;$i<count($t1Arr);$i++){
+                 echo '
+				 	<div class="anli-in swiper-slide"><a href="'.$t1Arr[$i]["url"].'">
+						<div class="linian-top">
+						<img src="'.$t1Arr[$i]["thumb"].'" />
+					</div>
+						<div class="linian-bot anli-bot">
+						<h2>'.$t1Arr[$i]["title"].'</h2>
+						<p>项目介绍：'.str_cut($t1Arr[$i]["description"],30).'<br />服务内容：'.str_cut($t1Arr[$i]["neiron"],100).'</p>
+					</div></a>
+					</div>';
+				}
+				?>
+				</div>
+				<div class="anli-zenjia swiper-pagination xiaoyuan-jianjie"></div>
+			</div>
+		</div>
+	<!--更多案例-->	
+	<!--小简介-->
+	<!-- <div class="jianjie">
+		<img src="/Jzw/Tpl/Wap/Default/images/fenduoanli.png"/>
+	</div>
+	<div class="genduogs" >
+	<JW:list sql="SELECT * FROM `jzw_slide_data` WHERE fid=22 order by listorder asc">
+			<a ><img src="{$r.pic}" /></a>
+							</JW:list>
+	</div> -->
+	<div style="clear: both;"></div>
+	<!--团队设计-->	
+	<!-- <div class="sjrenwu">
+		<div class="xxbt">
+			<img src="/Jzw/Tpl/Wap/Default/images/tuandui.png" />
+		</div>
+		<div class="sj-con swiper-container">
+			<div class="sj-swiper swiper-wrapper">
+				<JW:list sql="SELECT * FROM `jzw_slide_data` WHERE fid=27 order by listorder asc">
+				<div class="sjrenwu-in swiper-slide">
+					<div class="sjrenwu-in-top">
+						<img src="{$r.pic}" />
+					</div>
+					<p>{$r.title}</p>
+				</div>
+							</JW:list>
+			</div>
+		</div>
+	</div> -->
+	<!--公司资质-->	
+	<!-- <div class="zizhi">
+		<div class="zizhi-bt">
+			<img src="/Jzw/Tpl/Wap/Default/images/zizhibt.png" />
+		</div>
+		<div class="zizhi-bt-in">
+			<div class="zizhi-bt-in-top">
+			<?php
+               $t1Arr=M('slide_data')->query("SELECT * FROM `jzw_slide_data` WHERE fid=28 and status=1 order by listorder desc limit 0,2");
+               for($i=0;$i<count($t1Arr);$i++){
+                 echo '
+				<div class="zizhi-bt-in-top-left">
+					<div class="zizhi-bt-in-top-left-in">
+						<img src="'.$t1Arr[$i]["pic"].'" />
+					</div>
+					<p>'.$t1Arr[$i]["title"].'</p>
+				</div> ';
+				}
+				?>
+			</div>
+			<div class="zizhi-bt-in-top zzbot">
+			<?php
+               $t1Arr=M('slide_data')->query("SELECT * FROM `jzw_slide_data` WHERE fid=29 and status=1 order by listorder desc limit 0,2");
+               for($i=0;$i<count($t1Arr);$i++){
+                 echo '
+				<div class="zizhi-bt-in-top-left zzright">
+					<div class="zizhi-bt-in-top-left-in right-in">
+						<img src="'.$t1Arr[$i]["pic"].'" />
+					</div>
+					<p>'.$t1Arr[$i]["title"].'</p>
+				</div> ';
+				}
+				?>
+			</div>
+		</div>
+	</div> -->
+	
+	<!--在线预约-->	
+	<div class="yuyue">
+		<h1>在线预约</h1>
+		<div class="yuyue-bot">
+		<form action="" method="" onsubmit="return dosub2();">
+			<div class="yuyue-bot-in">
+				<h1>现在预约，即可定制一套专属设计方案</h1>
+				<h2>预约热线：{$tel}</h2>
+				<div class="xinxitianxie">
+					<p>姓名：</p>
+					<input id="t_name" />
+				</div>
+				<div class="xinxitianxie">
+					<p>电话：</p>
+					<input maxlength="11" id="t_phone" />
+				</div>
+				<div class="xinxitianxie">
+					<p>邮箱：</p>
+					<input  id="t_email" />
+				</div>
+				<div class="xinxitianxie">
+					<button>立即提交</button>
+				</div>
+			</div>
+			</form>
+		</div>
+	</div>
+	
+	
+	
+	
+	
+	
+			
+			
+			
+		</section>
+		<div class="zhanwei"></div>
+		<!--置顶-->
+		<div class="zhiding max-img" id="zhiding">
+			<img alt="" src="/Jzw/Tpl/Wap/Default/images/zhiding.png" />
+		</div>
+		<include file="./Jzw/Tpl/Wap/Default/model_foot.html" />
+		<!--侧导航-->
+		<script type="text/javascript">
+            //验证手机格式
+            function isPhone(str) {
+                var pattern = "^0?(13[0-9]|15[0-9]|18[0-9]|17[0-9]|14[0-9])[0-9]{8}$";
+                var check = new RegExp(pattern);
+                return check.test(str);
+            }
+
+            function dosub2(){
+
+                var phone = $("#t_phone").val();
+                var name = $("#t_name").val();
+                var email = $("#t_email").val();
+                var catid = 70;
+                if (phone == "" || name == "" || email == "") {
+                    alert("请填写相关信息");
+                    return false;
+                }
+                if (!isPhone(phone)) {
+                    alert("请输入正确的手机号码");
+                    return false;
+                }
+
+
+                submitMessage({
+                    title: name,
+                    phone: phone,
+                    email: email,
+
+                    catid: catid,
+                     ctype:"来自在线预约"
+                }, "liuyan", function () {
+                    alert("提交成功");
+                    window.location.reload();
+                });
+                return false;
+            }
+		</script>
+		
+		<!--底部样式js控制-->
+		<script>
+			$(function(){
+				$('.foot:nth-child(1)').addClass("active");
+			});
+		</script>
+	</body>
+</html>

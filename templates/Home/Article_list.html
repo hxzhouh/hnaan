@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html lang="zh">
+
+	<head>
+		<include file="model:head" />
+	</head>
+
+	<body>
+		<!--头部  -->
+		<header>
+			<include file="model:header" />
+		</header>
+		<!--导航-->
+		<include file="model:top" />
+		<!--banner-->
+		<div class="zt-banner">
+			<include file="model:banner" />
+		</div>
+		<div style='display:none;'><h1>新闻咨询</h1></div> 
+
+		<!--内容-->
+		<section>
+			<!--当前位置-->
+			<div class="zt-weizhi">
+				<ul>
+					<li><a href="/" title="{$site_name}">首页</a><span> > </span> </li>
+					<li><a href="{$Categorys[84]['url']}" title="新闻资讯">新闻资讯</a><span> > </span></li>
+					<li>{$catname}</li>
+				</ul>
+				<div class="clear"></div>
+			</div>		
+		</section>
+		
+		
+		<section style="margin: 37px 0 25px;">
+			<div class="wid1200 main-title">
+				<h3>新闻*智库</h3>
+				<p>爱奥尼标识公司动态及专业标识标牌知识</p>
+			</div>
+		</section>
+		<!--案例nav-->
+		<section style="margin-bottom: 32px;">
+			<div class="width1200 case-list-nav-top news-nav" id="menu">
+				<JW:list sql="SELECT * FROM `jzw_category` WHERE 1 and `ismenu`=1 and `parentid`=83 order by listorder asc">
+					<a href="{$r.url}" title="{$r.catname}" data-cid="{$r.id}" target="_blank">{$r.catname}</a>
+				</JW:list>
+
+			</div>
+			<script type="text/javascript">
+                $(function () {
+                    $("#menu").find("a").each(function () {
+                        if ($(this).attr("data-cid") == '{$catid}') {
+                            $(this).addClass("active");
+                        }
+                    });
+
+                });
+			</script>
+		</section>
+		<!--新闻列表-->
+		<section>
+			<div class="width1200 news-list">
+				<ul>
+					<volist name="list" id="vo">
+					<li style="position:relative">
+					<a href="{$vo.url}"  target="_blank" style="display:block;width:100%;height:100%;position:absolute;top:0;"> 
+						<div class="news-list-img Maximg"><a href="{$vo.url}" title="{$vo.title}"><img alt="{$vo.title}" src="{$vo.thumb}" /></a></div>
+						<div class="news-list-main">
+							<h3><a href="{$vo.url}" title="{$vo.title}">{$vo.title}</a></h3>
+							<p>{$vo.description}</p>
+						</div>
+						<div class="news-right">
+							<h3>{$vo.createtime|toDate=###,'m-d'}</h3>
+							<p>{$vo.createtime|toDate=###,'Y'}</p>
+							<span><img alt="{$vo.title}" src="/Jzw/Tpl/Home/Default/zt-images/banner-qian.png" /></span>
+						</div>
+						</a>
+					</li>
+					</volist>
+
+				</ul>
+			</div>
+			<div class="clear"></div>
+		</section>
+		
+		<section style="margin:54px 0 86px;">
+			<div class="width1200 fenye">
+				<ul>
+					{$pages}
+				</ul>
+				<div class="clear"></div>
+			</div>
+		</section>
+
+		<!--底部导航-->
+		<include file="model:foot" />
+
+		<!--侧导航-->
+		<include file="model:right" />
+		<script>
+            $(".nav-in li:nth-child(5)").addClass("nav-active");
+		</script>
+		<script>
+			$(".zt-qibu-list:nth-child(2n-1) .zt-qibu-in .zt-qibu-in1").addClass("slideInLeft");
+			$(".zt-qibu-list:nth-child(2n-1) .zt-qibu-in .zt-qibu-in2").addClass("slideInRight");
+			$(".zt-qibu-list:nth-child(2n) .zt-qibu-in .zt-qibu-in1").addClass("slideInRight");
+			$(".zt-qibu-list:nth-child(2n) .zt-qibu-in .zt-qibu-in2").addClass("slideInLeft");
+		</script>
+		
+	</body>
+
+</html>

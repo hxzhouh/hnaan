@@ -1,0 +1,19 @@
+{
+  "tables": {
+    "jzw_article": 274,
+    "jzw_attachment": 3330,
+    "jzw_biaoshi": 18,
+    "jzw_block": 2,
+    "jzw_case": 96,
+    "jzw_category": 45,
+    "jzw_config": 18,
+    "jzw_link": 5,
+    "jzw_page": 34,
+    "jzw_slide": 40,
+    "jzw_slide_data": 132,
+    "jzw_tags": 319,
+    "jzw_tags_data": 661
+  },
+  "assets": 4380,
+  "sourceDatabase": "201810aiaoni"
+}

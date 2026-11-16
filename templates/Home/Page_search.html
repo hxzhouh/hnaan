@@ -1,0 +1,104 @@
+<?php
+$kw=$_GET["key"]; 
+$map['state']=1;   
+if(!empty($kw)){ 
+ $map['title'] = array('like','%'.$kw.'%'); 
+} 
+$module = M('article'); 
+import("@.ORG.Page"); // 导入分页类 
+$count = $module->where($map)->count(); // 查询满足要求的总记录数 
+$Page = new Page($count,9); // 实例化分页类 传入总记录数和每页显示的记录数
+$show = $Page->myshow(); // 分页显示输出 
+$list = $module->where($map)->order('listorder desc,createtime desc')->limit($Page->firstRow.','.$Page->listRows)->select(); 
+?>
+
+<!DOCTYPE html>
+<html lang="zh">
+
+<head>
+    <include file="model:head" />
+</head>
+
+<body>
+<!--头部  -->
+<header>
+    <include file="model:header" />
+</header>
+<!--导航-->
+<include file="model:top" />
+<!--banner-->
+<div class="zt-banner">
+    <include file="model:banner" />
+</div>
+<div style='display:none;'><h1>搜索文章标签</h1></div> 
+
+<!--内容-->
+<section>
+    <!--当前位置-->
+    <div class="zt-weizhi">
+        <ul>
+            <li><a href="/" title="{$site_name}">首页</a><span> > </span> </li>
+            <li>文章标签搜索结果</li>
+        </ul>
+        <div class="clear"></div>
+    </div>
+</section>
+
+
+<section style="margin: 37px 0 25px;">
+    <div class="wid1200 main-title">
+        <h3>搜索文章标签“{$_GET["key"]}”结果</h3>
+
+    </div>
+</section>
+<!--新闻列表-->
+<section>
+    <div class="width1200 news-list">
+        <ul>
+            <volist name="list" id="vo">
+                <li>
+                    <div class="news-list-img Maximg"><a href="{$vo.url}" title="{$vo.title}"><img alt="{$vo.title}" src="{$vo.thumb}" /></a></div>
+                    <div class="news-list-main">
+                        <h3><a href="{$vo.url}" title="{$vo.title}">{$vo.title}</a></h3>
+                        <p>{$vo.description}</p>
+                    </div>
+                    <div class="news-right">
+                        <h3>{$vo.createtime|toDate=###,'m-d'}</h3>
+                        <p>{$vo.createtime|toDate=###,'Y'}</p>
+                        <span><img alt="{$vo.title}" src="/Jzw/Tpl/Home/Default/zt-images/banner-qian.png" /></span>
+                    </div>
+                </li>
+            </volist>
+
+        </ul>
+    </div>
+    <div class="clear"></div>
+</section>
+
+<section style="margin:54px 0 86px;">
+    <div class="width1200 fenye">
+        <ul>
+            {$show}
+        </ul>
+        <div class="clear"></div>
+    </div>
+</section>
+
+<!--底部导航-->
+<include file="model:foot" />
+
+<!--侧导航-->
+<include file="model:right" />
+<script>
+    $(".nav-in li:nth-child(6)").addClass("nav-active");
+</script>
+<script>
+    $(".zt-qibu-list:nth-child(2n-1) .zt-qibu-in .zt-qibu-in1").addClass("slideInLeft");
+    $(".zt-qibu-list:nth-child(2n-1) .zt-qibu-in .zt-qibu-in2").addClass("slideInRight");
+    $(".zt-qibu-list:nth-child(2n) .zt-qibu-in .zt-qibu-in1").addClass("slideInRight");
+    $(".zt-qibu-list:nth-child(2n) .zt-qibu-in .zt-qibu-in2").addClass("slideInLeft");
+</script>
+
+</body>
+
+</html>

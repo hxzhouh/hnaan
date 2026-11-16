@@ -1,0 +1,184 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+	<include file="./Jzw/Tpl/Wap/Default/model_head.html" />
+</head>
+
+<body>
+	<!--主内容-->
+	<include file="./Jzw/Tpl/Wap/Default/model_top.html" />
+
+	<!--内容区-->
+	<section>
+		<!--banner图-->
+		<div class="banner Maximg">
+			<JW:list sql="SELECT * FROM `jzw_slide_data` WHERE fid=36 order by listorder asc">
+				<img src="{$r.pic}" />
+			</JW:list>
+		</div>
+
+
+		<div class="width">
+			<h4 class="contact-title">在线留言<span>ONLINE MESSAGE</span></h4>
+			<div class="contact-form">
+				<form action="" method="" onsubmit="return dosub();">
+					<input type="text" placeholder="请输入您的真实姓名" maxlength="8" id="t_name" />
+					<input type="text" placeholder="请输入您的常用邮箱" maxlength="20" id="t_email" />
+					<input type="text" placeholder="请输入您的手机号码" maxlength="11" id="t_phone" />
+					<textarea placeholder="请输入留言内容" id="t_remark"></textarea>
+					<p>*限1000字符</p>
+			</div>
+			<div class="contact-ti">
+				<input type="submit" value="提交" />
+			</div>
+			</form>
+			<!--地图-->
+			<div class="contact-ditu maximg">
+				<style>
+					.dituing img{max-width:none;max-height:none;}
+				</style>
+				<div class="dituing">
+					<script type="text/javascript" src="https://api.map.baidu.com/api?v=3.0&ak=0BtPf2pDiTIGxnPC7PQw2vqgCLWoGGFV&callback=map_init&s=1"></script>
+
+
+					<div id="dituContent" style="width:100%;height:350px;border:#ccc solid 1px;font-size:12px;">
+					</div>
+
+					<script>
+						// loadContactMap('dituContent', '{$site_name}', '{$address}', '{$tel}', '{$baiduxy}'.split(',')[0], '{$baiduxy}'.split(',')[1]);
+					</script>
+					 <script type="text/javascript">
+                        function map_init() {
+                            var markerArr = [{
+                                title: { name: '公司', value: "{$site_name}" },
+                                point: { name: '坐标', value: "{$baiduxy}" },
+                                address: { name: '地址', value: "{$address}" },
+                                tel: { name: '电话', value: "{$phone}" }
+                            },];
+                            map = new BMap.Map('dituContent'); map.centerAndZoom(new BMap.Point(<php> echo $baiduxy </php>), 15); loadContactMap('dituContent', markerArr, map);
+                        }
+                    </script>
+				</div>
+			</div>
+			<!--联系方式-->
+			<div class="contact-mode">
+				<ul>
+					<li onclick="window.location.href='https://map.baidu.com/mobile/webapp/place/detail/qt=ninf&wd=%E6%B9%96%E5%8D%97%E7%88%B1%E5%A5%A5%E5%B0%BC%E6%A0%87%E8%AF%86&c=158&searchFlag=bigBox&version=5&exptype=dep&src_from=webapp_all_bigbox&wd2=%E9%95%BF%E6%B2%99%E5%B8%82%E5%B2%B3%E9%BA%93%E5%8C%BA&sug_forward=031b5c0aff124145c06c1462&src=1&nb_x=12566834.821956&nb_y=3255572.3506039&center_rank=1&uid=031b5c0aff124145c06c1462&industry=enterprise&qid=3921635381886599695/showall=1&pos=0&da_ref=listclk&da_qrtp=11&da_adquery=%E6%B9%96%E5%8D%97%E7%88%B1%E5%A5%A5%E5%B0%BC%E6%A0%87%E8%AF%86&da_adtitle=%E6%B9%96%E5%8D%97%E7%88%B1%E5%A5%A5%E5%B0%BC%E6%A0%87%E8%AF%86&da_adindus=%E5%85%AC%E5%8F%B8%E4%BC%81%E4%B8%9A%3B%E5%85%AC%E5%8F%B8&detail_from=list&vt=map';">
+						<div class="contact-mode-l">
+							<span class="maximg">
+								<img alt="" src="/Jzw/Tpl/Wap/Default/images/lx-1.png" />
+							</span>
+							<p>公司地址：</p>
+						</div>
+						<div class="contact-mode-r">
+							<p>{$address} <span style="color:red;">点击导航</span></p>
+						</div>
+						<div class="clear"></div>
+					</li>
+					<li class="contact-mode-li2">
+						<div class="contact-mode-l">
+							<span class="maximg">
+								<img alt="" src="/Jzw/Tpl/Wap/Default/images/lx-2.png" />
+							</span>
+							<p>联系方式：</p>
+						</div>
+						<div class="contact-mode-r">
+							<p>{$tel}</p>
+						</div>
+						<div class="clear"></div>
+					</li>
+					<li>
+						<div class="contact-mode-l">
+							<span class="maximg">
+								<img alt="" src="/Jzw/Tpl/Wap/Default/images/lx-3.png" />
+							</span>
+							<p>公司邮箱：</p>
+						</div>
+						<div class="contact-mode-r">
+							<p>{$site_email}</p>
+						</div>
+						<div class="clear"></div>
+					</li>
+				
+				</ul>
+			</div>
+		</div>
+		<div class="lx-che">
+			<img src="/Jzw/Tpl/Wap/Default/images/bus.png" />
+			<p>附近乘车路线</p>
+		</div>
+		<div class="luxian">
+			<span>
+				<JW:list sql="SELECT * FROM `jzw_block` WHERE pos='luxian'">
+					{$r.content}
+				</JW:list>
+			</span>
+		</div>
+		<!--二维码-->
+		<div class="contact-code">
+			<img alt="" src="/Jzw/Tpl/Wap/Default/images/erweima.png" />
+			<p>扫一扫关注</p>
+		</div>
+
+
+
+
+	</section>
+
+	<!--置顶-->
+	<div class="zhiding max-img" id="zhiding">
+		<img alt="" src="/Jzw/Tpl/Wap/Default/images/zhiding.png" />
+	</div>
+	<include file="./Jzw/Tpl/Wap/Default/model_foot.html" />
+	<!--侧导航-->
+	<script type="text/javascript">
+		//验证手机格式
+		function isPhone(str) {
+			var pattern = "^0?(13[0-9]|15[0-9]|18[0-9]|17[0-9]|14[0-9])[0-9]{8}$";
+			var check = new RegExp(pattern);
+			return check.test(str);
+		}
+
+		function dosub() {
+			var phone = $("#t_phone").val();
+			var name = $("#t_name").val();
+			var email = $("#t_email").val();
+			var remark = $("#t_remark").val();
+			var catid = { $catid };
+			if (phone == "" || name == "" || email == "") {
+				alert("请填写相关信息");
+				return false;
+			}
+			if (!isPhone(phone)) {
+				alert("请输入正确的手机号码");
+				return false;
+			}
+			if (remark.length > 200) {
+				alert("留言内容不能超过200字符");
+				return false;
+			}
+			submitMessage({
+				title: name,
+				phone: phone,
+				email: email,
+				remark: remark,
+				catid: catid,
+				ctype: "来自联系我们"
+			}, "liuyan", function () {
+				alert("提交成功");
+				window.location.reload();
+			});
+			return false;
+		}
+	</script>
+
+	<!--底部样式js控制-->
+	<script>
+		$(function () {
+			$('.foot:nth-child(1)').addClass("active");
+		});
+	</script>
+</body>
+
+</html>

@@ -1,0 +1,424 @@
+<!DOCTYPE html>
+<html lang="zh">
+
+	<head>
+		<include file="model:head" />
+	</head>
+	<style>
+		.dz-i-t-i{
+			margin-top: 0;
+			overflow: visible;
+			box-shadow: 1px 1px 2px 2px rgba(0,0,0,0.10);
+			border-radius: 4px;
+		}
+	</style>
+	<body>
+		<!--头部  -->
+		<header>
+			<include file="model:header" />
+		</header>
+		<!--导航-->
+		<include file="model:top" />
+		<!--banner-->
+		<div class="zt-banner">
+			<include file="model:banner" />
+		</div>
+		<div style='display:none;'><h1>标识设计</h1></div> 
+
+		<!--内容-->
+		<section>
+			<!--当前位置-->
+			<div class="zt-weizhi">
+				<ul>
+					<li><a href="/" title="{$site_name}">首页</a><span> > </span> </li>
+					<li><a href="{$Categorys[136]['url']}" title="服务项目">服务项目</a><span> > </span></li>
+					<li>{$catname}</li>
+				</ul>
+				<div class="clear"></div>
+			</div>		
+		</section>
+		<section class="w1200">
+			<div class="dinzhi-in-top" style="height: auto;overflow: visible;">
+				<div class="dz-i-t-i wow bounceInLeft" style="visibility: visible; animation-name: bounceInLeft;">
+					<div class="din-top">
+						<img alt="生产设备" src="/Jzw/Tpl/Home/Default/images/taideng.png">
+						<img alt="生产设备" src="/Jzw/Tpl/Home/Default/images/img/jinyan.png">
+					</div>
+					<h2>15年+</h2>
+					<p>15年标识标牌规划、设计、制作经验</p>
+					<h4>15年标识标牌规划、设计、制作经验</h4>
+				</div>
+				<div class="dz-i-t-i wow bounceInUp" style="visibility: visible; animation-name: bounceInUp;">
+					<div class="din-top">
+						<img alt="生产设备" src="/Jzw/Tpl/Home/Default/images/img/jiqi.png">
+						<img alt="生产设备" src="/Jzw/Tpl/Home/Default/images/taidengbai.png">
+					</div>
+					<h2>20台+</h2>
+					<p>20余台专业生产设备</p>
+					<h4>20余台专业生产设备</h4>
+				</div>
+				<div class="dz-i-t-i wow bounceInUp" style="visibility: visible; animation-name: bounceInUp;">
+					<div class="din-top">
+						<img alt="服务团队" src="/Jzw/Tpl/Home/Default/images/img/hehu.png">
+						<img alt="服务团队" src="/Jzw/Tpl/Home/Default/images/bairen.png">
+					</div>
+					<h2>100人+</h2>
+					<p>100多人专业服务团队</p>
+					<h4>100多人专业服务团队</h4>
+				</div>
+				<div class="dz-i-t-i wow bounceInRight" style="visibility: visible; animation-name: bounceInRight;">
+					<div class="din-top">
+						<img alt="合作项目" src="/Jzw/Tpl/Home/Default/images/img/xiamu.png">
+						<img alt="合作项目" src="/Jzw/Tpl/Home/Default/images/baishu.png">
+					</div>
+					<h2>3000个+</h2>
+					<p>3000多家标识项目成功见证</p>
+					<h4>3000多家标识项目成功见证</h4>
+				</div>
+			</div>
+			<div class="clear"></div>
+		</section>
+		
+		<!--标题-->
+		<div class="sheji-title" style="margin-top: 43px;">
+			<span>爱奥尼标识设计理念</span>
+		</div>
+		<!--设计理念-->
+		<section class="w1200">
+			<div class="sheji-linian">
+				<p>我们用制造业的工艺设计标准，做到精益求精；我们为项目量身定制符合环境的导向系统设计，合理、科学规划好路径，做到造型美观、功能明确</p>
+				<span><img src="/Jzw/Tpl/Home/Default/images/5c637d83c71dc0935f92dae1021878e.jpg" /></span>
+			</div>
+		</section>
+		<!--标题-->
+		<div class="sheji-title" style="margin-bottom: 50px;">
+			<span>经典标识设计案例</span>
+		</div>
+		<div class="w1200-img"><img src="/Jzw/Tpl/Home/Default/images/set-title1.png" /></div>	
+		<!--景区公园展示切换-->
+		<div class="set-jingqu">
+			<div class="swiper-container jignqu-swiper">
+			    <div class="swiper-wrapper">
+			      	<?php
+               $t1Arr=M('biaoshi')->query("SELECT * FROM `jzw_biaoshi` WHERE catid=139 and status=1 order by listorder desc,createtime desc limit 0,4");
+               for($i=0;$i<count($t1Arr);$i++){
+                 echo '
+				     <div class="swiper-slide">
+			        	
+			        	<div class="jingqu-swi-right">
+			        		<span><img src="'.$t1Arr[$i]["thumb"].'" /></span>
+			        		<h3>'.$t1Arr[$i]["title"].'</h3>
+			        		<p>项目介绍：'.str_cut($t1Arr[$i]["description"],44).'</p>
+							<p>服务内容：'.str_cut($t1Arr[$i]["neiron"],44).'</p>
+							<div class="posi-left">
+								<a class="jingqu-swi-left" href="'.$t1Arr[$i]["url"].'">
+					        		<div class="jingqu-swi-left-in">
+					        			<h3>'.$t1Arr[$i]["title"].'</h3>
+					        			<p>'.str_cut($t1Arr[$i]["description"],30).'</p>
+					        			<p>'.str_cut($t1Arr[$i]["neiron"],100).'</p>
+					        		</div>
+					        	</a>
+				        	</div>
+			        	</div>
+			        </div>';
+				}
+				?>
+			    </div>
+			    <div class="swiper-pagination"></div>
+			</div>
+		    <script>
+			    var swiper = new Swiper('.jignqu-swiper', {
+			    	slidesPerView: 2,
+				      spaceBetween: 30,
+				      slidesPerGroup: 2,
+				      autoplay:true,
+				      loopFillGroupWithBlank: true,
+				      pagination: {
+				        el: '.swiper-pagination',
+				        clickable: true,
+				      }
+			    });
+		    </script>
+		</div>
+		
+		<div class="w1200-img"><img src="/Jzw/Tpl/Home/Default/images/set-title2.png" /></div>	
+		<div class="set-list">
+			<div class="swiper-container set-list setlist1">
+			    <div class="swiper-wrapper">
+			       	<?php
+               $t1Arr=M('biaoshi')->query("SELECT * FROM `jzw_biaoshi` WHERE catid=140 and status=1 order by listorder desc,createtime desc limit 0,4");
+               for($i=0;$i<count($t1Arr);$i++){
+                 echo '
+				     <div class="swiper-slide">
+			        	
+			        	<div class="jingqu-swi-right">
+			        		<span><img src="'.$t1Arr[$i]["thumb"].'" /></span>
+			        		<h3>'.$t1Arr[$i]["title"].'</h3>
+			        		<p>项目介绍：'.str_cut($t1Arr[$i]["description"],44).'</p>
+							<p>服务内容：'.str_cut($t1Arr[$i]["neiron"],44).'</p>
+							<div class="posi-left">
+								<a class="jingqu-swi-left" href="'.$t1Arr[$i]["url"].'">
+					        		<div class="jingqu-swi-left-in">
+					        			<h3>'.$t1Arr[$i]["title"].'</h3>
+					        			<p>'.str_cut($t1Arr[$i]["description"],30).'</p>
+					        			<p>'.str_cut($t1Arr[$i]["description"],100).'</p>
+					        		</div>
+					        	</a>
+				        	</div>
+			        	</div>
+			        </div>';
+				}
+				?>
+			    </div>
+			    <div class="swiper-pagination"></div>
+		    </div>
+		    <script>
+		    var swiper = new Swiper('.setlist1', {
+		      slidesPerView: 2,
+		      spaceBetween: 30,
+		      slidesPerGroup: 2,
+		      autoplay:true,
+		      loopFillGroupWithBlank: true,
+		      pagination: {
+		        el: '.swiper-pagination',
+		        clickable: true,
+		      }
+		    });
+		  </script>
+		</div>
+		
+		<div class="w1200-img"><img src="/Jzw/Tpl/Home/Default/images/set-title3.png" /></div>	
+		<div class="set-list">
+			<div class="swiper-container set-list setlist2">
+			    <div class="swiper-wrapper">
+			        	<?php
+               $t1Arr=M('biaoshi')->query("SELECT * FROM `jzw_biaoshi` WHERE catid=141 and status=1 order by listorder desc,createtime desc limit 0,4");
+               for($i=0;$i<count($t1Arr);$i++){
+                 echo '
+				     <div class="swiper-slide">
+			        	
+			        	<div class="jingqu-swi-right">
+			        		<span><img src="'.$t1Arr[$i]["thumb"].'" /></span>
+			        		<h3>'.$t1Arr[$i]["title"].'</h3>
+			        		<p>项目介绍：'.str_cut($t1Arr[$i]["description"],44).'</p>
+							<p>服务内容：'.str_cut($t1Arr[$i]["neiron"],44).'</p>
+							<div class="posi-left">
+								<a class="jingqu-swi-left" href="'.$t1Arr[$i]["url"].'">
+					        		<div class="jingqu-swi-left-in">
+					        			<h3>'.$t1Arr[$i]["title"].'</h3>
+					        			<p>'.str_cut($t1Arr[$i]["description"],30).'</p>
+					        			<p>'.str_cut($t1Arr[$i]["description"],100).'</p>
+					        		</div>
+					        	</a>
+				        	</div>
+			        	</div>
+			        </div>';
+				}
+				?>
+			    </div>
+			    <div class="swiper-pagination"></div>
+		    </div>
+		    <script>
+		    var swiper = new Swiper('.setlist2', {
+		      slidesPerView: 2,
+		      spaceBetween: 30,
+		      slidesPerGroup: 2,
+		      autoplay:true,
+		      loopFillGroupWithBlank: true,
+		      pagination: {
+		        el: '.swiper-pagination',
+		        clickable: true,
+		      }
+		    });
+		  </script>
+		</div>
+		
+		<div class="w1200-img"><img src="/Jzw/Tpl/Home/Default/images/set-title4.png" /></div>	
+		<div class="set-list">
+			<div class="swiper-container set-list setlist3">
+			    <div class="swiper-wrapper">
+			       	<?php
+               $t1Arr=M('biaoshi')->query("SELECT * FROM `jzw_biaoshi` WHERE catid=142 and status=1 order by listorder desc,createtime desc limit 0,4");
+               for($i=0;$i<count($t1Arr);$i++){
+                 echo '
+				     <div class="swiper-slide">
+			        	
+			        	<div class="jingqu-swi-right">
+			        		<span><img src="'.$t1Arr[$i]["thumb"].'" /></span>
+			        		<h3>'.$t1Arr[$i]["title"].'</h3>
+			        		<p>项目介绍：'.str_cut($t1Arr[$i]["description"],44).'</p>
+							<p>服务内容：'.str_cut($t1Arr[$i]["neiron"],44).'</p>
+							<div class="posi-left">
+								<a class="jingqu-swi-left" href="'.$t1Arr[$i]["url"].'">
+					        		<div class="jingqu-swi-left-in">
+					        			<h3>'.$t1Arr[$i]["title"].'</h3>
+					        			<p>'.$t1Arr[$i]["description"].'</p>
+					        			<p>'.$t1Arr[$i]["description"].'</p>
+					        		</div>
+					        	</a>
+				        	</div>
+			        	</div>
+			        </div>';
+				}
+				?>
+			    </div>
+			    <div class="swiper-pagination"></div>
+		    </div>
+		    <script>
+		    var swiper = new Swiper('.setlist3', {
+		      slidesPerView: 2,
+		      spaceBetween: 30,
+		      slidesPerGroup: 2,
+		      autoplay:true,
+		      loopFillGroupWithBlank: true,
+		      pagination: {
+		        el: '.swiper-pagination',
+		        clickable: true,
+		      }
+		    });
+		  </script>
+		</div>
+		
+		
+		<div class="w1200-img"><img src="/Jzw/Tpl/Home/Default/images/set-title5.png"	 /></div>
+		<div class="chenxin-b-p" style="margin-bottom: 0;">
+			<div class="zt-img-heji">
+				<ul>
+					<JW:list sql="SELECT * FROM `jzw_slide_data` WHERE fid=22 order by listorder asc">
+								<li><a href="{$r.link}"><img alt="{$r.title}" src="{$r.pic}" /></a></li>
+							</JW:list>
+				</ul>
+				<div class="clear"></div>
+			</div>
+		</div>
+		<!--设计团队-->
+		<div class="set-tuan-title"><img src="/Jzw/Tpl/Home/Default/images/set-tuan_11.jpg" /></div>
+		<div class="set-tuandui">
+			<div class="swiper-container tuan-swiper">
+			    <div class="swiper-wrapper">
+				<JW:list sql="SELECT * FROM `jzw_slide_data` WHERE fid=27 order by listorder asc">
+								 <div class="swiper-slide">
+			        	<span><img src="{$r.pic}" /></span>
+			        	<p>{$r.title}</p>
+			        </div>
+							</JW:list>
+			    </div>
+			    <div class="swiper-button-next"></div>
+			    <div class="swiper-button-prev"></div>
+			</div>
+		    <script>
+			    var swiper = new Swiper('.tuan-swiper', {
+			      slidesPerView: 4,
+			      spaceBetween: 20,
+			      slidesPerGroup: 4,
+			      loopFillGroupWithBlank: true,
+			      autoplay:true,
+			      navigation: {
+			        nextEl: '.swiper-button-next',
+			        prevEl: '.swiper-button-prev',
+			      },
+			    });
+		    </script>
+		</div>
+		
+		
+		<div class="zt3-zizhi" style="margin-top: 0;">
+				<span class="zt3-changjia" style="margin-bottom: 72px;margin-top: 0;">公司资质</span>
+				
+				<div class="zt3-xianjin1">
+					<ul>
+						
+						<JW:list sql="SELECT * FROM `jzw_slide_data` WHERE fid=28 order by listorder asc">
+								<li><img alt="{$r.title}" src="{$r.pic}" /><p>{$r.title}</p></li>
+								
+							</JW:list>
+											</ul>
+					<div class="clear"></div>
+				</div>
+				
+				<div class="zt3-xianjin2">
+					<ul>
+						
+						<JW:list sql="SELECT * FROM `jzw_slide_data` WHERE fid=29 order by listorder asc">
+								<li><img alt="{$r.title}" src="{$r.pic}" /><p>{$r.title}</p></li>
+								
+							</JW:list>
+						
+					</ul>
+					<div class="clear"></div>
+				</div>
+				
+			</div>
+			<span class="zt3-yuyue-title" >在线预约</span>
+			<div class="zt3-yuyue">
+				<div class="width1200">
+					<div class="zt3-yuyue-top">
+						<h3>现在预约，即可定制一套专属设计方案  <span>预约热线：{$tel}</span></h3>
+					</div>
+					<form action="" method="" onsubmit="return dosub2();">
+					<div class="zt3-yuyue-main">
+						<span><em>姓名：</em><input id="t_name" type="text" placeholder="必填"></span>
+						<span><em>电话：</em><input id="t_phone" type="text" placeholder="必填"></span>
+						<span><em>邮箱：</em><input id="t_email" type="text"></span>
+					</div>
+					<button type="submit" class="zt3-tijiao">立即提交</button>
+					</form>
+				</div>
+			</div>
+		
+
+		<!--底部导航-->
+		<include file="model:foot" />
+<script type="text/javascript">
+            //验证手机格式
+            function isPhone(str) {
+                var pattern = "^0?(13[0-9]|15[0-9]|18[0-9]|17[0-9]|14[0-9])[0-9]{8}$";
+                var check = new RegExp(pattern);
+                return check.test(str);
+            }
+
+            function dosub2(){
+
+                var phone = $("#t_phone").val();
+                var name = $("#t_name").val();
+                var email = $("#t_email").val();
+                var catid = 70;
+                if (phone == "" || name == "" ) {
+                    alert("请填写相关信息");
+                    return false;
+                }
+                if (!isPhone(phone)) {
+                    alert("请输入正确的手机号码");
+                    return false;
+                }
+
+
+                submitMessage({
+                    title: name,
+                    phone: phone,
+                    email: email,
+
+                    catid: catid,
+                     ctype:"来自在线预约"
+                }, "liuyan", function () {
+                    alert("提交成功");
+                    window.location.reload();
+                });
+                return false;
+            }
+		</script>
+		<!--侧导航-->
+		<include file="model:right" />
+		<script>
+            $(".nav-in li:nth-child(2)").addClass("nav-active");
+		</script>
+		<script>
+			$(".zt-qibu-list:nth-child(2n-1) .zt-qibu-in .zt-qibu-in1").addClass("slideInLeft");
+			$(".zt-qibu-list:nth-child(2n-1) .zt-qibu-in .zt-qibu-in2").addClass("slideInRight");
+			$(".zt-qibu-list:nth-child(2n) .zt-qibu-in .zt-qibu-in1").addClass("slideInRight");
+			$(".zt-qibu-list:nth-child(2n) .zt-qibu-in .zt-qibu-in2").addClass("slideInLeft");
+		</script>
+		
+	</body>
+
+</html>

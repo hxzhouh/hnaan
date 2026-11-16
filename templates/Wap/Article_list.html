@@ -1,0 +1,111 @@
+<?php
+    $Model=new Model();
+    $catInfo=$Model->query("select * from jzw_category where id=".$catid);
+	$arrchildid=$catInfo[0]["arrchildid"];
+?>
+<!DOCTYPE html>
+<html>
+	<head>
+		<include file="./Jzw/Tpl/Wap/Default/model_head.html" />
+		<script src="/Jzw/Tpl/Wap/Default/js/jqueryweui/jquery-weui.min.js"></script>
+	</head>
+	<body>
+		<!--主内容-->
+		<include file="./Jzw/Tpl/Wap/Default/model_top.html" />
+		
+		<!--内容区-->
+		<section>
+			<!--banner图-->
+			<div class="banner Maximg">
+			   <JW:list sql="SELECT * FROM `jzw_slide_data` WHERE fid=40 order by listorder asc">
+							<img src="{$r.pic}" />
+				</JW:list>
+			</div>
+			
+			<div class="news-head" id="ulullist">
+			<JW:list sql="SELECT * FROM `jzw_category` WHERE 1 and `ismenu`=1 and `parentid`=83 order by listorder asc">
+            <a href="{$r.url}" title="{$r.catname}" data-cid="{$r.id}">{$r.catname}</a>
+</JW:list> 
+			</div>
+			<script>
+					$("#ulullist").find("a").each(function () {
+						if ($(this).data("cid") == '{$catid}') {
+						$(this).addClass("active");
+						}
+					});
+				</script>
+			<div class="width" >
+<ul id="clist">
+
+</ul>
+				
+			</div>
+			<div class="jiazai" id="clist_more">
+				<p>滑动加载更多</p>
+			</div>
+			<script>
+            var nowPage = 1;
+            var catids = "{$arrchildid}";
+            var loading = false;  //状态标记
+            $(function () {
+                loadData("article", nowPage, catids);
+            });
+            $(document.body).infinite().on("infinite", function () {               
+                if (loading) return;
+                loading = true;
+                setTimeout(function () {
+                    nowPage++;
+                    loadData("article", nowPage, catids);
+                    loading = false;
+                }, 100);   //模拟延迟
+            });
+			   function LimitNumber(txt,idName) {
+				var str = txt;
+				str = str.substr(0,20) + '...' ;
+				var id=document.getElementById(idName);
+				id.innerText=str;
+    }
+ 
+            function getData(result) {                
+                if (result != null) {
+                    var html = "";
+                    for (var i = 0; i < result.length; i++) {
+                        var d = new Date(result[i].createtime * 1000);    //根据时间戳生成的时间对象
+                        var date = (d.getFullYear()) + "-" +
+                            (d.getMonth() + 1) + "-" +
+                            (d.getDate());
+   	html += '<li></li><a  class="news-li" href="/wap' + result[i].url + '" title="' + result[i].title + '"> <span class="Maximg"><img src="' + result[i].thumb + '"  alt="' + result[i].title + '"/> </span>  <div class="news-li-r"><h4>' + result[i].title + '</h4><p>' + result[i].description + '</p><span>' + date + '</span></div></a></li>';
+					          
+					}
+                    $("#clist").html($("#clist").html() + html);
+                    $("#clist_more").show();
+                } else {
+                    $("#clist_more").html("<p>暂无更多内容...</p>");
+                }
+                if ($("#clist").html() == "") {
+                    $("#clist_more").show();
+                    $("#clist_more").html("<p>暂无更多内容...</p>");
+                }
+            }
+        </script>
+			
+			
+			
+		</section>
+		
+		<!--置顶-->
+		<div class="zhiding max-img" id="zhiding">
+			<img alt="" src="/Jzw/Tpl/Wap/Default/images/zhiding.png" />
+		</div>
+		<include file="./Jzw/Tpl/Wap/Default/model_foot.html" />
+		<!--侧导航-->
+		
+		
+		<!--底部样式js控制-->
+		<script>
+			$(function(){
+				$('.foot:nth-child(1)').addClass("active");
+			});
+		</script>
+	</body>
+</html>

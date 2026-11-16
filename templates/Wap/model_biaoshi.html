@@ -1,0 +1,48 @@
+<!-- 
+      <div class="zt-main">
+      标识logo
+      <div class="zt-biaoshi" id="n">
+        <a class="zt-biaoshi-in" href="/wap{$Categorys[107]['url']}" title="{$Categorys[107]['catname']}" data-cid="107">
+          <div class="biaoshi-in-img"><img src="/Jzw/Tpl/Wap/Default/images/img/5.png" /></div>
+          <h4>地产标识解决方案</h4>
+          <p>1,200</p>
+          <span>Real estate logo</span>
+        </a>
+        <a class="zt-biaoshi-in" href="/wap{$Categorys[109]['url']}" title="{$Categorys[109]['catname']}" data-cid="109">
+          <div class="biaoshi-in-img"><img src="/Jzw/Tpl/Wap/Default/images/img/4.png" /></div>
+          <h4>医卫标识解决方案</h4>
+          <p>1,200</p>
+          <span>Medical logo</span>
+        </a>
+        <a class="zt-biaoshi-in" href="/wap{$Categorys[110]['url']}" title="{$Categorys[110]['catname']}" data-cid="110">
+          <div class="biaoshi-in-img"><img src="/Jzw/Tpl/Wap/Default/images/img/3.png" /></div>
+          <h4>学校标识解决方案</h4>
+          <p>9,200</p>
+          <span>School logo</span>
+        </a>
+        <a class="zt-biaoshi-in" href="/wap{$Categorys[108]['url']}" title="{$Categorys[108]['catname']}" data-cid="108">
+          <div class="biaoshi-in-img"><img src="/Jzw/Tpl/Wap/Default/images/img/2.png" /></div>
+          <h4>景区标识解决方案</h4>
+          <p>1,200</p>
+          <span>Tourism logo</span>
+        </a>
+        <a class="zt-biaoshi-in" href="/wap{$Categorys[111]['url']}" title="{$Categorys[111]['catname']}" data-cid="111">
+          <div class="biaoshi-in-img"><img src="/Jzw/Tpl/Wap/Default/images/img/1.png" /></div>
+          <h4>其他标识解决方案</h4>
+          <p>1,200</p>
+          <span>Other logo</span>
+        </a>
+      </div>  
+     </div> -->
+
+      <script type="text/javascript">
+             $(function () {
+      $("#n").find("a").each(function () {
+        if ($(this).attr("data-cid") == '{$catid}') {
+          $(this).addClass("active");
+        }
+      });
+    
+  });
+</script>
+

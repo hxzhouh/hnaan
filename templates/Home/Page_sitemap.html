@@ -1,0 +1,176 @@
+<?php
+$module = M('category');
+$moduleb = M('case');
+$modulec = M('article'); 
+ // 分页显示输出 
+$lister = $module->where()->order()->select();
+$listerb = $moduleb->where()->order()->select();
+$listerc = $modulec->where()->order()->select();
+$a=17;
+$b=count($listerb);
+$c=16+$b;
+
+//将数据传入sitemap.xml文件中
+    for($i=0;$i<count($lister);$i++){
+        $str .= '<url>
+                 <loc>http://www.hnionic.cn'.$lister[$i]["url"].'</loc>
+                <priority>1</priority>
+                <lastmod>'.date("Y-m-d",time()).'</lastmod>
+                <changefreq>weekly</changefreq>
+                  </url>';
+     }
+       for($i=0;$i<count($listerb);$i++){
+        $str .= '<url>
+                 <loc>http://www.hnionic.cn'.$listerb[$i]["url"].'</loc>
+                <priority>0.5</priority>
+                <lastmod>'.date("Y-m-d",$listerb[$i]["createtime"]).'</lastmod>
+                <changefreq>weekly</changefreq>
+                  </url>';
+     }
+       for($i=0;$i<count($listerc);$i++){
+        $str .= '<url>
+                 <loc>http://www.hnionic.cn'.$listerc[$i]["url"].'</loc>
+                <priority>0.5</priority>
+                <lastmod>'.date("Y-m-d",$listerc[$i]["createtime"]).'</lastmod>
+                <changefreq>weekly</changefreq>
+                  </url>';
+     }
+$top='<urlset
+       xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:schemaLocation="http://www.sitemaps.org/schemas/sitemap/0.9
+       http://www.sitemaps.org/schemas/sitemap/0.9/sitemap.xsd">  ';
+   $last='</urlset>';
+   $txt=$top.$str.$last;
+$file = ROOT_PATH.'\sitemap.xml';
+
+file_put_contents($file, $txt);
+   
+
+?>
+<!DOCTYPE html>
+<html>
+
+<head>
+		<include file='model:head' />
+</head>
+
+<body>
+<style type="text/css">
+
+ .STYLE1 {
+ font-size: 14px;
+ 
+ border-bottom: 1px;
+ }
+ .STYLE1 a{
+ color: #181de4;
+
+ }
+
+ 
+ </style>
+		<!--内容区-->
+<table align="center">
+
+<table width="766" border="0" style="margin:0 auto" >
+<tr align="left"> 
+ <td width="760" class="title">&nbsp;<span style="font-size:16px">网站地图:&nbsp;&nbsp;&nbsp;(<?php echo date("Y-m-d",time());?>)</span></td>
+ </tr>
+
+  <tr align="left"> 
+           <td width="760" class="STYLE1">1.&nbsp;<a href="{$Categorys[115]["url"]}" title="{$Categorys[115]["catname"]}">{$Categorys[115]["catname"]}</a>
+  </td></tr>
+  <tr align="left">
+      <td width="760" class="STYLE1">2.&nbsp;<a href="{$Categorys[116]["url"]}" title="{$Categorys[116]["catname"]}">{$Categorys[116]["catname"]}</a>
+  </td></tr>
+  <tr align="left"> 
+           <td width="760" class="STYLE1">3.&nbsp;<a href="{$Categorys[72]["url"]}" title="{$Categorys[72]["catname"]}">{$Categorys[72]["catname"]}</a>
+  </td></tr>
+  <tr align="left"> 
+           <td width="760" class="STYLE1">4.&nbsp;<a href="{$Categorys[84]["url"]}" title="{$Categorys[84]["catname"]}">{$Categorys[84]["catname"]}</a>
+  </td></tr>
+  <tr align="left"> 
+           <td width="760" class="STYLE1">5.&nbsp;<a href="{$Categorys[85]["url"]}" title="{$Categorys[85]["catname"]}">{$Categorys[85]["catname"]}</a>
+  </td></tr>
+  <tr align="left"> 
+           <td width="760" class="STYLE1">6.&nbsp;<a href="{$Categorys[86]["url"]}" title="{$Categorys[86]["catname"]}">{$Categorys[86]["catname"]}</a>
+  </td></tr>
+
+  <tr align="left"> 
+           <td width="760" class="STYLE1">7.&nbsp;<a href="{$Categorys[66]["url"]}" title="{$Categorys[66]["catname"]}">{$Categorys[66]["catname"]}</a>
+  </td></tr>
+  <tr align="left"> 
+           <td width="760" class="STYLE1">8.&nbsp;<a href="{$Categorys[95]["url"]}" title="{$Categorys[95]["catname"]}">{$Categorys[95]["catname"]}</a>
+  </td></tr>
+  <tr align="left"> 
+           <td width="760" class="STYLE1">9.&nbsp;<a href="{$Categorys[96]["url"]}" title="{$Categorys[96]["catname"]}">{$Categorys[96]["catname"]}</a>
+  </td></tr>
+  <tr align="left"> 
+           <td width="760" class="STYLE1">10.&nbsp;<a href="{$Categorys[97]["url"]}" title="{$Categorys[97]["catname"]}">{$Categorys[97]["catname"]}</a>
+  </td></tr>
+  <tr align="left"> 
+      <td width="760" class="STYLE1">11.&nbsp;<a href="{$Categorys[118]["url"]}" title="{$Categorys[118]["catname"]}">{$Categorys[118]["catname"]}</a>
+  </td></tr>
+  <tr align="left"> 
+      <td width="760" class="STYLE1">12.&nbsp;<a href="{$Categorys[119]["url"]}" title="{$Categorys[119]["catname"]}">{$Categorys[119]["catname"]}</a>
+  </td></tr>
+  <tr align="left"> 
+      <td width="760" class="STYLE1">13.&nbsp;<a href="{$Categorys[120]["url"]}" title="{$Categorys[120]["catname"]}">{$Categorys[120]["catname"]}</a>
+  </td></tr>
+    <tr align="left">
+        <td width="760" class="STYLE1">14.&nbsp;<a href="{$Categorys[121]["url"]}" title="{$Categorys[121]["catname"]}">{$Categorys[121]["catname"]}</a>
+        </td></tr>
+    <tr align="left">
+        <td width="760" class="STYLE1">15.&nbsp;<a href="{$Categorys[122]["url"]}" title="{$Categorys[122]["catname"]}">{$Categorys[122]["catname"]}</a>
+        </td></tr>
+    <tr align="left">
+        <td width="760" class="STYLE1">16.&nbsp;<a href="{$Categorys[123]["url"]}" title="{$Categorys[123]["catname"]}">{$Categorys[123]["catname"]}</a>
+        </td></tr>
+
+      <?php
+  for($i=0;$i<count($listerb);$i++){
+    
+      echo '<tr align="left"> 
+        <td width="760" class="STYLE1">'.($i+$a).'.&nbsp;<a href="'.$listerb[$i]["url"].'" title="'.$listerb[$i]["title"].'">'.$listerb[$i]["title"].'</a></td>
+        </tr>';
+     }
+     ?>
+      
+        <?php
+  for($i=0;$i<count($listerc);$i++){
+      echo '<tr align="left"> 
+        <td width="760" class="STYLE1">'.($i+$c).'.&nbsp;<a href="'.$listerc[$i]["url"].'" title="'.$listerc[$i]["title"].'">'.$listerc[$i]["title"].'</a></td>
+        </tr>';
+     }
+     ?>
+<!-- <volist name="lister" id="vo">
+ <tr align="left"> 
+ <td width="760" class="STYLE1">&nbsp;<a href="{$vo.url}" title="{$vo.title}">{$vo.title}</a></td>
+ </tr>
+</volist>
+<volist name="listerb" id="vo">
+ <tr align="left"> 
+ <td width="760" class="STYLE1">&nbsp;<a href="{$vo.url}" title="{$vo.title}">{$vo.title}</a></td>
+ </tr>
+</volist>
+<volist name="listerc" id="vo">
+ <tr align="left"> 
+ <td width="760" class="STYLE1">&nbsp;<a href="{$vo.url}" title="{$vo.title}">{$vo.catname}</a></td>
+ </tr>
+</volist> -->
+ </table> </table>
+
+	
+		
+		<script>
+			$(".nav-list:nth-child(6)").addClass("active");
+		</script>
+		
+	</body>
+
+</html>
+
+
+
+

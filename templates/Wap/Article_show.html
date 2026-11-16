@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<include file="./Jzw/Tpl/Wap/Default/model_head.html" />
+	</head>
+	<body>
+		<!--主内容-->
+		<include file="./Jzw/Tpl/Wap/Default/model_top.html" />
+		
+		<!--内容区-->
+		<section>
+			<!--banner图-->
+			<div class="banner Maximg">
+				<JW:list sql="SELECT * FROM `jzw_slide_data` WHERE fid=40 order by listorder asc">
+					<img src="{$r.pic}" />
+		</JW:list>
+			</div>
+			
+			<div class="width">
+				<!--标题-->
+				<div class="particulars-title">
+					<h3>{$title}</h3>
+					<p>时间：{$createtime|toDate=###,'Y-m-d'} &nbsp; &nbsp; 编辑：{$zuozhe}  &nbsp; &nbsp; 阅读量：<span>{$hits}</span></p>
+				</div>
+				<div class="particulars-mian">
+					<p>
+
+		{$content}</p>
+				</div>
+			</div>
+			<!--分享-->
+			<div class="share">
+				<em>分享：</em>
+				<div class="share-a bdsharebuttonbox">
+					<a href="javascript:wx_share();" class="WeChat bk" title="分享到微信" ></a>
+					<a href="javascript:;" class="WeChat bk" data-cmd="sqq" title="分享到QQ好友" ></a>
+					<a href="javascript:;" class="WeChat bk" data-cmd="tsina" title="分享到新浪微博" ></a>
+				</div>
+				<a class="share-fan" href="/wap{$Categorys[$catid]['url']}" title="">返回列表</a>
+					<script>window._bd_share_config = { "common": { "bdSnsKey": {}, "bdText": "", "bdMini": "2", "bdMiniList": false, "bdPic": "", "bdStyle": "0", "bdSize": "16" }, "share": {} }; with (document) 0[(getElementsByTagName('head')[0] || body).appendChild(createElement('script')).src = 'http://bdimg.share.baidu.com/static/api/js/share.js?v=89860593.js?cdnversion=' + ~(-new Date() / 36e5)];</script>
+
+			</div>
+			<!--上下篇-->
+			<div class="switch">
+			<?php
+                    $pre = M($module_name)->where("id<$id and catid=$catid")->field("title,url")->order("id desc")->find();
+                    $next = M($module_name)->where("id>$id and catid=$catid")->field("title,url")->order("id asc")->find();
+
+                    $pre ? $pre = '<a href="/wap'.$pre['url'].'" style="border-bottom: 0.01rem dashed #c3c3c3;"><span>上一篇：</span>'.$pre['title'].'</a>' : $pre = '上一篇：没有了';
+                    $next ? $next = '<a href="/wap'.$next['url'].'"><span>下一篇：</span>'.$next['title'].'</a>' : $next = '下一篇：没有了';
+                    ?>
+					{$pre}{$next}
+			</div>
+			
+			<!--推荐文章-->
+			<div class="xinwen-tuijian">
+				<h3>推荐文章</h3>
+				<ul>
+				  <?php
+                $Pdata=M()->query("select arrchildid from `jzw_category` where id=83");
+					$t1Arr=M('article')->query("SELECT * FROM `jzw_article` WHERE catid  in (".$Pdata[0]["arrchildid"].") and status=1 order by                                    listorder desc,createtime desc limit 0,4");
+					for($i=0;$i<count($t1Arr);$i++){
+					echo '
+						<li><a href="'.$t1Arr[$i]["url"].'" title="'.$t1Arr[$i]["title"].'">'.str_cut($t1Arr[$i]["title"],60).'</a></li>';
+					}
+					?>
+				</ul>
+			</div>
+			
+			
+			
+		</section>
+		
+		<!--置顶-->
+		<div class="zhiding max-img" id="zhiding">
+			<img alt="" src="/Jzw/Tpl/Wap/Default/images/zhiding.png" />
+		</div>
+			<include file="./Jzw/Tpl/Wap/Default/model_foot.html" />
+		<!--侧导航-->
+		
+		<!--底部样式js控制-->
+		<script>
+			$(function(){
+				$('.foot:nth-child(1)').addClass("active");
+			});
+		</script>
+		<script>		
+        $(function(){
+            $(".width img").removeAttr("width");
+			$(".width img").removeAttr("height");
+			$(".width img").attr("style","");
+        });        
+	</script>
+
+		<!-- 微信分享 -->
+	<style>
+		.oy_share {
+			background-color: rgba(0, 0, 0, 0.7);
+			width: 100%;
+			height: 100%;
+			position: fixed;
+			top: 0px;
+			left: 0px;
+			z-index: 999999;
+		}
+
+		.oy_share img {
+			width: 60%;
+			right: 20px;
+			position: absolute;
+		}
+
+
+		.oy_share_hide {
+			display: none;
+		}
+	</style>
+	<script>
+		//微信分享提示
+		function wx_share() {
+			$(".oy_share").removeClass("oy_share_hide");
+		}
+	</script>
+	<div class="oy_share oy_share_hide" onclick="$(this).addClass('oy_share_hide');">
+		<img src="/Jzw/Tpl/Wap/Default/images/wx_share.png" style="top: 0px;" id="imgShare" runat="server" />
+	</div>
+
+	</body>
+</html>

@@ -1,0 +1,172 @@
+<!DOCTYPE html>
+<html lang="zh">
+
+<head>
+	<include file="model:head" />
+</head>
+
+<body>
+	<!--头部  -->
+	<header>
+		<include file="model:header" />
+	</header>
+	<!--导航-->
+	<include file="model:top" />
+	<!--banner-->
+	<div class="zt-banner">
+		<include file="model:banner" />
+	</div>
+	<div style='display:none;'>
+		<h1>{$catname}详情</h1>
+	</div>
+
+	<!--内容-->
+	<section>
+		<!--当前位置-->
+		<div class="zt-weizhi">
+			<ul>
+				<li><a href="###">首页</a><span> > </span> </li>
+				<li><a href="{$Categorys[120]['url']}" title="服务案例">服务案例</a><span> > </span></li>
+				<li><a href="{$Categorys[$catid]['url']}" title="{$catname}">{$catname}</a><span> > </span></li>
+				<li>案例详情</li>
+			</ul>
+			<div class="clear"></div>
+		</div>
+	</section>
+
+
+	<!--新闻详情-->
+	<section class="width1200 news-main">
+		<div class="news-head">
+			<h2>{$title}</h2>
+			<p>
+				<span>时间：{$createtime|toDate=###,'Y-m-d'}</span>
+				<span>来源：{$zuozhe}</span>
+				<span>点击：{$hits}</span>
+			</p>
+		</div>
+		<div class="main-news maximg">
+			<div>{$content}</div>
+			<div class="news-zuoze1" style="height:160px;margin-top: 20px;">
+				<p>湖南爱奥尼标识工程有限公司拥有15年标识设计经验，100多名专业生产团队，<span style="color: #c31a0b;font-weight: bold;    font-size: 24px;">电话：{$phone_a}</span>，<span
+					 style="color: #c31a0b ;    font-size: 24px;">网址：<a style="color: #c31a0b;" href="http://www.hnaan.cn" title="爱奥尼">www.hnaan.cn</a></span>
+				</p>
+				<div style="text-align: center;">
+					<img src="/Jzw/Tpl/Home/Default/images/topecode.png" style="width:160px;" />
+				</div>
+			</div>
+		</div>
+
+	</section>
+	<section>
+		<div class="wenzhang">
+			<ul>
+				<li><b>文章标签：</b></li>
+				<?php
+                 $array=explode(",",$keywords);
+                 foreach($array as $key=>$val) {
+					echo ' <li><a href="'.$Categorys[133]['url'].'?key='.$val.'" title="'.$val.'">'.$val.'</a></li> ';
+					}
+					?>
+
+			</ul>
+			<div class="clear"></div>
+
+		</div>
+	</section>
+
+	<!--分享-->
+	<section>
+		<div class="news-fenxiang" style="height:200px;">
+			<em>分享到：</em>
+			<div class="fenxiang-in">
+				<div class="bdsharebuttonbox">
+					<a href="javascript:;" title="微信" data-cmd="weixin"></a>
+					<a href="javascript:;" title="QQ" data-cmd="sqq"></a>
+					<a href="javascript:;" title="微博" data-cmd="tsina"></a>
+				</div>
+			</div>
+			<script>window._bd_share_config = {
+					"common": {
+						"bdSnsKey": {}, "bdText": "", "bdMini": "2", "bdMiniList": false, "bdPic": "",
+						"bdStyle": "0", "bdSize": "16"
+					}, "share": {}
+				}; with (document) 0[(getElementsByTagName('head')[0] || body).appendChild(createElement('script')).src =
+					'http://bdimg.share.baidu.com/static/api/js/share.js?v=89860593.js?cdnversion=' + ~(-new Date() / 36e5)];</script>
+			<a class="news-fanhui" href="{$Categorys[$catid]['url']}" title="返回列表">返回列表</a>
+		</div>
+	</section>
+	<!--上下篇-->
+	<section>
+		<div class="tiaozhuan">
+			<?php
+        $pre = M($module_name)->where("id<$id and catid=$catid")->field("title,url")->order("id desc")->find();
+				$next = M($module_name)->where("id>$id and catid=$catid")->field("title,url")->order("id asc")->find();
+				$pre ? $pre = '<a href="'.$pre['url'].'" title="">上一篇：'.$pre['title'].'</a>' : $pre = '<a>上一篇：没有了</a>';
+				$next ? $next = '<a href="'.$next['url'].'" title="">下一篇：'.$next['title'].'</a>' : $next = '<a>下一篇：没有了</a>';
+				?>
+			{$pre} {$next}
+		</div>
+	</section>
+
+	<!--推荐案例-->
+	<div class="foot-case">
+		<h3>推荐案例</h3>
+		<div class="foot-case-main">
+			<div class="picScroll-left">
+				<div class="hd">
+					<a class="next"></a>
+					<a class="prev"></a>
+				</div>
+				<div class="bd">
+					<ul class="picList">
+						<?php
+                $Pdata=M()->query("select arrchildid from `jzw_category` where id=93");
+					$t1Arr=M('article')->query("SELECT * FROM `jzw_case` WHERE catid  in (".$Pdata[0]["arrchildid"].") and status=1 order by                                    listorder desc,createtime desc limit 0,8");
+					for($i=0;$i<count($t1Arr);$i++){
+					echo '
+						<li>
+								<div class="pic"><a href="'.$t1Arr[$i]["url"].'" target="_blank">
+									<img src="'.$t1Arr[$i]["thumb"].'" /></a>
+								</div>
+								<div class="title">
+									<a href="'.$t1Arr[$i]["url"].'" target="_blank">
+										<h3>'.str_cut($t1Arr[$i]["title"],24).'</h3>
+									</a>
+								</div>
+							</li>';
+					}
+					?>
+
+					</ul>
+				</div>
+			</div>
+
+
+		</div>
+	</div>
+	<script id="jsID" type="text/javascript">
+		jQuery(".picScroll-left").slide({ titCell: ".hd ul", mainCell: ".bd ul", autoPage: true, effect: "left", scroll: 4, vis: 4 });
+	</script>
+
+
+	<!--底部导航-->
+	<include file="model:foot" />
+
+
+
+	<!--侧导航-->
+	<include file="model:right" />
+	<script>
+		$(".nav-in li:nth-child(3)").addClass("nav-active");
+	</script>
+	<script>
+		$(".zt-qibu-list:nth-child(2n-1) .zt-qibu-in .zt-qibu-in1").addClass("slideInLeft");
+		$(".zt-qibu-list:nth-child(2n-1) .zt-qibu-in .zt-qibu-in2").addClass("slideInRight");
+		$(".zt-qibu-list:nth-child(2n) .zt-qibu-in .zt-qibu-in1").addClass("slideInRight");
+		$(".zt-qibu-list:nth-child(2n) .zt-qibu-in .zt-qibu-in2").addClass("slideInLeft");
+	</script>
+
+</body>
+
+</html>

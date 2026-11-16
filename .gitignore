@@ -1,0 +1,10 @@
+node_modules/
+.wrangler/
+.dev.vars
+.env*
+dist/
+playwright-report/
+.loop-state.json
+public/Uploads/
+dist-node/
+seeds/

@@ -1,0 +1,63 @@
+/* CSS Document */
+/*ģ����ʽ
+�����ˣ�����
+QQ��315799281
+�������ڣ�2010-4-27
+��֧��ԭ��
+*/
+
+/*��ҳ��ʽ*/
+.txt_red{
+color:red;}
+
+.txt_pagelist{
+font-size:12px;float:left;position:relative; left:50%;}
+
+.txt_pagelist a{
+text-decoration:none;
+margin:5px 3px;
+padding:0px 10px;
+text-decoration:none;
+white-space:nowrap;
+overflow:hidden; text-align:center;
+line-height:2;
+padding:0 9px;
+display:block;
+float:left;
+position:relative;
+left:-50%;
+font-family:Verdana, Arial, Helvetica, sans-serif;
+color:#999;
+border:solid 1px #ddd;
+}
+
+.txt_pagelist1 a:hover{
+
+}
+.txt_pagelist a:hover{}
+
+#cur_pagelist{
+color:white;
+background:#c42323;
+border:solid 1px #c42323;
+}
+
+#txt_First1, #txt_Pre1, #txt_Next1, #txt_Last1{
+/*
+padding:0px 5px;
+
+text-decoration:none;
+border:none;
+text-decoration:none;
+color:#fff;
+font-weight:normal;
+font-size:12px;
+background:#ddd;*/
+}
+
+#txt_First,#txt_Pre,#txt_Next,#txt_Last{
+/*text-decoration:underline;
+border:none;*/}
+
+#txt_Pre, #txt_Pre1{}
+#txt_Next, #txt_Next1{}

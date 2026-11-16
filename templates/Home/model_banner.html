@@ -1,0 +1,105 @@
+
+<?php
+    $pc_img="";
+    $wap_img="";
+    //项目流程
+    $cate=M('category')->where("id=115")->find();
+    $catid1=$cate["arrchildid"];
+  $arr=explode(',',$catid1);
+    if(in_array($catid,$arr)){
+        $datapc=M('slide_data')->where("id=88")->find();
+        $datawap=M('slide_data')->where("id=173")->find();
+        $pc_img=$datapc["pic"];
+        $pc_title=$datapc["title"];
+        $wap_img=$datawap["pic"];
+    }
+//爱奥尼优势
+      $cate=M('category')->where("id=116")->find();
+    $catid1=$cate["arrchildid"];
+  $arr=explode(',',$catid1);
+    if(in_array($catid,$arr)){
+        $datapc=M('slide_data')->where("id=89")->find();
+        $datawap=M('slide_data')->where("id=173")->find();
+        $pc_img=$datapc["pic"];
+       $pc_title=$datapc["title"];
+        $wap_img=$datawap["pic"];
+    }
+
+    //资源整合
+    $cate=M('category')->where("id=117")->find();
+    $catid1=$cate["arrchildid"];
+  $arr=explode(',',$catid1);
+    if(in_array($catid,$arr)){
+        $datapc=M('slide_data')->where("id=90")->find();
+        $datawap=M('slide_data')->where("id=182")->find();
+        $pc_img=$datapc["pic"];
+        $pc_title=$datapc["title"];
+        $wap_img=$datawap["pic"];
+    }
+//成功案例
+      $cate=M('category')->where("id=93")->find();
+    $catid1=$cate["arrchildid"];
+  $arr=explode(',',$catid1);
+    if(in_array($catid,$arr)){
+        $datapc=M('slide_data')->where("id=91")->find();
+        $datawap=M('slide_data')->where("id=182")->find();
+        $pc_img=$datapc["pic"];
+       $pc_title=$datapc["title"];
+        $wap_img=$datawap["pic"];
+    }
+
+
+    // 新闻资讯
+    $cate=M('category')->where("id=83")->find();
+    $catid1=$cate["arrchildid"];
+  $arr=explode(',',$catid1);
+    if(in_array($catid,$arr)){
+        $datapc=M('slide_data')->where("id=92")->find();
+        $datawap=M('slide_data')->where("id=174")->find();
+        $pc_img=$datapc["pic"];
+       $pc_title=$datapc["title"];
+        $wap_img=$datawap["pic"];
+    }
+//关于我们
+     $cate=M('category')->where("id=72")->find();
+    $catid1=$cate["arrchildid"];
+  $arr=explode(',',$catid1);
+    if(in_array($catid,$arr)){
+        $datapc=M('slide_data')->where("id=93")->find();
+        $datawap=M('slide_data')->where("id=174")->find();
+        $pc_img=$datapc["pic"];
+       $pc_title=$datapc["title"];
+        $wap_img=$datawap["pic"];
+    }
+
+    //联系我们
+    $cate=M('category')->where("id=66")->find();
+    $catid1=$cate["arrchildid"];
+  $arr=explode(',',$catid1);
+    if(in_array($catid,$arr)){
+        $datapc=M('slide_data')->where("id=94")->find();
+        $datawap=M('slide_data')->where("id=174")->find();
+        $pc_img=$datapc["pic"];
+        $pc_title=$datapc["title"];
+        $wap_img=$datawap["pic"];
+    }
+
+     //  搜索结果
+    $cate=M('category')->where("id=63")->find();
+       $catid1=$cate["arrchildid"];
+  $arr=explode(',',$catid1);
+    if(in_array($catid,$arr)){
+        $datapc=M('slide_data')->where("id=327")->find();
+        $datawap=M('slide_data')->where("id=178")->find();
+        $pc_img=$datapc["pic"];
+        $pc_title=$datapc["title"];
+        $wap_img=$datawap["pic"];
+    }
+
+?>
+
+<!--大图1 start-->
+        <img src="{$pc_img}" alt="{$pc_title}" />
+
+
+  

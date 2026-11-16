@@ -1,0 +1,673 @@
+<!DOCTYPE html>
+
+<html lang="zh">
+
+
+
+	<head>
+
+		<include file="model:head" />
+
+	</head>
+
+
+
+	<body>
+
+		<!--头部  -->
+
+		<header>
+
+			<include file="model:header" />
+
+		</header>
+
+		<!--导航-->
+
+		<include file="model:top" />
+
+		<!--banner-->
+
+		<div class="zt-banner">
+
+			<include file="model:banner" />
+
+		</div>
+
+		<div style='display:none;'><h1>{$catname}</h1></div> 
+
+
+
+		<!--内容-->
+
+		<section>
+
+			<!--当前位置-->
+
+			<div class="zt-weizhi">
+
+				<ul>
+
+					<li><a href="/" title="{$site_name}">首页</a><span> > </span> </li>
+
+					<li>{$catname}</li>
+
+				</ul>
+
+				<div class="clear"></div>
+
+			</div>		
+
+			
+
+			<div class="gyaan" style="margin-bottom: 100px;">
+
+				<div class="dzinb-t">
+
+					<h2>关于爱奥尼</h2>
+
+					<div class="dzinb-t-bo">
+
+						<div class="shuanyin"><img alt="关于爱奥尼" src="/Jzw/Tpl/Home/Default/images/shanshuan_20180911152602.png" /></div>
+
+						<p>标识标牌规划、设计、制作一站式服务我们只做这件事</p>
+
+						<div class="shuanyin"><img alt="关于爱奥尼" src="/Jzw/Tpl/Home/Default/images/suan_20180911152554.png" /></div>
+
+					</div>
+
+				</div>
+
+				<div class="gyaan-in">
+
+					<?php
+
+                    $Ad=M('slide_data')->query("SELECT * FROM `jzw_slide_data` WHERE fid=25 order by listorder asc");
+
+				echo '
+
+							<div class="gyaan-in-left wow"><iframe id="video" style="display:none" height=560 width=600 src="http://player.youku.com/embed/XMzg5OTUwNzkwMA==" frameborder=0 "allowfullscreen"></iframe><a href="JavaScript:void(0);" id="click"><img alt="'.$Ad[0]["title"].'" src="'.$Ad[0]["pic"].'"  id="img"/></a></div>
+
+							';
+
+					?>
+
+
+
+					<div class="gyaan-in-right wow">
+
+						<h1>走进爱奥尼</h1>
+
+						<div class="gyaan-in-right-bot">
+
+							<?php
+
+        $Ad=M('slide_data')->query("SELECT * FROM `jzw_slide_data` WHERE fid=25 order by listorder asc");
+
+							echo '
+
+							<h2>'.$Ad[0]["title"].'</h2>
+
+							<p>'.$Ad[0]["description"].'</p>
+
+							';
+
+
+
+							?>
+
+
+
+							<h3>快速通道</h3>
+
+							<div class="tongdao">
+
+								<div class="tongdao-top">
+
+
+
+									<h5>行业标识</h5>
+
+									<p>
+
+										<JW:list sql="SELECT * FROM `jzw_category` WHERE 1 and `ismenu`=1 and `parentid`=125 order by listorder asc">
+
+											<a href="{$r.url}" title="{$r.catname}" style="color:rgba(51,51,51,1);">{$r.catname}</a>
+
+										</JW:list>
+
+									</p>
+
+								</div>
+
+								<div style="clear:both;"></div>
+
+								<div class="tongdao-top">
+
+									<h5>地区标识</h5>
+
+									<p>
+
+										<JW:list sql="SELECT * FROM `jzw_category` WHERE 1 and `ismenu`=1 and `parentid`=126 order by listorder asc">
+
+											<a href="{$r.url}" title="{$r.catname}" style="color:rgba(51,51,51,1);">{$r.catname}</a>
+
+										</JW:list>
+
+									</p>
+
+								</div>
+
+								<div style="clear:both;"></div>
+
+							</div>
+
+						</div>
+
+					</div>
+
+				</div>
+
+			</div>
+
+			<script>
+
+   $(document).ready(function(){
+
+  $("#click").click(function(){
+
+  $("#click").hide();
+
+  $("#video").show();
+
+  $("#img").hide();
+
+  });
+
+});
+
+</script>
+
+<div class="cen_m aboutm">
+
+			<div class="ab_bt" style="margin-bottom:75px;"><span>爱奥尼 /</span> 企业文化</div>
+
+			<div class="aboutthree">
+
+				<p ><img src="/Jzw/Tpl/Home/Default/images/about_17.jpg" width="1129" height="422" alt=""></p><p>&nbsp;</p><p style="color:#808080;">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 欧洲古典文化时期在世界历史上留下博大精深的一页，而其建筑代表爱奥尼克柱以其<span class="red1">精致细腻、风格开朗、尺度合宜</span>，展现了建筑艺术的成熟、优美和辉煌…<br>
+
+				&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+
+				在现代高速发展的时代，<span class="red1">爱奥尼标识</span>代表着标识设计制作的求新和未来的发展……<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+
+				爱奥尼坚持<span class="red1">"以人为本"，"先做人，后做事"</span>的文化理念，不断培养和引进高技术专业人才。其技术骨干均具有丰富的建筑学和工艺美学知识，同时具备高度的敬业精神和创新意识，这也成为爱奥尼公司最坚实的发展基础。<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+
+				爱奥尼结合现代管理观念，率先打破传统的手工也作坊的加工模式，成为标识界向规模化、产业化、管理化方面发展的成功典范。"以人为本"渗透于标识制作中的每一个极为细微的环节。</p>
+
+			</div>
+
+</div>
+
+
+
+			<div class="about_four">
+
+				<div class="cen_m">
+
+					<div class="ab_bt" style="margin-bottom:60px;"><span>爱奥尼 /</span> 企业文化</div>
+
+					<ul>
+
+						<li>
+
+							<div class="tp">
+
+							<a target="_blank" title="力拼搏，快乐至上">
+
+							<img src="/Jzw/Tpl/Home/Default/images/2017111681878873.jpg" alt="力拼搏，快乐至上" width="121" height="120">
+
+							</a>
+
+						</div>
+
+							<div class="bt">
+
+								<a target="_blank" title="力拼搏，快乐至上">力拼搏，快乐至上</a>
+
+							</div>
+
+							<div class="nr">在快乐中努力在快乐中成长在快乐中创造</div>
+
+						</li>
+
+						<li>
+
+							<div class="tp">
+
+								<a target="_blank" title="细腻化，创新模式"><img src="/Jzw/Tpl/Home/Default/images/2017111681858057.jpg" alt="细腻化，创新模式" width="121" height="120">
+
+								</a>
+
+							</div>
+
+							<div class="bt">
+
+								<a target="_blank" title="细腻化，创新模式">细腻化，创新模式</a>
+
+							</div>
+
+							<div class="nr">精致细腻，唯有创新的步伐永不停歇才能为客户创造更好的价值</div>
+
+						</li>
+
+						<li>
+
+							<div class="tp"><a target="_blank" title="诚为信，以人为本">
+
+								<img src="/Jzw/Tpl/Home/Default/images/2017111681841257.jpg" alt="诚为信，以人为本" width="121" height="120">
+
+							</a>
+
+							</div>
+
+							<div class="bt">
+
+								<a target="_blank" title="诚为信，以人为本">诚为信，以人为本</a>
+
+							</div>
+
+							<div class="nr">诚信是经商之源，是一种责任，一种品德，任何时刻，先做人后做事</div>
+
+						</li>
+
+						<li>
+
+							<div class="tp">
+
+								<a target="_blank" title="严管理，体系健全">
+
+									<img src="/Jzw/Tpl/Home/Default/images/2017111681822233.jpg" alt="严管理，体系健全" width="121" height="120">
+
+								</a>
+
+							</div>
+
+							<div class="bt">
+
+								<a target="_blank" title="严管理，体系健全">严管理，体系健全</a>
+
+							</div>
+
+							<div class="nr">管理严加管理，体系管理健全为工作建立了良好的服务态度</div>
+
+						</li>
+
+						<li>
+
+							<div class="tp">
+
+								<a target="_blank" title="专业度，与时俱进">
+
+									<img src="/Jzw/Tpl/Home/Default/images/2017111681802457.jpg" alt="专业度，与时俱进" width="121" height="120">
+
+								</a>
+
+							</div>
+
+							<div class="bt">
+
+								<a target="_blank" title="专业度，与时俱进">专业度，与时俱进</a>
+
+							</div>
+
+							<div class="nr">专业上需要与时俱进，方能更好的服务与客户，满足客户要求</div>
+
+						</li>
+
+						<div class="clear"></div>
+
+					</ul>
+
+				</div>
+
+			</div>
+
+
+
+			<div class="ab_bt cen_m" style="margin-bottom:60px;"><span>爱奥尼 /</span> 品牌历程</div>
+
+
+
+			<div class="aboutfive cen_m">
+
+				<ul>
+
+					<JW:list sql="SELECT * FROM `jzw_slide_data` WHERE fid=30 order by listorder asc">
+
+						<li><a target="_blank" title="{$r.description}">{$r.description}</a></li>
+
+					</JW:list>
+
+				</ul>
+
+			</div>
+
+
+
+			<div class="about_six">
+
+				<div class="ab_bt cen_m" style="margin-bottom:54px;"><span>爱奥尼 /</span> 团队风采</div>
+
+				<div class="gc_show cen_m">
+
+					<a href="#" class="bnl btn tprev"></a><a href="#" class="bnr btn tnext"></a>
+
+					<div class=" jcarousel-skin-team"><div class="jcarousel-container jcarousel-container-horizontal" style="position: relative; display: block;"><div class="jcarousel-clip jcarousel-clip-horizontal" style="overflow: hidden; position: relative;">
+
+						<ul id="mycarousel" class="hover jcarousel-list jcarousel-list-horizontal" style="overflow: hidden; position: relative; top: 0px; margin: 0px; padding: 0px; left: 0px; width: 1320px;">
+
+							<JW:list sql="SELECT * FROM `jzw_slide_data` WHERE fid=27 order by listorder asc">
+
+								<li jcarouselindex="1" style="float: left; list-style: none;">
+
+									<a target="_blank">
+
+										<img alt="{$r.title}" src="{$r.pic}" width="280" height="280">
+
+									</a>
+
+									<div class="p_bt">
+
+										<a target="_blank">{$r.title}</a>
+
+									</div>
+
+								</li>
+
+							</JW:list>
+
+					</ul></div>
+
+
+
+						<div class="jcarousel-prev jcarousel-prev-horizontal" style="display: block;"></div>
+
+						<div class="jcarousel-next jcarousel-next-horizontal" style="display: block;"></div></div>
+
+					</div>
+
+					<script>
+
+                        $(document).ready(function(){
+
+                            var view = 4;
+
+                            if($('#mycarousel').children().length > view){
+
+                                $(".gc_show .btn").show();
+
+                            }
+
+                            if($('#mycarousel').children().length > (view - 1)){
+
+                                $('#mycarousel').jcarousel({
+
+                                    wrap:'both',
+
+                                    auto:4,
+
+                                    initCallback:function(carousel){
+
+                                        $(".tprev").bind("click",function(e){
+
+                                            e.preventDefault()
+
+                                            carousel.prev();
+
+                                            return false;
+
+                                        });
+
+                                        $(".tnext").bind("click",function(e){
+
+                                            e.preventDefault()
+
+                                            carousel.next();
+
+                                            return false;
+
+                                        });
+
+                                    },
+
+                                    scroll:1,
+
+                                    animation:500
+
+                                });
+
+                            }
+
+                        });
+
+					</script>
+
+					<div class="clear"></div>
+
+				</div>
+
+			</div>
+
+
+
+			<div class="ab_bt cen_m" style="margin-bottom:54px;"><span>爱奥尼 /</span> 荣誉资质</div>
+
+
+
+			<div class="about_ten cen_m">
+
+				<table width="100%" border="0" cellspacing="0" cellpadding="0">
+
+					<tbody>
+
+					<tr class="firstRow">
+
+						<JW:list sql="SELECT * FROM `jzw_slide_data` WHERE fid=28 order by listorder asc">
+
+							<td width="25%" align="center">
+
+								<img alt="{$r.title}" src="{$r.pic}" width="262" height="365"><br>
+
+								{$r.title}</td>
+
+						</JW:list>
+
+
+
+
+
+					</tr>
+
+					<tr>
+
+						<JW:list sql="SELECT * FROM `jzw_slide_data` WHERE fid=29 order by listorder asc limit 0,4">
+
+							<td align="center"><img alt="{$r.title}" src="{$r.pic}" width="276" height="193"><br>
+
+								{$r.title}</td>
+
+						</JW:list>
+
+					</tr>
+
+					<tr>
+
+						<JW:list sql="SELECT * FROM `jzw_slide_data` WHERE fid=29 order by listorder asc limit 4,4">
+
+							<td align="center"><img alt="{$r.title}" src="{$r.pic}" width="276" height="193"><br>
+
+								{$r.title}</td>
+
+						</JW:list>
+
+					</tr>
+
+					</tbody>
+
+				</table>
+
+			</div>
+
+			
+
+			
+
+			
+
+
+
+
+
+
+
+		<!--	<div class="chenxin">
+
+				<div class="dzinb-t">
+
+					<h2>精诚合作    <span>诚信</span>为本</h2>
+
+					<div class="dzinb-t-bo">
+
+						<div class="shuanyin"><img alt="精诚合作诚信为本" src="/Jzw/Tpl/Home/Default/images/shanshuan_20180911152602.png" /></div>
+
+						<p>为您所想，为您所用，解决您的后顾之忧</p>
+
+						<div class="shuanyin"><img alt="精诚合作诚信为本" src="/Jzw/Tpl/Home/Default/images/suan_20180911152554.png" /></div>
+
+					</div>
+
+				</div>
+
+
+
+				<div class="chenxin-t">
+
+					<div class="chenxin-t-in wow">
+
+						<h1>优先定制设计</h1>
+
+						<p>20名优秀设计师为您所用</p>
+
+					</div>
+
+					
+
+					<div class="chenxin-t-in wow">
+
+						<h1>源头厂家供货</h1>
+
+						<p>高性价比产品利润增值</p>
+
+					</div>
+
+					<div class="chenxin-t-in wow slideInDown">
+
+						<h1>客户商谈支持</h1>
+
+						<p>全力协助只为成交客户</p>
+
+					</div>
+
+					<div class="chenxin-t-in wow">
+
+						<h1>品牌授权体系</h1>
+
+						<p>资质实力品牌为您加分</p>
+
+					</div>
+
+					<div class="chenxin-t-in wow">
+
+						<h1>全程售后服务</h1>
+
+						<p>为您解决服务后顾之忧</p>
+
+					</div>
+
+				</div>
+
+				&lt;!&ndash;其它logo&ndash;&gt;
+
+				<div  class="chenxin-b-p">
+
+					<div class="zt-img-heji">
+
+						<ul>
+
+							<?php
+
+        $Ad=M('slide_data')->query("SELECT * FROM `jzw_slide_data` WHERE fid=22 order by listorder asc");
+
+							for($i=0;$i<count($Ad);$i++){
+
+							echo '
+
+							<li><img alt="'.$Ad[$i]["title"].'" src="'.$Ad[$i]["pic"].'" /></li>
+
+							';
+
+							}
+
+							?>
+
+
+
+						</ul>
+
+						<div class="clear"></div>
+
+					</div>
+
+				</div>
+
+			</div>-->
+
+
+
+
+
+		</section>
+
+		<!--底部导航-->
+
+		<include file="model:foot" />
+
+		<!--侧导航-->
+
+		<include file="model:right" />
+
+		<script>
+
+            $(".nav-in li:nth-child(6	)").addClass("nav-active");
+
+		</script>
+
+		<script>
+
+			$(".zt-qibu-list:nth-child(2n-1) .zt-qibu-in .zt-qibu-in1").addClass("slideInLeft");
+
+			$(".zt-qibu-list:nth-child(2n-1) .zt-qibu-in .zt-qibu-in2").addClass("slideInRight");
+
+			$(".zt-qibu-list:nth-child(2n) .zt-qibu-in .zt-qibu-in1").addClass("slideInRight");
+
+			$(".zt-qibu-list:nth-child(2n) .zt-qibu-in .zt-qibu-in2").addClass("slideInLeft");
+
+		</script>
+
+		
+
+	</body>
+
+
+
+</html>

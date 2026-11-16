@@ -1,0 +1,144 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<include file="./Jzw/Tpl/Wap/Default/model_head.html" />
+	</head>
+	<body>
+		<!--主内容-->
+		<include file="./Jzw/Tpl/Wap/Default/model_top.html" />
+		
+		<!--内容区-->
+		<section>
+			<!--banner图-->
+			<div class="Maximg">
+			   	<JW:list sql="SELECT * FROM `jzw_slide_data` WHERE fid=41 order by listorder asc">
+							<img src="{$r.pic}" />
+				</JW:list>
+			</div>
+			<div class="maxwimg">
+				<img src="/Jzw/Tpl/Wap/Default/images/zh2.png" />
+			</div>
+			<!--标题-->
+			<div class="zh-title">
+				<h3>为什么<span>选择</span>爱奥尼标识</h3>
+			</div>
+			<div class="zh-youshi">
+				  <?php
+        $Ad=M('slide_data')->query("SELECT * FROM `jzw_slide_data` WHERE fid=21 order by listorder asc");
+            for($i=0;$i<count($Ad);$i++){
+            echo '
+			<a href="#">
+					<span><img src="'.$Ad[$i]["pic"].'" /></span>
+					<h3>'.$Ad[$i]["subtitle"].'</h3>
+					<p>'.$Ad[$i]["description"].'</p>
+				</a>
+            ';
+            }
+            ?>
+		
+				
+				<div class="clear"></div>
+			</div>
+			<!--标题-->
+			<div class="zh-title" style="margin-top:.26rem ;">
+				<h3>合作伙伴<span>加入</span>流程</h3>
+			</div>
+			<div class="maxwimg">
+				<img src="/Jzw/Tpl/Wap/Default/images/zh_24.png" />
+			</div>
+			<!--标题-->
+			<div class="zh-title" style="margin-top:.26rem ;">
+				<h3>他们都选择了<span>爱奥尼</span></h3>
+			</div>
+			<div class="maxwimg">
+				<img src="/Jzw/Tpl/Wap/Default/images/zh9.png" />
+			</div>
+			<!--标题-->
+			<div class="zh-title" style="margin-top:.26rem;margin-bottom: .52rem;">
+				<h3><span>我们</span>的联系方式</h3>
+			</div>
+			<div class="maxwimg width">
+			<style>
+				.dituing img{max-width:none;max-height:none;}
+				</style>
+							<div class="dituing">
+    <script type="text/javascript" src="http://api.map.baidu.com/api?v=1.2"></script>
+    
+
+   <div  id="dituContent" style="width:100%;height:350px;border:#ccc solid 1px;font-size:12px;">
+    </div>
+    
+   <script>
+						loadContactMap('dituContent', '{$site_name}', '{$address}', '{$tel}', '{$baiduxy}'.split(',')[0], '{$baiduxy}'.split(',')[1]);
+					</script>
+</div> 
+			</div>
+			<!--联系方式-->
+			<div class="contact-mode width">
+				<ul>
+					<li>
+						<div class="contact-mode-l">
+							<span class="maximg">
+								<img alt="" src="/Jzw/Tpl/Wap/Default/images/l1.png" />
+							</span>
+							<p>公司地址：</p>
+						</div>
+						<div class="contact-mode-r">
+							<p>{$address}</p>
+						</div>
+						<div class="clear"></div>
+					</li>
+					<li class="contact-mode-li2">
+						<div class="contact-mode-l">
+							<span class="maximg">
+								<img alt="" src="/Jzw/Tpl/Wap/Default/images/l2.png" />
+							</span>
+							<p>联系方式：</p>
+						</div>
+						<div class="contact-mode-r">
+							<p>{$tel}</p>
+						</div>
+						<div class="clear"></div>
+					</li>
+					<li>
+						<div class="contact-mode-l">
+							<span class="maximg">
+								<img alt="" src="/Jzw/Tpl/Wap/Default/images/l3.png" />
+							</span>
+							<p>公司邮箱：</p>
+						</div>
+						<div class="contact-mode-r">
+							<p>{$site_email}</p>
+						</div>
+						<div class="clear"></div>
+					</li>
+				</ul>
+			</div>
+			
+			
+			
+			
+			
+			
+			
+			
+			
+			
+		</section>
+		
+		<!--置顶-->
+		<div class="zhiding max-img" id="zhiding">
+			<img alt="" src="/Jzw/Tpl/Wap/Default/images/zhiding.png" />
+		</div>
+		<include file="./Jzw/Tpl/Wap/Default/model_foot.html" />
+		<!--侧导航-->
+	
+		
+		<!--底部样式js控制-->
+		<script>
+			$(function(){
+				$('.foot:nth-child(1)').addClass("active");
+			});
+		</script>
+	</body>
+</html>

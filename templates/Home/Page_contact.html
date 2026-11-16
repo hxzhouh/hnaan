@@ -1,0 +1,218 @@
+<!DOCTYPE html>
+<html lang="zh">
+
+	<head>
+		<include file="model:head" />
+	</head>
+
+	<body>
+		<!--头部  -->
+		<header>
+			<include file="model:header" />
+		</header>
+		<!--导航-->
+		<include file="model:top" />
+		<!--banner-->
+		<div class="zt-banner">
+			<include file="model:banner" />
+		</div>
+		<div style='display:none;'><h1>{$catname}</h1></div> 
+
+		<!--内容-->
+		<section>
+			<!--当前位置-->
+			<div class="zt-weizhi">
+				<ul>
+					<li><a href="/" title="{$site_name}">首页</a><span> > </span> </li>
+					<li>{$catname}</li>
+				</ul>
+				<div class="clear"></div>
+			</div>		
+		</section>
+		
+		<!--内页标题-->
+		<section style="margin: 50px 0 30px;">
+			<div class="width1200 main-title">
+				<h3>联系我们</h3>
+				<p>欢迎您随时来咨询，我们会在第一时间回复您</p>
+			</div>
+		</section>
+			
+		<section>
+			<div class="lianxi-fshi width1200">
+				<ul>
+					<li>
+						<div class="lianxi-fshi-img">
+							<img style="margin-top: 28px;" width="58" height="58" alt="联系电话" src="/Jzw/Tpl/Home/Default/zt-images/lianxi-dianhua1.png" />
+							<span>
+								<img style="margin-top: 28px;" width="58" height="58" alt="联系电话" src="/Jzw/Tpl/Home/Default/zt-images/lianxi-dianhua.png" />
+							</span>
+						</div>
+						<div class="lianxi-fshi-bot">
+							<h4>联系电话</h4>
+							<p>{$tel}</p>
+						</div>
+					</li>
+					<li>
+						<div class="lianxi-fshi-img">
+							<img style="margin-top: 28px;" width="58" height="58" alt="邮箱" src="/Jzw/Tpl/Home/Default/zt-images/lianxi-youjian1.png" />
+							<span>
+								<img style="margin-top: 28px;" width="58" height="58" alt="邮箱" src="/Jzw/Tpl/Home/Default/zt-images/lianxi-youjian.png" />
+							</span>
+						</div>
+						<div class="lianxi-fshi-bot">
+							<h4>邮箱</h4>
+							<p>{$site_email}</p>
+						</div>
+					</li>
+					<li>
+						<div class="lianxi-fshi-img">
+							<a href="http://p.qiao.baidu.com/cps/chat?siteId=9999511&userId=20499162" target="_blank" title="在线咨询"><img style="margin-top: 28px;" width="58" height="58" alt="在线咨询" src="/Jzw/Tpl/Home/Default/zt-images/lianxi-qq1.png" />
+							<span>
+								<img style="margin-top: 28px;" width="58" height="58" alt="在线咨询" src="/Jzw/Tpl/Home/Default/zt-images/lianxi-qq.png" />
+							</span></a>
+						</div>
+						<div class="lianxi-fshi-bot">
+							<a href="http://p.qiao.baidu.com/cps/chat?siteId=9999511&userId=20499162" target="_blank" title="在线咨询"><h4>在线咨询 </h4></a>
+						</div>
+					</li>
+					<li>
+						<div class="lianxi-fshi-img">
+							<img style="margin-top: 28px;" width="58" height="58" alt="地址" src="/Jzw/Tpl/Home/Default/zt-images/index-dizhi1.png" />
+							<span>
+								<img style="margin-top: 28px;" width="58" height="58" alt="地址" src="/Jzw/Tpl/Home/Default/zt-images/index-dizhi.png" />
+							</span>
+						</div>
+						<div class="lianxi-fshi-bot">
+							<h4>地址</h4>
+							<p>{$address}</p>
+						</div>
+					</li>
+				</ul>
+			</div>
+			<!--乘车路线-->
+			<div class="lianxi-cche width1200">
+				<h2>附近乘车路线</h2>
+				<a href="https://j.map.baidu.com/lQjh2" title="路线查询" target="_blank">路线查询</a>
+			</div>
+			<div class="lianxi-luxian width1200">
+				<JW:list sql="SELECT * FROM `jzw_block` WHERE pos='luxian'">
+					{$r.content}
+				</JW:list>
+				<span style="clear: both;"></span>
+			</div>
+			<div style="clear: both;"></div>
+			<!--地图  留言-->
+			<style>
+				.maximgditu img{
+					max-height: none;
+					max-width: none;
+				}
+			</style>
+			<div class="lianxi-ditu width1200">
+				<!--地图导航-->
+				<div class="ditu maximgditu">
+					<script type="text/javascript" src="https://api.map.baidu.com/api?v=3.0&ak=0BtPf2pDiTIGxnPC7PQw2vqgCLWoGGFV&callback=map_init&s=1"></script>
+					<div style="width:673px;height:478px;border:#ccc solid 1px;" id="dituContent"></div>
+					<script type="text/javascript" >
+                        //创建和初始化地图函数：
+                        //loadContactMap('dituContent', '{$site_name}', '{$address}', '{$tel}', '{$baiduxy}'.split(',')[0], '{$baiduxy}'.split(',')[1]);
+					</script>
+					<script type="text/javascript">            
+						function map_init() {
+							var markerArr = [{
+								title: { name: '公司', value: "{$site_name}" },
+								point: { name: '坐标', value: "{$baiduxy}" },
+								address: { name: '地址', value: "{$address}" },
+								tel: { name: '电话', value: "{$tel}" }
+							},];
+							map = new BMap.Map('dituContent'); map.centerAndZoom(new BMap.Point(113.02578,28.191093), 15); loadContactMap('dituContent', markerArr, map);
+						}
+					</script>
+				</div>
+				<!--在线留言-->
+				<div class="lianxi-liuyan">
+					<form action="" method="" onsubmit="return dosub();">
+					<h3>在线留言<span>ONLINE MESSAGE</span></h3>
+					<table>
+						<tr height="47">
+							<td height="36"><p>姓名</p></td>
+							<td><input type="text" id="t_name" placeholder="请输入您的真实姓名" /></td>
+						</tr>
+						<tr height="47">
+							<td height="36"><p>邮箱</p></td>
+							<td><input type="text" id="t_email" placeholder="请输入您的常用邮箱" /></td>
+						</tr>
+						<tr height="47">
+							<td height="36"><p>电话</p></td>
+							<td><input type="text" id="t_phone" placeholder="请输入您的手机号码" /></td>
+						</tr>
+						<tr height="151">
+							<td height="140"><p class="lianxi-yan"></p></td>
+							<td><textarea id="t_remark" placeholder="请输入留言内容"></textarea></td>
+						</tr>
+					</table>
+					<em><span>*</span>限1000字符</em>
+					<button type="submit" value="提交">提交</button>
+					</form>
+				</div>
+			</div>
+		</section>
+		<script type="text/javascript">
+            //验证手机格式
+            function isPhone(str) {
+                var pattern = "^0?(13[0-9]|15[0-9]|18[0-9]|17[0-9]|14[0-9])[0-9]{8}$";
+                var check = new RegExp(pattern);
+                return check.test(str);
+            }
+
+            function dosub() {
+                var phone = $("#t_phone").val();
+                var name = $("#t_name").val();
+                var email = $("#t_email").val();
+                var remark = $("#t_remark").val();
+                var catid = {$catid};
+                if (phone == "" || name == "" || email == "") {
+                    alert("请填写相关信息");
+                    return false;
+                }
+                if (!isPhone(phone)) {
+                    alert("请输入正确的手机号码");
+                    return false;
+                }
+                if (remark.length > 200) {
+                    alert("留言内容不能超过200字符");
+                    return false;
+                }
+                submitMessage({
+                    title: name,
+                    phone: phone,
+                    email: email,
+                    remark: remark,
+                    catid: catid,
+                    ctype:"来自联系我们"
+                }, "liuyan", function () {
+                    alert("提交成功");
+                    window.location.reload();
+                });
+                return false;
+            }
+		</script>
+		<!--底部导航-->
+		<include file="model:foot" />
+
+		<!--侧导航-->
+		<include file="model:right" />
+		<script>
+            $(".nav-in li:nth-child(7)").addClass("nav-active");
+		</script>
+		<script>
+			$(".zt-qibu-list:nth-child(2n-1) .zt-qibu-in .zt-qibu-in1").addClass("slideInLeft");
+			$(".zt-qibu-list:nth-child(2n-1) .zt-qibu-in .zt-qibu-in2").addClass("slideInRight");
+			$(".zt-qibu-list:nth-child(2n) .zt-qibu-in .zt-qibu-in1").addClass("slideInRight");
+			$(".zt-qibu-list:nth-child(2n) .zt-qibu-in .zt-qibu-in2").addClass("slideInLeft");
+		</script>
+		
+	</body>
+
+</html>

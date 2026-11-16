@@ -46,7 +46,18 @@ function submitMessage(dataValue, method, callback) {
 //加载联系我们地图PC
 //调用方式
 //loadContactMap('content','{$site_name}','{$address}','{$tel}','{$baiduxy}'.split(',')[0],'{$baiduxy}'.split(',')[1]);
+function showContactMapFallback(id) {
+    var container = document.getElementById(id);
+    if (container) {
+        container.textContent = document.documentElement.lang === 'en'
+            ? 'Map unavailable. Please use the contact details on this page.'
+            : '地图暂时无法加载，请查看页面上的联系方式。';
+        container.setAttribute('role', 'status');
+    }
+}
+
 function loadContactMap_bak(id, site_name, address, tel, bdx, bdy) {
+    if (!window.BMap) return showContactMapFallback(id);
     var map = new BMap.Map(id);
     var point = new BMap.Point(bdx, bdy);
     map.centerAndZoom(point, 15);
@@ -68,6 +79,8 @@ function loadContactMap_bak(id, site_name, address, tel, bdx, bdy) {
 var baiduMap;
 //加载联系我们地图PC
 function loadContactMap(id, markerArr, map) {
+    if (typeof markerArr === 'string') return loadContactMap_bak.apply(null, arguments);
+    if (!window.BMap) return showContactMapFallback(id);
     baiduMap = map;
     baiduMap.enableScrollWheelZoom(true);
     //向地图中添加缩放控件

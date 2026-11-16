@@ -2,7 +2,7 @@ import { templates } from './generated/templates';
 import routes from './generated/routes.json';
 import { ContentRepository, escapeHTML } from './model';
 import type { Row, Services } from './ports';
-import { cleanHTML } from './api';
+import { cleanHTML,cleanInlineHTML } from './api';
 
 export function legacyCut(value:unknown,length:number){const s=String(value||'');if(new TextEncoder().encode(s).length<=length)return s;let out='',width=0;for(const ch of s){const w=ch.codePointAt(0)!>127?2:1;if(width+w>length)break;out+=ch;width+=w;}return out.length<s.length?out+'...':out;}
 export function dateFormat(format:string,timestamp:unknown){const d=new Date(Number(timestamp)*1000+8*3600000);if(!Number.isFinite(d.getTime()))return '';const p=(n:number)=>String(n).padStart(2,'0');return format.replace(/[YmdHis]/g,k=>({Y:String(d.getUTCFullYear()),m:p(d.getUTCMonth()+1),d:p(d.getUTCDate()),H:p(d.getUTCHours()),i:p(d.getUTCMinutes()),s:p(d.getUTCSeconds())}[k]!));}
@@ -63,6 +63,7 @@ export async function renderSite(request:Request,services:Services){
   const [path,filter]=e.split('|');let normalized=path.replace(/\[\$(\w+)\]/g,(_,v)=>'.'+ctx[v]).replace(/\[['"]?([^\]'"\[]+)['"]?\]/g,'.$1');
   let val:any=ctx;for(const part of normalized.split('.'))val=get(val,part);
   if(filter?.startsWith('toDate'))return dateFormat(filter.match(/'([^']+)'/)?.[1]||'Y-m-d',val);
+  if(!attribute&&filter==='inline')return cleanInlineHTML(String(val||''));
   // Bodies are authored HTML; ordinary scalar fields are escaped at interpolation boundaries.
   if(!attribute&&(['content','wap_content','description'].includes(path)||/\.(content|description)$/.test(path)))return cleanHTML(String(val||''));
   if(['pages','show','pre','next'].includes(path))return val;

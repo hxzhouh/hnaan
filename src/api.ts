@@ -6,6 +6,7 @@ import { authenticated,cookie,equal,limited,passwordHash,sessionToken } from './
 import { identifier,type Services,type Row,type Database } from './ports';
 export const json=(value:unknown,status=200,headers:Record<string,string>={})=>new Response(JSON.stringify(value),{status,headers:{'content-type':'application/json; charset=utf-8','cache-control':'no-store','x-content-type-options':'nosniff',...headers}});
 export function cleanHTML(value:string){return sanitize(value,{allowedTags:[...sanitize.defaults.allowedTags,'img','h1','h2','span','video','source','font','center'],allowedAttributes:{'*':['class','style','title'],'a':['href','target','rel'],'img':['src','alt','width','height','loading'],'video':['src','controls','poster','width','height'],'source':['src','type'],'font':['color','face','size']},allowedSchemes:['http','https','mailto','tel'],allowProtocolRelative:false});}
+export function cleanInlineHTML(value:string){return sanitize(value,{allowedTags:['span','strong','b','em','i','br'],allowedAttributes:{}});}
 const isNumeric=(entity:string,key:string)=>(columnTypes as Record<string,Record<string,string>>)['jzw_'+entity]?.[key]==='number';
 async function rebuildCategories(db:Database){
  const rows=await db.all('SELECT id,parentid,child,arrparentid,arrchildid FROM jzw_category');
@@ -24,6 +25,7 @@ function cleanFields(entity:string,row:Row){
   if(!allowed.includes(k)||k==='id')continue;
   if(isNumeric(entity,k)){const n=Number(v);if(!Number.isFinite(n))throw Error('Invalid number: '+k);out[k]=n;}
   else if(['content','wap_content'].includes(k))out[k]=cleanHTML(String(v).slice(0,1500000));
+  else if(entity==='slide_data'&&k==='subtitle')out[k]=cleanInlineHTML(String(v).slice(0,10000));
   else{out[k]=sanitize(String(v),{allowedTags:[],allowedAttributes:{}}).slice(0,10000);if(['url','thumb','pic','small','link'].includes(k)&&/^\s*(javascript|data|vbscript):/i.test(out[k]))throw Error('Invalid URL');}
  }
  return out;

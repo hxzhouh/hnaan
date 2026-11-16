@@ -79,7 +79,7 @@ function compile(text){
  text=text.replace(/<php>([\s\S]*?)<\/php>/gi,'<?php $1; ?>');
  const php=[];text=text.replace(/<\?php([\s\S]*?)\?>/g,(_,code)=>`@@PHP${php.push(code)-1}@@`);
  let code='',pos=0;
- const re=/@@PHP(\d+)@@|<include\s+file="([^"]+)"\s*\/>|<(JW:list|JW:link|volist|if)\b([^>]*?)>|<\/(JW:list|JW:link|volist|if)>/gi;
+ const re=/@@PHP(\d+)@@|<include\s+file\s*=\s*["']([^"']+)["']\s*\/>|<(JW:list|JW:link|volist|if)\b([^>]*?)>|<\/(JW:list|JW:link|volist|if)>/gi;
  for(const m of text.matchAll(re)){
   code+=html(text.slice(pos,m.index));pos=m.index+m[0].length;
   if(m[1]!==undefined){

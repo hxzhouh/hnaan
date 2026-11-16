@@ -67,3 +67,26 @@ test('page translation controls fallback and canonical URLs follow CMS edits',as
 test('portable filesystem serves the CMS directory index',async()=>{
  const temp=fs.mkdtempSync(path.join(os.tmpdir(),'hnaan-cms-test-'));try{fs.mkdirSync(path.join(temp,'cms'));fs.writeFileSync(path.join(temp,'cms/index.html'),'CMS test');const assets=new FileStorage(temp);for(const url of ['/cms','/cms/']){const response=await fetchApplication(request(url),{...services,assets});assert.equal(response.status,200);assert.equal(await response.text(),'CMS test');}}finally{fs.rmSync(temp,{recursive:true,force:true});}
 });
+test('legacy homepage highlights render as safe spans and remain escaped in image attributes',async()=>{
+ const subtitle='<span onclick="bad()">资深</span>标识设计团队<script>alert(1)</script>';
+ await db.run('INSERT INTO jzw_slide_data (id,fid,title,subtitle,description,pic,listorder,status) VALUES (?,?,?,?,?,?,?,?)',[580001,24,'01',subtitle,'测试介绍','/safe.png',0,1]);
+ const html=await(await fetchApplication(request('/'),services)).text();
+ assert.ok(html.includes('<h2><span>资深</span>标识设计团队</h2>'));
+ assert.ok(html.includes('alt="&lt;span onclick=&quot;bad()&quot;&gt;资深&lt;/span&gt;标识设计团队&lt;script&gt;alert(1)&lt;/script&gt;"'));
+ assert.ok(!html.includes('<span onclick="bad()">'));assert.ok(!html.includes('<script>alert(1)</script>'));
+});
+test('CMS slide edits preserve approved inline highlights and remove executable markup',async()=>{
+ const result=await fetchApplication(request('/api/admin/content/slide_data/580001',{fields:{subtitle:'<span onclick="bad()">11项</span>定制服务标准<script>alert(1)</script>'}},'PUT',session),services);
+ assert.equal(result.status,200);
+ assert.equal((await db.all('SELECT subtitle FROM jzw_slide_data WHERE id=?',[580001]))[0].subtitle,'<span>11项</span>定制服务标准');
+ const html=await(await fetchApplication(request('/'),services)).text();assert.ok(html.includes('<h2><span>11项</span>定制服务标准</h2>'));
+});
+test('resource and service pages render their shared desktop and mobile layouts',async()=>{
+ for(const path of ['/ziyuan/','/about/youshi/','/fuwu/zhizuo/','/sitemap/'])for(const mobile of [false,true]){
+  const r=request(path);if(mobile)r.headers.set('user-agent','iPhone Mobile');
+  const response=await fetchApplication(r,services);assert.equal(response.status,200,path);
+  const html=await response.text();assert.doesNotMatch(html,/<include\b/i,path);assert.match(html,/<title>[^<]+<\/title>/,path);
+  assert.ok(html.includes(mobile?'/Jzw/Tpl/Wap/Default/css/style.css':'/Jzw/Tpl/Home/Default/css/aiaoni.css'),path);
+  if(mobile&&path==='/fuwu/zhizuo/')assert.equal((html.match(/class="ce-nav"/g)||[]).length,1,'The mobile menu must have one dismissible overlay');
+ }
+});

@@ -90,3 +90,12 @@ test('resource and service pages render their shared desktop and mobile layouts'
   if(mobile&&path==='/fuwu/zhizuo/')assert.equal((html.match(/class="ce-nav"/g)||[]).length,1,'The mobile menu must have one dismissible overlay');
  }
 });
+test('media upload and listing expose a complete public delivery URL',async()=>{
+ const png=Buffer.from('iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVR42mP8/x8AAwMCAO+jzu0AAAAASUVORK5CYII=','base64');
+ const form=new FormData();form.set('file',new File([png],'cdn-test.png',{type:'image/png'}));
+ const response=await fetchApplication(new Request('https://example.test/api/admin/media',{method:'POST',headers:{origin:'https://example.test',cookie:session},body:form}),services);
+ assert.equal(response.status,201);const uploaded=await response.json()as any;
+ assert.match(uploaded.path,/^\/Uploads\/cms\/[\w-]+\.png$/);assert.equal(uploaded.url,'https://example.test'+uploaded.path);
+ const listing=await(await fetchApplication(request('/api/admin/media',undefined,'GET',session),services)).json()as any[];
+ assert.equal(listing.find(item=>item.path===uploaded.path).url,uploaded.url);
+});

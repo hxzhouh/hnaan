@@ -41,5 +41,8 @@
       "pattern": "www.hnaan.cn",
       "custom_domain": true
     }
-  ]
+  ],
+  "version_metadata": {
+    "binding": "VERSION"
+  }
 }

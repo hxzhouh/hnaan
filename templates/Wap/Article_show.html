@@ -86,8 +86,8 @@
 		</script>
 		<script>		
         $(function(){
-            $(".width img").removeAttr("width");
-			$(".width img").removeAttr("height");
+            $(".width img").not("[data-intrinsic-size]").removeAttr("width");
+			$(".width img").not("[data-intrinsic-size]").removeAttr("height");
 			$(".width img").attr("style","");
         });        
 	</script>

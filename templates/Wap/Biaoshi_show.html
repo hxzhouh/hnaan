@@ -97,8 +97,8 @@
 	</script>
 	<script>
 		$(function () {
-			$(".chuanzuo-bot img").removeAttr("width");
-			$(".chuanzuo-bot img").removeAttr("height");
+			$(".chuanzuo-bot img").not("[data-intrinsic-size]").removeAttr("width");
+			$(".chuanzuo-bot img").not("[data-intrinsic-size]").removeAttr("height");
 			$(".chuanzuo-bot img").attr("style", "");
 		});        
 	</script>

@@ -6,7 +6,7 @@ import {fetchApplication} from '../src/app';
 import {passwordHash} from '../src/auth';
 import {D1DatabaseAdapter} from '../src/adapters/d1';
 import {ContentRepository} from '../src/model';
-import {englishHTML} from '../src/render';
+import {englishHTML,prepareImageLoading} from '../src/render';
 import {cleanHTML} from '../src/api';
 import vm from 'node:vm';
 import {localizeMarketingGraphics} from '../src/english-media';
@@ -165,4 +165,36 @@ test('compiled English UI updates immediately when its stored dictionary changes
   await db.upsert('cms_settings',['name'],{name:'ui.en',value:JSON.stringify({'测试品牌':'Updated Brand'})});
   assert.ok((await englishHTML(html,services)).includes('<body>Updated Brand</body>'));
  }finally{await db.run('DELETE FROM cms_settings WHERE name=?',['ui.en']);}
+});
+
+test('initial HTML schedules the first three images eagerly and preserves scripts, styles and author choices',()=>{
+ const script=`<script>const template='<img src="dynamic.jpg">';</script>`,style='<style>/* <img src="not-an-image"> */</style>',comment='<!-- <img src="comment.jpg"> -->';
+ const html=prepareImageLoading(script+style+comment+'<img src="logo.png"><img src="qr.png"/><IMG SRC="hero.jpg" alt="a > b"><img src="photo.jpg"><img src="manual.jpg" loading="eager">');
+ assert.ok(html.includes(script+style+comment));
+ assert.match(html,/<img src="logo.png" loading="eager">/);assert.match(html,/<img src="qr.png" loading="eager"\/>/);assert.match(html,/<IMG SRC="hero.jpg" alt="a > b" loading="eager">/);
+ assert.match(html,/<img src="photo.jpg" loading="lazy">/);assert.match(html,/<img src="manual.jpg" loading="eager">/);assert.equal((html.match(/loading=/g)||[]).length,5);
+});
+test('Chinese and English article bodies contain lazy image attributes before browser scripts run',async()=>{
+ const content=Array.from({length:20},(_,i)=>`<p><img src="/test-detail-${i}.jpg" width="740" height="600"></p>`).join('');
+ await db.run('INSERT INTO jzw_article (id,catid,title,url,status,content,wap_content) VALUES (?,?,?,?,?,?,?)',[590009,84,'Photo article','/news/lazy-fixture.html',1,content,content]);
+ for(const path of ['/news/lazy-fixture.html','/en/news/lazy-fixture.html','/news/lazy-fixture.html?phone=1','/en/news/lazy-fixture.html?phone=1']){
+  const response=await fetchApplication(request(path),services);assert.equal(response.status,200);const html=await response.text();const images=html.match(/<img[^>]*src="\/test-detail-\d+\.jpg"[^>]*>/g)||[];
+  assert.equal(images.length,20,path);assert.ok(images.filter(img=>img.includes('loading="lazy"')).length>=19,path);
+  if(path.includes('phone=1'))assert.ok(html.includes('.not("[data-intrinsic-size]").removeAttr("width")'),path);
+ }
+});
+
+test('legacy photo dimensions reserve its aspect ratio without replacing authored dimensions',()=>{
+ const src='/Uploads/202509/68da55ce8c623.jpg';
+ assert.match(prepareImageLoading(`<img src="${src}">`),/width="4096" height="3072"/);
+ assert.match(prepareImageLoading(`<img src="${src}" width="600">`),/width="600" height="450"/);
+ assert.match(prepareImageLoading(`<img src="${src}" height="300">`),/height="300" width="400"/);
+ assert.match(prepareImageLoading(`<img src="${src}" width="300" height="300">`),/width="300" height="300"/);
+ assert.ok(!prepareImageLoading('<img src="https://external.test/photo.jpg">').includes('width='));
+ for(const name of ['constructor','toString','__proto__'])assert.ok(!prepareImageLoading(`<img src="${name}">`).includes('width='));
+});
+
+test('mobile header icons do not defer the first banner',()=>{
+ const html=prepareImageLoading('<img src="logo"><img src="phone"><img src="menu"><img src="banner"><img src="body">',4);
+ assert.match(html,/<img src="banner" loading="eager">/);assert.match(html,/<img src="body" loading="lazy">/);
 });

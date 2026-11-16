@@ -4,12 +4,37 @@ import { ContentRepository, escapeHTML } from './model';
 import type { Row, Services } from './ports';
 import { cleanHTML,cleanInlineHTML } from './api';
 import {localizeMarketingGraphics} from './english-media';
+import mediaDimensions from './generated/media-dimensions.json';
 
 export function legacyCut(value:unknown,length:number){const s=String(value||'');if(new TextEncoder().encode(s).length<=length)return s;let out='',width=0;for(const ch of s){const w=ch.codePointAt(0)!>127?2:1;if(width+w>length)break;out+=ch;width+=w;}return out.length<s.length?out+'...':out;}
 export function dateFormat(format:string,timestamp:unknown){const d=new Date(Number(timestamp)*1000+8*3600000);if(!Number.isFinite(d.getTime()))return '';const p=(n:number)=>String(n).padStart(2,'0');return format.replace(/[YmdHis]/g,k=>({Y:String(d.getUTCFullYear()),m:p(d.getUTCMonth()+1),d:p(d.getUTCDate()),H:p(d.getUTCHours()),i:p(d.getUTCMinutes()),s:p(d.getUTCSeconds())}[k]!));}
 export function pagination(count:number,size:number,current:number,url:URL){
  const total=Math.ceil(count/size);if(total<=1)return '';
  return Array.from({length:Math.min(total,30)},(_,i)=>{const link=new URL(url);link.searchParams.set('page',String(i+1));return `<li><a ${i+1===current?'aria-current="page" class="current"':''} href="${escapeHTML(link.pathname+link.search)}">${i+1}</a></li>`;}).join('');
+}
+// A deferred client script runs after the browser's preload scanner. Mark images
+// in the HTML itself so full-size offscreen photos do not compete with the first view.
+export function prepareImageLoading(html:string,eagerImages=3){
+ let image=0;
+ return html.replace(/<!--[\s\S]*?-->|<script\b[\s\S]*?<\/script>|<style\b[\s\S]*?<\/style>|<img\b(?:[^>"']|"[^"]*"|'[^']*')*>/gi,tag=>{
+  if(!/^<img\b/i.test(tag))return tag;
+  const loading=++image<=eagerImages?'eager':'lazy';let attributes='';
+  const src=tag.match(/\ssrc\s*=\s*(["'])(.*?)\1/i)?.[2];
+  let path=src?.split(/[?#]/)[0]||'';try{path=decodeURIComponent(path);}catch{}
+  const dimensions=Object.hasOwn(mediaDimensions,path)?(mediaDimensions as Record<string,number[]>)[path]:undefined;
+  // Natural dimensions reserve the correct aspect ratio before a lazy photo loads.
+  // Preserve explicit author dimensions and let existing CSS continue to control size.
+  const width=tag.match(/\swidth\s*=\s*(?:["']([^"']*)["']|([^\s>]+))/i),height=tag.match(/\sheight\s*=\s*(?:["']([^"']*)["']|([^\s>]+))/i);
+  if(dimensions){
+   const [w,h]=dimensions,existingWidth=width?Number(width[1]??width[2]):0,existingHeight=height?Number(height[1]??height[2]):0;
+   if(!width&&!height)attributes+=` width="${w}" height="${h}"`;
+   else if(!height&&Number.isFinite(existingWidth)&&existingWidth>0)attributes+=` height="${Math.max(1,Math.round(existingWidth*h/w))}"`;
+   else if(!width&&Number.isFinite(existingHeight)&&existingHeight>0)attributes+=` width="${Math.max(1,Math.round(existingHeight*w/h))}"`;
+  }
+  if(attributes)attributes+=' data-intrinsic-size=""';
+  if(!/\sloading\s*=/i.test(tag))attributes+=' loading="'+loading+'"';
+  return tag.replace(/\/?>$/,ending=>attributes+ending);
+ });
 }
 export async function renderSite(request:Request,services:Services){
  const url=new URL(request.url),locale=url.pathname.startsWith('/en/')||url.pathname==='/en'?'en':'zh-CN';
@@ -81,6 +106,7 @@ export async function renderSite(request:Request,services:Services){
  html=html.replace(/https?:\/\/(?:www\.)?hnionic\.cn(?=\/Uploads\/)/gi,'');
  html=html.replace(/http:\/\/(api\.map\.baidu\.com|player\.youku\.com|bdimg\.share\.baidu\.com)/g,'https://$1');
  if(locale==='en')html=await englishHTML(localizeMarketingGraphics(html),services,String(cfg['ui.en']||''));
+ html=prepareImageLoading(html,mobile?4:3);
  html=html.replace(/<html(?:\s+lang="[^"]*")?/i,'<html lang="'+locale+'"');
  const base=services.config.siteUrl.replace(/\/$/,''),canonical=base+(locale==='en'?'/en':'')+pathname;
  const translationRecord=entity==='category'&&cat?.module==='Page'?(pageRecord||record):record;

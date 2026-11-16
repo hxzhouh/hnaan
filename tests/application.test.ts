@@ -6,6 +6,9 @@ import {fetchApplication} from '../src/app';
 import {passwordHash} from '../src/auth';
 import {D1DatabaseAdapter} from '../src/adapters/d1';
 import {ContentRepository} from '../src/model';
+import {englishHTML} from '../src/render';
+import vm from 'node:vm';
+import {localizeMarketingGraphics} from '../src/english-media';
 import type {Services} from '../src/ports';
 import columnTypes from '../src/generated/column-types.json';
 import {FileStorage} from '../src/adapters/filesystem';
@@ -98,4 +101,46 @@ test('media upload and listing expose a complete public delivery URL',async()=>{
  assert.match(uploaded.path,/^\/Uploads\/cms\/[\w-]+\.png$/);assert.equal(uploaded.url,'https://example.test'+uploaded.path);
  const listing=await(await fetchApplication(request('/api/admin/media',undefined,'GET',session),services)).json()as any[];
  assert.equal(listing.find(item=>item.path===uploaded.path).url,uploaded.url);
+});
+test('English loads compact summaries once and fetches large bodies only for requested IDs',async()=>{
+ const isolated=new DatabaseSync(':memory:');isolated.exec('CREATE TABLE cms_translations(entity TEXT,entity_id INTEGER,locale TEXT,published INTEGER,fields TEXT);CREATE TABLE jzw_article(id INTEGER,title TEXT,url TEXT,status INTEGER)');
+ isolated.prepare('INSERT INTO cms_translations VALUES (?,?,?,?,?)').run('article',1,'en',1,JSON.stringify({title:'Translated neighbor'}));
+ isolated.prepare('INSERT INTO cms_translations VALUES (?,?,?,?,?)').run('article',9999,'en',1,'invalid unrelated JSON');
+ isolated.prepare('INSERT INTO jzw_article VALUES (?,?,?,?)').run(1,'中文标题','/neighbor.html',1);
+ const calls:{sql:string,args:unknown[]}[]=[],adapter={...db,async all(sql:string,args:unknown[]=[]){calls.push({sql,args});return isolated.prepare(sql).all(...args as any[])as any[];},run:db.run.bind(db),upsert:db.upsert.bind(db)};
+ try{
+  const repo=new ContentRepository(adapter,'en');const neighbor=await repo.model('article').where({id:1}).field('title,url').find();assert.equal(neighbor.title,'Translated neighbor');
+  const rows=await repo.translate('jzw_article',Array.from({length:170},(_,i)=>({id:i+1,title:'original'})),true);assert.equal(rows[0].title,'Translated neighbor');assert.equal(rows[1]._translated,false);
+  assert.ok(calls.filter(c=>c.sql.includes('cms_translations')&&!c.sql.includes('JSON_REMOVE')).every(c=>c.args.length<=82&&c.sql.includes('entity_id IN')));
+  const before=calls.length;await repo.translate('jzw_article',[{id:2}]);assert.equal(calls.length,before,'negative lookup is cached within the request');
+ }finally{isolated.close();}
+});
+test('static Page categories without a page row can publish English without a fallback notice',async()=>{
+ const created=await(await fetchApplication(request('/api/admin/content/category',{fields:{catname:'静态测试栏目',module:'Page',parentid:0}},'POST',session),services)).json()as any;
+ await fetchApplication(request('/api/admin/content/category/'+created.id,{fields:{template_list:'ziyuan'}},'PUT',session),services);
+ const row=(await db.all('SELECT * FROM jzw_category WHERE id=?',[created.id]))[0];
+ const result=await fetchApplication(request('/api/admin/content/category/'+created.id+'?locale=en',{fields:{catname:'Static Resources'},published:true},'PUT',session),services);assert.equal(result.status,200);
+ const html=await(await fetchApplication(request('/en'+row.url),services)).text();assert.ok(!html.includes('English translation is being prepared'));assert.ok(!html.includes('noindex,follow'));
+});
+
+test('complex English service pages stay within the D1 Free query budget',async()=>{
+ for(const path of ['/en/fuwu/','/en/fuwu/zhizuo/']){
+  let calls=0;const guarded={...services,db:{all:async(sql:string,args?:unknown[])=>{assert.ok(++calls<=50,'D1 query budget exceeded');return db.all(sql,args);},run:db.run.bind(db),upsert:db.upsert.bind(db)}};
+  const response=await fetchApplication(request(path),guarded);assert.equal(response.status,200,path);assert.ok(calls<=50);
+ }
+});
+test('UI overrides translate whitespace consistently in SEO, text, attributes and alerts while retaining URLs and scripts',async()=>{
+ await db.upsert('cms_settings',['name'],{name:'ui.en',value:JSON.stringify({'测试  品牌':'Test Brand','测试</script>':'Safe Value','价格':'$100 $& $1'})});
+ try{
+  const html=await englishHTML('<html><head><meta name="description" content="测试  品牌"><script>const untouched="测试  品牌";</script></head><body><p>测试  品牌</p><a href="/测试  品牌" title="测试  品牌">Link</a></body></html>',services);
+  assert.ok(html.includes('<p>Test Brand</p>'));assert.ok(html.includes('content="Test Brand"'));assert.ok(html.includes('title="Test Brand"'));assert.ok(html.includes('href="/测试  品牌"'));assert.ok(html.includes('const untouched="测试  品牌"'));
+  const script=html.match(/<head><script>([\s\S]*?)<\/script>/)![1],alerts:string[]=[];const window:any={alert:(s:string)=>alerts.push(s)};
+  vm.runInNewContext(script,{window});window.alert('测试  品牌');assert.deepEqual(alerts,['Test Brand']);assert.equal(window.siteTranslate('测试</script>'),'Safe Value');assert.equal(window.siteTranslate('价格'),'$100 $& $1');
+ }finally{await db.run('DELETE FROM cms_settings WHERE name=?',['ui.en']);}
+});
+test('English marketing artwork keeps its original photo and leaves replacement CMS images untouched',()=>{
+ const original='<img src="/Uploads/201811/5bf20784987d9.jpg" alt="Signage design">',localized=localizeMarketingGraphics(original);
+ assert.ok(localized.includes(original));assert.ok(localized.includes('15+ Years in Signage'));
+ const custom='<img src="/Uploads/cms/new-english-banner.png" alt="New banner">';assert.equal(localizeMarketingGraphics(custom),custom);
+ assert.ok(localizeMarketingGraphics('<img src="/Jzw/Tpl/Wap/Default/images/zh2.png">').includes('Unreliable quality'));
 });

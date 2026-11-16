@@ -19,7 +19,7 @@ export class MediaEdgeCache {
     const validator=request.headers.get('if-range');
     let hit=await this.cache.match(this.key(path,validator?undefined:request));
     if(hit&&validator&&request.headers.has('range')&&matchesIfRange(validator,hit.headers.get('etag'),hit.headers.get('last-modified')))hit=await this.cache.match(this.key(path,request));
-    if(hit){const headers=new Headers(hit.headers);headers.set('x-media-cache','HIT');return new Response(request.method==='HEAD'?null:hit.body,{status:hit.status,headers});}
+    if(hit){const headers=new Headers(hit.headers);headers.set('x-media-cache','HIT');headers.set('cache-control',this.policy);return new Response(request.method==='HEAD'?null:hit.body,{status:hit.status,headers});}
    }catch(error){console.warn('Media cache lookup failed',String(error));}
   }
   const response=await load(),headers=new Headers(response.headers);

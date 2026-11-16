@@ -5,13 +5,30 @@ export type Entity=typeof entities[number];
 export function validEntity(s:string):s is Entity{return entities.includes(s as Entity);}
 export const escapeHTML=(s:unknown)=>String(s??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]!));
 export class ContentRepository {
- private translations:Map<string,Row>|undefined;
+ private translations=new Map<string,Row>();
+ private translationLoads=new Map<string,Promise<void>>();
+ private summaryLoad:Promise<void>|undefined;
  private queries=new Map<string,Promise<Row[]>>();
  constructor(public db:Database,public locale='zh-CN'){}
- async translate(table:string,rows:Row[]):Promise<Row[]>{
-  if(this.locale!=='en')return rows;
-  if(!this.translations){const ts=await this.db.all('SELECT * FROM cms_translations WHERE locale=? AND published=1',['en']);this.translations=new Map(ts.map(t=>[t.entity+':'+t.entity_id,JSON.parse(t.fields)]));}
-  return rows.map(r=>({...r,...(this.translations!.get(table.replace('jzw_','')+':'+r.id)||{}),_translated:this.translations!.has(table.replace('jzw_','')+':'+r.id)}));
+ async translate(table:string,rows:Row[],includeBodies=false):Promise<Row[]>{
+  const entity=table.replace('jzw_','');
+  if(this.locale!=='en'||!validEntity(entity))return rows;
+  // One compact lookup serves all small legacy template queries. Large article/page
+  // bodies stay in the database until the actual detail record is requested.
+  this.summaryLoad??=this.db.all("SELECT entity,entity_id,CASE WHEN entity IN ('article','case','biaoshi','page') THEN JSON_REMOVE(fields,'$.content','$.wap_content') ELSE fields END AS fields FROM cms_translations WHERE locale=? AND published=1 AND JSON_VALID(fields)",['en']).then(ts=>{for(const t of ts)this.translations.set(t.entity+':'+t.entity_id,typeof t.fields==='string'?JSON.parse(t.fields):t.fields);});
+  await this.summaryLoad;
+  if(includeBodies||table==='jzw_page'){
+  const ids=[...new Set(rows.map(r=>r.id).filter(id=>id!==undefined&&id!==null))];
+  const missing=ids.filter(id=>!this.translationLoads.has(entity+':'+id));
+  // D1 limits bound parameters; each batch uses at most 82 across both adapters.
+  for(let offset=0;offset<missing.length;offset+=80){
+   const batch=missing.slice(offset,offset+80);
+   const task=this.db.all(`SELECT entity_id,fields FROM cms_translations WHERE entity=? AND locale=? AND published=1 AND entity_id IN (${batch.map(()=>'?').join(',')})`,[entity,'en',...batch]).then(ts=>{for(const t of ts)this.translations.set(entity+':'+t.entity_id,typeof t.fields==='string'?JSON.parse(t.fields):t.fields);});
+   for(const id of batch)this.translationLoads.set(entity+':'+id,task);
+  }
+  await Promise.all(ids.map(id=>this.translationLoads.get(entity+':'+id)));
+  }
+  return rows.map(r=>({...r,...(this.translations.get(entity+':'+r.id)||{}),_translated:this.translations.has(entity+':'+r.id)}));
  }
  async query(sql:string,args:unknown[]=[]){
   if(!/^\s*select\b/i.test(sql)||/;|--|\/\*|\b(union|information_schema|sqlite_master|pragma)\b/i.test(sql))throw Error('Only template SELECT queries are allowed');
@@ -25,7 +42,7 @@ export class ContentRepository {
   const key=sql+JSON.stringify(args);if(!this.queries.has(key))this.queries.set(key,this.db.all(sql,args).then(rows=>this.translate(table,rows)));
   return this.queries.get(key)!;
  }
- async record(entity:string,id:number){const rows=await this.db.all(`SELECT * FROM ${identifier('jzw_'+entity)} WHERE id=?`,[id]);return (await this.translate('jzw_'+entity,rows))[0];}
+ async record(entity:string,id:number){const rows=await this.db.all(`SELECT * FROM ${identifier('jzw_'+entity)} WHERE id=?`,[id]);return (await this.translate('jzw_'+entity,rows,['article','case','biaoshi','page'].includes(entity)))[0];}
  model(table=''){return new LegacyModel(this,table.toLowerCase());}
 }
 export class LegacyModel {
@@ -40,7 +57,7 @@ export class LegacyModel {
   const args:unknown[]=[];
   const cond=typeof this.condition==='string'?this.condition:Object.entries(this.condition).filter(([k])=>k!=='state').map(([k,v])=>{if(Array.isArray(v)){args.push(v[1]);return identifier(k)+' LIKE ?';}args.push(v);return identifier(k)+'=?';}).join(' AND ')||'1';
   if(!/^[a-z_]+$/.test(this.table))throw Error('Invalid model');
-  return {sql:`SELECT ${count?'COUNT(*) AS count':this.fields} FROM ${identifier('jzw_'+this.table)} WHERE ${cond}${!count&&this.ordering?' ORDER BY '+this.ordering:''}${!count&&this.window?' LIMIT '+this.window:''}`,args};
+  return {sql:`SELECT ${count?'COUNT(*) AS count':this.fields==='*'?'*':'id,'+this.fields} FROM ${identifier('jzw_'+this.table)} WHERE ${cond}${!count&&this.ordering?' ORDER BY '+this.ordering:''}${!count&&this.window?' LIMIT '+this.window:''}`,args};
  }
  async select(){const {sql,args}=this.build();return this.repo.query(sql,args);}
  async find(){this.window='1';return (await this.select())[0]||null;}

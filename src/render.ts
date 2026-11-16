@@ -3,6 +3,7 @@ import routes from './generated/routes.json';
 import { ContentRepository, escapeHTML } from './model';
 import type { Row, Services } from './ports';
 import { cleanHTML,cleanInlineHTML } from './api';
+import {localizeMarketingGraphics} from './english-media';
 
 export function legacyCut(value:unknown,length:number){const s=String(value||'');if(new TextEncoder().encode(s).length<=length)return s;let out='',width=0;for(const ch of s){const w=ch.codePointAt(0)!>127?2:1;if(width+w>length)break;out+=ch;width+=w;}return out.length<s.length?out+'...':out;}
 export function dateFormat(format:string,timestamp:unknown){const d=new Date(Number(timestamp)*1000+8*3600000);if(!Number.isFinite(d.getTime()))return '';const p=(n:number)=>String(n).padStart(2,'0');return format.replace(/[YmdHis]/g,k=>({Y:String(d.getUTCFullYear()),m:p(d.getUTCMonth()+1),d:p(d.getUTCDate()),H:p(d.getUTCHours()),i:p(d.getUTCMinutes()),s:p(d.getUTCSeconds())}[k]!));}
@@ -79,10 +80,10 @@ export async function renderSite(request:Request,services:Services){
  html=html.replace(/https?:\/\/(?:www\.)?hnaan\.cn(?=[/"'\s<])/gi,'');
  html=html.replace(/https?:\/\/(?:www\.)?hnionic\.cn(?=\/Uploads\/)/gi,'');
  html=html.replace(/http:\/\/(api\.map\.baidu\.com|player\.youku\.com|bdimg\.share\.baidu\.com)/g,'https://$1');
- if(locale==='en')html=await englishHTML(html,services);
+ if(locale==='en')html=await englishHTML(localizeMarketingGraphics(html),services);
  html=html.replace(/<html(?:\s+lang="[^"]*")?/i,'<html lang="'+locale+'"');
  const base=services.config.siteUrl.replace(/\/$/,''),canonical=base+(locale==='en'?'/en':'')+pathname;
- const translationRecord=entity==='category'&&cat?.module==='Page'?pageRecord:record;
+ const translationRecord=entity==='category'&&cat?.module==='Page'?(pageRecord||record):record;
  const fallback=locale==='en'&&record&&!translationRecord?._translated;
  const legacyCarousel=template==='Page_about'?'<script src="/legacy-carousel.js"></script>':'';
  const seo=legacyCarousel+`<link rel="canonical" href="${escapeHTML(canonical)}"><link rel="alternate" hreflang="zh-CN" href="${escapeHTML(base+pathname)}"><link rel="alternate" hreflang="en" href="${escapeHTML(base+'/en'+pathname)}">${fallback?'<meta name="robots" content="noindex,follow">':''}<link rel="stylesheet" href="/site-migration.css"><script defer src="/site-migration.js"></script>`;
@@ -92,16 +93,27 @@ export async function renderSite(request:Request,services:Services){
  return new Response(html,{headers:{'content-type':'text/html; charset=utf-8','content-language':locale,'cache-control':'no-store','vary':'User-Agent','x-content-type-options':'nosniff','referrer-policy':'strict-origin-when-cross-origin'}});
 }
 import uiDictionary from './generated/ui-en.json';
-async function englishHTML(html:string,services:Services){
+export async function englishHTML(html:string,services:Services){
  const custom=(await services.db.all('SELECT value FROM cms_settings WHERE name=?',['ui.en']))[0];
- const dict={...uiDictionary,...(custom?JSON.parse(custom.value):{})} as Record<string,string>;
- const keys=Object.keys(dict).filter(Boolean).sort((a,b)=>b.length-a.length);
+ const dict=Object.fromEntries(Object.entries({...uiDictionary,...(custom?JSON.parse(custom.value):{})}).map(([key,value])=>[key.replace(/\s+/g,' '),String(value)])) as Record<string,string>;
+ const keys=Object.keys(dict).filter(k=>/[\u3400-\u9fff]/.test(k)).sort((a,b)=>b.length-a.length);
  if(!keys.length)return html;
- const pattern=new RegExp(keys.map(k=>k.replace(/[.*+?^${}()|[\]\\]/g,'\\$&')).join('|'),'g');
- // Text and descriptive attributes only; do not translate CSS classes, URLs or JavaScript.
- return html.split(/(<script\b[\s\S]*?<\/script>|<style\b[\s\S]*?<\/style>|<[^>]+>)/gi).map(part=>{
+ const source=keys.map(k=>k.replace(/[.*+?^${}()|[\]\\]/g,'\\$&').replace(/ +/g,'\\s+')).join('|');
+ const pattern=new RegExp(source,'g');
+ const translate=(text:string)=>{for(let i=0;i<2;i++)text=text.replace(pattern,key=>escapeHTML(dict[key.replace(/\s+/g,' ')]??key));return text;};
+ // Text and descriptive attributes only; URLs, classes, CSS and scripts remain untouched.
+ html=html.split(/(<script\b[\s\S]*?<\/script>|<style\b[\s\S]*?<\/style>|<[^>]+>)/gi).map(part=>{
   if(/^<(script|style)\b/i.test(part))return part;
-  if(part.startsWith('<'))return part.replace(/\b(title|alt|placeholder)="([^"]*)"/g,(_,a,v)=>`${a}="${v.replace(pattern,(s:string)=>escapeHTML(dict[s]))}"`);
-  return part.replace(pattern,s=>escapeHTML(dict[s]));
+  if(part.startsWith('<')){
+   part=part.replace(/\b(title|alt|placeholder|aria-label)=(['"])([\s\S]*?)\2/gi,(_,a,q,v)=>`${a}=${q}${translate(v)}${q}`);
+   if(/^<input\b/i.test(part)&&/\btype=['"](?:submit|button)['"]/i.test(part))part=part.replace(/\bvalue=(['"])([\s\S]*?)\1/i,(_,q,v)=>`value=${q}${translate(v)}${q}`);
+   if(/^<meta\b/i.test(part)&&/\bname=['"](?:description|keywords)['"]/i.test(part))part=part.replace(/\bcontent=(['"])([\s\S]*?)\1/i,(_,q,v)=>`content=${q}${translate(v)}${q}`);
+   return part;
+  }
+  return translate(part);
  }).join('');
+ // The client handles legacy form alerts and labels inserted by pagination callbacks.
+ const dictionary=JSON.stringify(dict).replace(/</g,'\\u003c').replace(/>/g,'\\u003e').replace(/&/g,'\\u0026');
+ const script=`<script>window.siteTranslations=${dictionary};window.siteTranslate=function(v){const d=window.siteTranslations,p=new RegExp(${JSON.stringify(source).replace(/</g,'\\u003c').replace(/>/g,'\\u003e')},'g');for(let i=0;i<2;i++)v=String(v).replace(p,k=>d[k.replace(/\\s+/g,' ')]??k);return v};{const a=window.alert;window.alert=function(v){a.call(window,window.siteTranslate(v))}}</script>`;
+ return html.replace(/<head([^>]*)>/i,(_,attributes)=>`<head${attributes}>${script}`);
 }

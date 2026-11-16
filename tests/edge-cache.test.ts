@@ -60,7 +60,8 @@ test('static assets miss after deployment and keep query-based variants separate
   const edge=new MediaEdgeCache(cache as any,wait,'https://example.test',version);
   const first=await edge.get('/logo.png?v=1',new Request('https://example.test/logo.png?v=1'),async()=>{reads++;return response(version);});
   assert.equal(first.headers.get('x-media-cache'),'MISS');assert.match(first.headers.get('cache-control')!,/max-age=0,must-revalidate/);assert.equal(await first.text(),version);await Promise.all(tasks);
-  const hit=await edge.get('/logo.png?v=1',new Request('https://example.test/logo.png?v=1'),async()=>{throw Error('must hit');});assert.equal(hit.headers.get('x-media-cache'),'HIT');
+  for(const entry of cache.entries.values())entry.headers.set('cache-control','public,max-age=14400');
+  const hit=await edge.get('/logo.png?v=1',new Request('https://example.test/logo.png?v=1'),async()=>{throw Error('must hit');});assert.equal(hit.headers.get('x-media-cache'),'HIT');assert.match(hit.headers.get('cache-control')!,/max-age=0,must-revalidate/);
   const variant=await edge.get('/logo.png?v=2',new Request('https://example.test/logo.png?v=2'),async()=>response('variant'));assert.equal(variant.headers.get('x-media-cache'),'MISS');await Promise.all(tasks);
  }
  assert.equal(reads,2);

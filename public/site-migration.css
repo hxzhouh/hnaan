@@ -16,10 +16,11 @@ html[lang=en] .english-supplier-questions{padding:24px 16px;font:14px/1.5 Arial,
 html[lang=en] .english-supplier-questions h3{font-size:18px;color:#c52a1b;margin-bottom:20px}
 html[lang=en] .english-supplier-questions div{display:grid;grid-template-columns:1fr 1fr;gap:12px}
 html[lang=en] .english-supplier-questions p{border:1px solid #e9d2ce;padding:14px 8px;border-radius:4px}
-html[lang=en] .fenlei-in{height:270px}
-html[lang=en] .fenlei-in p{box-sizing:border-box;height:76px;padding:8px 12px;font:14px/20px Arial,sans-serif;white-space:normal;display:-webkit-box;-webkit-box-orient:vertical;-webkit-line-clamp:3;overflow:hidden}
+html[lang=en] .fenlei-in{height:270px;background:#fff}
+html[lang=en] .fenlei-in p{box-sizing:border-box;height:60px;width:calc(100% - 24px);margin:8px 12px;padding:0;font:14px/20px Arial,sans-serif;white-space:normal;display:-webkit-box;-webkit-box-orient:vertical;-webkit-line-clamp:3;overflow:hidden}
 html[lang=en] .dzinb-bottom-right,html[lang=en] .fenlei{height:930px}
-html[lang=en] .dzinb-bottom-left span{white-space:normal;line-height:22px}
+html[lang=en] .dzinb-bottom-left>span{display:flex;align-items:center;justify-content:center;white-space:normal;line-height:1.2;padding:8px;box-sizing:border-box}
+html[lang=en] .dinzhi-in-top p{width:100%;height:36px;white-space:normal;line-height:18px;padding:0 8px;box-sizing:border-box}
 html[lang=en] .zh-title h3{font-family:Arial,sans-serif;font-size:17px}
 html[lang=en] .zh-title h3 span{margin:0 .2em}
 @media(max-width:767px){html[lang=en] .english-banner-copy{padding:.8cqw;gap:.5cqw}html[lang=en] .english-banner-copy strong{font-size:2.6cqw}html[lang=en] .english-banner-copy small{font-size:1.8cqw}html[lang=en] .english-partner-flow{gap:20px 8px;padding:25px 8px}html[lang=en] .english-partner-flow li{width:30%;font-size:12px}html[lang=en] .english-partner-flow b{width:44px;height:44px;font-size:20px}}

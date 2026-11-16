@@ -50,7 +50,8 @@ export async function handleAPI(request:Request,s:Services){
   const ids=String(url.searchParams.get('catids')||'').split(',').slice(0,100).map(Number).filter(n=>Number.isSafeInteger(n)&&n>0);
   if(!ids.length)return json([]);
   const page=Math.min(10000,Math.max(1,Number(url.searchParams.get('nowPage')||url.searchParams.get('page'))||1)),size=Math.min(30,Math.max(1,Number(url.searchParams.get('size'))||6));
-  const repo=new ContentRepository(s.db,url.searchParams.get('locale')==='en'?'en':'zh-CN');
+  const revision=(await s.db.all("SELECT value FROM cms_settings WHERE name='site.revision'"))[0]?.value;
+  const repo=new ContentRepository(s.db,url.searchParams.get('locale')==='en'?'en':'zh-CN',revision?s.config.siteUrl+'|'+revision:'');
   const rows=await repo.query(`SELECT id,title,url,thumb,description,createtime FROM jzw_${entity} WHERE status=1 AND catid IN (${ids.map(()=>'?')}) ORDER BY listorder DESC,createtime DESC LIMIT ${Math.floor(size)} OFFSET ${Math.floor((page-1)*size)}`,ids);
   return json(rows.map(r=>({...r,title:escapeHTML(r.title),url:escapeHTML(r.url),thumb:escapeHTML(r.thumb),description:cleanHTML(String(r.description||''))})));
  }

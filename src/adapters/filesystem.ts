@@ -1,7 +1,7 @@
 import fs from 'node:fs/promises';
 import path from 'node:path';
 import type { Storage } from '../ports';
-const types:Record<string,string>={html:'text/html; charset=utf-8',css:'text/css; charset=utf-8',js:'text/javascript; charset=utf-8',jpg:'image/jpeg',jpeg:'image/jpeg',png:'image/png',gif:'image/gif',webp:'image/webp',svg:'image/svg+xml',ico:'image/x-icon',mp4:'video/mp4',pdf:'application/pdf',woff:'font/woff',woff2:'font/woff2'};
+const types:Record<string,string>={html:'text/html; charset=utf-8',css:'text/css; charset=utf-8',js:'text/javascript; charset=utf-8',jpg:'image/jpeg',jpeg:'image/jpeg',png:'image/png',gif:'image/gif',webp:'image/webp',svg:'image/svg+xml',ico:'image/x-icon',mp4:'video/mp4',pdf:'application/pdf',doc:'application/msword',docx:'application/vnd.openxmlformats-officedocument.wordprocessingml.document',woff:'font/woff',woff2:'font/woff2'};
 export class FileStorage implements Storage {
  constructor(private directory:string){}
  private file(key:string){const base=path.resolve(this.directory),file=path.resolve(base,'.'+decodeURIComponent(key.startsWith('/')?key:'/'+key));if(!file.startsWith(base+path.sep))throw Error('Invalid file path');return file;}

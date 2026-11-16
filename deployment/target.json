@@ -1,0 +1,18 @@
+{
+  "accountId": "c24f41e3f9bf97db8b552c40d33ab57a",
+  "databaseId": "096a71c4-910a-4578-94f1-714ff0193765",
+  "bucket": "hnaan-media",
+  "siteUrl": "https://hnaan-website.372405779.workers.dev",
+  "verifiedFiles": 3541,
+  "verifiedBytes": 1107932757,
+  "sampleKeys": [
+    "Uploads/202208/630f0a1cbe30a.jpg",
+    "Uploads/202509/68da57e41caab.jpg",
+    "Uploads/202509/68da57e1ad297.jpg",
+    "Uploads/201810/5bd7bf82ce96e.jpg",
+    "Uploads/201810/5bd7bf83477f0.jpg",
+    "Uploads/201810/5bd7bf8370954.jpg",
+    "Uploads/201810/5bd7bf83c0a7c.jpg",
+    "Uploads/201810/5bd7bf8429bf4.jpg"
+  ]
+}

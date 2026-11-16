@@ -97,7 +97,7 @@ for dialect in ['d1','mysql']:
     (ROOT/'seeds').mkdir(exist_ok=True)
     (ROOT/'seeds'/('original-'+dialect+'.sql')).write_text('\n'.join(seed_statements)+'\n')
 
-allowed={'.jpg','.jpeg','.png','.gif','.webp','.svg','.ico','.css','.js','.woff','.woff2','.ttf','.eot','.otf','.mp4','.swf'}
+allowed={'.jpg','.jpeg','.png','.gif','.webp','.svg','.ico','.css','.js','.woff','.woff2','.ttf','.eot','.otf','.mp4','.swf','.doc','.docx','.pdf'}
 count=0
 for folder in ([] if args.skip_assets else ['Uploads','Jzw/Tpl/Home/Default','Jzw/Tpl/Wap/Default','Public']):
     for f in (source/folder).rglob('*'):

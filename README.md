@@ -2,6 +2,8 @@
 
 保留原站桌面与手机模板，提供简体中文、英文和内容管理后台。业务层使用 Web 标准 Request/Response，数据库与文件存储通过接口注入。
 
+部署地址：[官网](https://hnaan-website.372405779.workers.dev/) · [英文入口](https://hnaan-website.372405779.workers.dev/en/) · [内容管理](https://hnaan-website.372405779.workers.dev/cms/)。后台凭据单独交付，不存入仓库。
+
 | 运行方式 | 数据库 | 文件存储 | 入口 |
 |---|---|---|---|
 | Cloudflare Workers | D1 | 静态资源 + R2 | `src/index.ts` |
@@ -69,7 +71,7 @@ MySQL 迁移脚本在 `migrations-mysql/`，使用 MySQL 原生 upsert 语法；
 
 `src/ports.ts` 定义 Database、Storage、Services；新增 PostgreSQL 或 S3 等适配时，实现对应接口并在入口注入即可。当前已提供的存储适配为 R2 与本地文件，不声称已提供 S3 适配。
 
-本机 Docker/MySQL 在验证时发生连接与写入挂起，因此目前已完成 D1 的实际集成验证、Node 目标构建和 MySQL 适配实现；MySQL 的完整集成验证需要在正常可用的 MySQL 实例上补跑。
+已在 GitHub Actions 的真实 MySQL 8.4 实例上通过内容创建、草稿发布、译文更新和限流计数的集成测试；同一流水线的 10 项测试全部通过，并完成 Cloudflare 与 Node 两个目标的构建。验证记录：[首次完整检查](https://github.com/hxzhouh/hnaan/actions/runs/43862775429)。
 
 ## 内容管理与双语
 

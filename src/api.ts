@@ -7,6 +7,7 @@ import { identifier,type Services,type Row,type Database } from './ports';
 export const json=(value:unknown,status=200,headers:Record<string,string>={})=>new Response(JSON.stringify(value),{status,headers:{'content-type':'application/json; charset=utf-8','cache-control':'no-store','x-content-type-options':'nosniff',...headers}});
 export function cleanHTML(value:string){return sanitize(value,{allowedTags:[...sanitize.defaults.allowedTags,'img','h1','h2','span','video','source','font','center'],allowedAttributes:{'*':['class','style','title'],'a':['href','target','rel'],'img':['src','alt','width','height','loading'],'video':['src','controls','poster','width','height'],'source':['src','type'],'font':['color','face','size']},allowedSchemes:['http','https','mailto','tel'],allowProtocolRelative:false});}
 export function cleanInlineHTML(value:string){return sanitize(value,{allowedTags:['span','strong','b','em','i','br'],allowedAttributes:{}});}
+const mediaURL=(path:string,s:Services)=>new URL(path,s.config.siteUrl).href;
 const isNumeric=(entity:string,key:string)=>(columnTypes as Record<string,Record<string,string>>)['jzw_'+entity]?.[key]==='number';
 async function rebuildCategories(db:Database){
  const rows=await db.all('SELECT id,parentid,child,arrparentid,arrchildid FROM jzw_category');
@@ -74,7 +75,7 @@ export async function handleAPI(request:Request,s:Services){
   const b=await request.json()as Row;await s.db.run('UPDATE cms_inquiries SET status=? WHERE id=?',[b.status==='read'?'read':'new',String(b.id)]);return json({ok:true});
  }
  if(path==='/api/admin/media'){
-  if(method==='GET'){const q='%'+(url.searchParams.get('q')||'')+'%',page=Math.max(0,Number(url.searchParams.get('page'))||0);return json(await s.db.all('SELECT * FROM cms_media WHERE name LIKE ? ORDER BY created_at DESC LIMIT 60 OFFSET '+Math.floor(page*60),[q]));}
+  if(method==='GET'){const q='%'+(url.searchParams.get('q')||'')+'%',page=Math.max(0,Number(url.searchParams.get('page'))||0);return json((await s.db.all('SELECT * FROM cms_media WHERE name LIKE ? ORDER BY created_at DESC LIMIT 60 OFFSET '+Math.floor(page*60),[q])).map(row=>({...row,url:mediaURL(row.path,s)})));}
   if(method==='POST'){
    const form=await request.formData(),file=form.get('file');
    if(!file||typeof file==='string'||file.size>25*1024*1024)return json({error:'文件为空或超过25MB'},400);
@@ -85,7 +86,7 @@ export async function handleAPI(request:Request,s:Services){
    if(!matches)return json({error:'文件内容与扩展名不匹配'},400);
    const type=ext==='pdf'?'application/pdf':ext==='mp4'?'video/mp4':'image/'+(ext==='jpg'?'jpeg':ext);
    const path='/Uploads/cms/'+crypto.randomUUID()+'.'+ext;
-   await s.media.put(path,bytes,type);await s.db.run('INSERT INTO cms_media (path,name,size,type,created_at) VALUES (?,?,?,?,?)',[path,file.name.slice(0,200),file.size,type,Math.floor(Date.now()/1000)]);return json({path},201);
+   await s.media.put(path,bytes,type);await s.db.run('INSERT INTO cms_media (path,name,size,type,created_at) VALUES (?,?,?,?,?)',[path,file.name.slice(0,200),file.size,type,Math.floor(Date.now()/1000)]);return json({path,url:mediaURL(path,s)},201);
   }
  }
  if(path==='/api/admin/ui'){

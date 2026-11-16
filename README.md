@@ -2,7 +2,7 @@
 
 保留原站桌面与手机模板，提供简体中文、英文和内容管理后台。业务层使用 Web 标准 Request/Response，数据库与文件存储通过接口注入。
 
-部署地址：[官网](https://hnaan-website.372405779.workers.dev/) · [英文入口](https://hnaan-website.372405779.workers.dev/en/) · [内容管理](https://hnaan-website.372405779.workers.dev/cms/)。后台凭据单独交付，不存入仓库。
+部署地址：[官网](https://hnaan.cn/) · [英文入口](https://hnaan.cn/en/) · [内容管理](https://hnaan.cn/cms/)。后台凭据单独交付，不存入仓库。
 
 | 运行方式 | 数据库 | 文件存储 | 入口 |
 |---|---|---|---|
@@ -41,7 +41,7 @@ npm run deploy
 
 旧图片、CSS、JS 在本机保留原路径。公开代码仓库包含模板资源；历史 `Uploads/` 与生产种子数据不进入 Git。首次部署必须单独将历史图片传入 R2，并逐文件检查，结果记录于 `deployment/target.json`。部署脚本会核对目标账号、数据库和图片可访问性，再从静态发布包排除已迁移的图片。直接构建默认保留本机现有图片，避免未迁移时丢失资源。新上传文件写入 R2。`/Uploads/` 先查静态资源，再查存储接口，所以以后可以把旧图片搬到对象存储，而无需改变内容中的地址。上传文件限制为25MB，并检查扩展名与文件签名。
 
-本次未修改 `hnaan.cn` 的 DNS。绑定域名后，需要同步设置 `SITE_URL`，并检查百度地图、在线客服和视频等原第三方服务对新域名的授权。
+`hnaan.cn` 的 DNS 已由 Cloudflare 托管，注册商保持原有设置。根域名和 `www.hnaan.cn` 通过 `wrangler.jsonc` 绑定同一个 Worker，规范地址为 `https://hnaan.cn`；原 workers.dev 地址保留。百度地图、在线客服和视频等原第三方服务的域名授权需另行核对。
 
 ## Node.js + MySQL
 

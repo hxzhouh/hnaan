@@ -26,9 +26,20 @@
     }
   ],
   "vars": {
-    "SITE_URL": "https://hnaan-website.372405779.workers.dev"
+    "SITE_URL": "https://hnaan.cn"
   },
   "observability": {
     "enabled": true
-  }
+  },
+  "workers_dev": true,
+  "routes": [
+    {
+      "pattern": "hnaan.cn",
+      "custom_domain": true
+    },
+    {
+      "pattern": "www.hnaan.cn",
+      "custom_domain": true
+    }
+  ]
 }

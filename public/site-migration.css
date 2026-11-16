@@ -1,1 +1,25 @@
 .site-language{position:fixed;right:18px;top:12px;z-index:10000;font:12px/1.5 Arial,sans-serif;background:#fff;color:#a92318;border:1px solid #ddd;padding:5px 10px;border-radius:3px}.translation-notice{position:fixed;bottom:0;left:0;right:0;background:#fff7de;color:#684f18;padding:8px 15px;text-align:center;z-index:10001;font:12px/1.4 sans-serif}html[lang=en] .nav-in a{font-size:14px}html[lang=en] .head>p{font-size:15px}html[lang=en] .dinzhi-in-top p{font-size:13px}html[lang=en] .dzinb-bottom-left>span{font-size:18px}html[lang=en] .dibubot-in-in h1{font-size:12px}html[lang=en] .lianxi-liuyan p{font-size:12px}.site-form-status{padding:8px;color:#b11f16}@media(max-width:767px){.site-language{top:calc(1.07rem + 8px);right:8px;font-size:10px;padding:3px 7px}}
+
+html[lang=en]{font-family:Arial,sans-serif}
+html[lang=en] .english-banner{display:block;position:relative;container-type:inline-size;width:100%;line-height:0}
+html[lang=en] .english-banner>img{display:block;width:100%}
+html[lang=en] .english-banner-copy{position:absolute;box-sizing:border-box;padding:1cqw;display:flex;flex-direction:column;justify-content:center;gap:.6cqw;white-space:normal;text-align:left;font-family:Arial,sans-serif;line-height:1.15;overflow:hidden}
+html[lang=en] .english-banner-copy strong{display:block;font:600 2.2cqw/1.1 Arial,sans-serif}
+html[lang=en] .english-banner-copy small{display:block;font:400 1.1cqw/1.2 Arial,sans-serif}
+html[lang=en] .english-partner-flow{display:flex;gap:20px;justify-content:center;flex-wrap:wrap;padding:40px 16px;box-sizing:border-box;list-style:none;font:16px/1.5 Arial,sans-serif}
+html[lang=en] .english-partner-flow li{width:160px;text-align:center;color:#333}
+html[lang=en] .english-partner-flow b{display:grid;place-items:center;width:66px;height:66px;margin:0 auto 12px;background:#cc291c;color:#fff;border-radius:50%;font-size:30px}
+html[lang=en] .english-partner-flow span{display:block}
+html[lang=en] .zt-liu{background:#f6f6f6;height:auto;min-height:350px;padding-bottom:100px;display:flex;flex-direction:column}
+html[lang=en] .zt-liu>.zt-xuan-title{order:-1}
+html[lang=en] .english-supplier-questions{padding:24px 16px;font:14px/1.5 Arial,sans-serif;text-align:center}
+html[lang=en] .english-supplier-questions h3{font-size:18px;color:#c52a1b;margin-bottom:20px}
+html[lang=en] .english-supplier-questions div{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+html[lang=en] .english-supplier-questions p{border:1px solid #e9d2ce;padding:14px 8px;border-radius:4px}
+html[lang=en] .fenlei-in{height:270px}
+html[lang=en] .fenlei-in p{box-sizing:border-box;height:76px;padding:8px 12px;font:14px/20px Arial,sans-serif;white-space:normal;display:-webkit-box;-webkit-box-orient:vertical;-webkit-line-clamp:3;overflow:hidden}
+html[lang=en] .dzinb-bottom-right,html[lang=en] .fenlei{height:930px}
+html[lang=en] .dzinb-bottom-left span{white-space:normal;line-height:22px}
+html[lang=en] .zh-title h3{font-family:Arial,sans-serif;font-size:17px}
+html[lang=en] .zh-title h3 span{margin:0 .2em}
+@media(max-width:767px){html[lang=en] .english-banner-copy{padding:.8cqw;gap:.5cqw}html[lang=en] .english-banner-copy strong{font-size:2.6cqw}html[lang=en] .english-banner-copy small{font-size:1.8cqw}html[lang=en] .english-partner-flow{gap:20px 8px;padding:25px 8px}html[lang=en] .english-partner-flow li{width:30%;font-size:12px}html[lang=en] .english-partner-flow b{width:44px;height:44px;font-size:20px}}

@@ -59,11 +59,12 @@ export async function handleAPI(request:Request,s:Services){
   return json({ok:true},200,{'set-cookie':cookie(request,await sessionToken(s))});
  }
  if(path==='/api/inquiries'&&method==='POST'){
-  if(await limited(s,'inquiry:'+(request.headers.get('cf-connecting-ip')||request.headers.get('x-real-ip')||'local'),5,3600))return json({error:'提交次数过多，请稍后重试'},429);
-  const b=await request.json() as Row;
+  const inquiry=await request.json()as Row,en=inquiry.locale==='en';
+  if(await limited(s,'inquiry:'+(request.headers.get('cf-connecting-ip')||request.headers.get('x-real-ip')||'local'),5,3600))return json({error:en?'Too many messages. Please try again later.':'提交次数过多，请稍后重试'},429);
+  const b=inquiry;
   if(b.website)return json({ok:true});
   const name=String(b.name||'').trim(),phone=String(b.phone||'').trim(),email=String(b.email||'').trim(),message=String(b.message||'').trim();
-  if(!name||name.length>100||!phone||phone.length>80||message.length>5000||email.length>200)return json({error:'请填写有效的姓名和联系电话'},400);
+  if(!name||name.length>100||!phone||phone.length>80||message.length>5000||email.length>200)return json({error:en?'Please enter a valid name and phone number.':'请填写有效的姓名和联系电话'},400);
   await s.db.run('INSERT INTO cms_inquiries (id,name,email,phone,message,locale,created_at,status) VALUES (?,?,?,?,?,?,?,?)',[crypto.randomUUID(),name,email,phone,message,b.locale==='en'?'en':'zh-CN',Math.floor(Date.now()/1000),'new']);return json({ok:true});
  }
  if(!await authenticated(request,s))return json({error:'请登录'},401);

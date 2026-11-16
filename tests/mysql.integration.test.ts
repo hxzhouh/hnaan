@@ -11,7 +11,8 @@ test('MySQL 8 content, translation, draft and rate-limit lifecycle',{skip:!proce
  assert.equal(new URL(url).pathname,'/hnaan_ci','Use the dedicated empty hnaan_ci test database');
  const db=new MySQLDatabaseAdapter(url);
  try{
-  for(const file of fs.readdirSync('migrations-mysql').filter(n=>n.endsWith('.sql')).sort())for(const sql of fs.readFileSync('migrations-mysql/'+file,'utf8').split(';\n'))if(sql.trim())await db.run(sql);
+  // Trigger DDL uses the text protocol, matching scripts/migrate-mysql.mjs.
+  for(const file of fs.readdirSync('migrations-mysql').filter(n=>n.endsWith('.sql')).sort())for(const sql of fs.readFileSync('migrations-mysql/'+file,'utf8').split(';\n'))if(sql.trim())await db.pool.query(sql);
   for(const sql of fs.readFileSync('tests/fixture.sql','utf8').split(';\n'))if(sql.trim())await db.run(sql);
   const revision=async()=>String((await db.all("SELECT value FROM cms_settings WHERE name='site.revision'"))[0].value);
   const beforeCreate=await revision();

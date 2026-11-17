@@ -62,15 +62,12 @@
 				.dituing img{max-width:none;max-height:none;}
 				</style>
 							<div class="dituing">
-    <script type="text/javascript" src="http://api.map.baidu.com/api?v=1.2"></script>
+    
     
 
-   <div  id="dituContent" style="width:100%;height:350px;border:#ccc solid 1px;font-size:12px;">
-    </div>
+   <div  id="dituContent" style="width:100%;height:350px;border:#ccc solid 1px;font-size:12px;" role="status">{$map_unavailable}</div>
     
-   <script>
-						loadContactMap('dituContent', '{$site_name}', '{$address}', '{$tel}', '{$baiduxy}'.split(',')[0], '{$baiduxy}'.split(',')[1]);
-					</script>
+   
 </div> 
 			</div>
 			<!--联系方式-->

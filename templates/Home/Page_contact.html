@@ -112,23 +112,10 @@
 			<div class="lianxi-ditu width1200">
 				<!--地图导航-->
 				<div class="ditu maximgditu">
-					<script type="text/javascript" src="https://api.map.baidu.com/api?v=3.0&ak=0BtPf2pDiTIGxnPC7PQw2vqgCLWoGGFV&callback=map_init&s=1"></script>
-					<div style="width:673px;height:478px;border:#ccc solid 1px;" id="dituContent"></div>
-					<script type="text/javascript" >
-                        //创建和初始化地图函数：
-                        //loadContactMap('dituContent', '{$site_name}', '{$address}', '{$tel}', '{$baiduxy}'.split(',')[0], '{$baiduxy}'.split(',')[1]);
-					</script>
-					<script type="text/javascript">            
-						function map_init() {
-							var markerArr = [{
-								title: { name: '公司', value: "{$site_name}" },
-								point: { name: '坐标', value: "{$baiduxy}" },
-								address: { name: '地址', value: "{$address}" },
-								tel: { name: '电话', value: "{$tel}" }
-							},];
-							map = new BMap.Map('dituContent'); map.centerAndZoom(new BMap.Point(113.02578,28.191093), 15); loadContactMap('dituContent', markerArr, map);
-						}
-					</script>
+					
+					<div style="width:673px;height:478px;border:#ccc solid 1px;" id="dituContent" role="status">{$map_unavailable}</div>
+					
+					
 				</div>
 				<!--在线留言-->
 				<div class="lianxi-liuyan">

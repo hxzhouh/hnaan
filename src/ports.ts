@@ -9,6 +9,6 @@ export interface Storage {
   put(path:string,bytes:ArrayBuffer,type:string):Promise<void>;
   delete(path:string):Promise<void>;
 }
-export interface Config { siteUrl:string; adminPasswordHash:string; sessionSecret:string; adminUser:string; }
+export interface Config { siteUrl:string; adminPasswordHash:string; sessionSecret:string; adminUser:string; baiduMapAk?:string; baiduMapHosts?:string; }
 export interface Services { db:Database; media:Storage; assets:{fetch(request:Request):Promise<Response>}; config:Config; }
 export const identifier=(name:string)=>{if(!/^[a-zA-Z_][a-zA-Z0-9_]*$/.test(name))throw Error('Invalid identifier');return '`'+name+'`';};

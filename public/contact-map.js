@@ -4,6 +4,12 @@
     var config = document.getElementById('site-map-config');
     if (!target || !config) return;
     var data = JSON.parse(config.textContent);
+    // Match the provider's Referer configuration. Alias/preview domains that
+    // have not been authorized keep contact guidance without invoking its SDK.
+    if (!data.hosts.includes(window.location.hostname)) {
+        target.setAttribute('data-map-state', 'unavailable');
+        return;
+    }
     var finished = false;
     var initialized = false;
     var timer;

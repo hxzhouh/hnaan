@@ -63,6 +63,7 @@ jobs:
       CLOUDFLARE_ACCOUNT_ID: ${{ vars.CLOUDFLARE_ACCOUNT_ID }}
       SITE_URL: ${{ vars.CLOUDFLARE_SITE_URL }}
       BAIDU_MAP_AK: ${{ secrets.BAIDU_MAP_AK }}
+      BAIDU_MAP_HOSTS: ${{ vars.BAIDU_MAP_HOSTS }}
     steps:
       - uses: actions/checkout@d23441a48e516b6c34aea4fa41551a30e30af803 # v6
       - uses: actions/setup-node@249970729cb0ef3589644e2896645e5dc5ba9c38 # v6
@@ -74,7 +75,7 @@ jobs:
       - name: Deploy website
         run: |
           if [ -n "$BAIDU_MAP_AK" ]; then
-            npm run deploy -- --var "BAIDU_MAP_AK:$BAIDU_MAP_AK"
+            npm run deploy -- --var "BAIDU_MAP_AK:$BAIDU_MAP_AK" --var "BAIDU_MAP_HOSTS:${BAIDU_MAP_HOSTS:-}"
           else
             npm run deploy
           fi

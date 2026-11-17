@@ -121,7 +121,8 @@ export async function renderSite(request:Request,services:Services){
  html=html.replace('</body>',`<a class="site-language" href="${escapeHTML(other)}" lang="${locale==='en'?'zh-CN':'en'}">${locale==='en'?'简体中文':'English'}</a>${fallback?'<div class="translation-notice">English translation is being prepared. This page currently shows the Chinese original.</div>':''}</body>`);
  if(['Page_contact','Page_ziyuan'].includes(template)){
   const mapConfig=locale==='en'?{...cfg,site_name:englishPlainText(String(cfg.site_name||''),String(cfg['ui.en']||'')),address:englishPlainText(String(cfg.address||''),String(cfg['ui.en']||''))}:cfg;
-  html=attachContactMap(html,services.config.baiduMapAk,mapConfig,locale);
+  const hosts=services.config.baiduMapHosts?.split(',').map(host=>host.trim().toLowerCase()).filter(Boolean);
+  html=attachContactMap(html,services.config.baiduMapAk,mapConfig,locale,hosts?.length?hosts:[new URL(services.config.siteUrl).hostname]);
  }
  return new Response(html,{headers:{'content-type':'text/html; charset=utf-8','content-language':locale,'cache-control':'no-store','vary':'User-Agent','x-content-type-options':'nosniff','referrer-policy':'strict-origin-when-cross-origin'}});
 }

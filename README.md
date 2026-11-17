@@ -43,7 +43,7 @@ npm run deploy
 
 `hnaan.cn` 的 DNS 已由 Cloudflare 托管，注册商保持原有设置。根域名和 `www.hnaan.cn` 通过 `wrangler.jsonc` 绑定同一个 Worker，规范地址为 `https://hnaan.cn`；原 workers.dev 地址保留。联系页与资源页通过环境配置 `BAIDU_MAP_AK` 异步加载百度地图，使用原有 BD-09 公司坐标，保留公司地址、电话与原导航入口。中英文地图信息窗口使用对应语言。未配置 AK、网络失败或初始化超时时显示中英文联系方式提示。旧禁用 AK 和 v1.2 SDK 不再使用。在线客服和外部视频仍依赖其服务状态。
 
-百度地图 AK 在 GitHub 仓库 Secret `BAIDU_MAP_AK` 中配置，Actions 将其传入 Worker；本地可放入 `.dev.vars`，Node 部署可放入 `.env`。浏览器端 AK 会由地图 SDK 使用，不属于服务器密钥；请在百度控制台启用 JavaScript API，并将实际访问域名加入 Referer 白名单。该配置不改变地图服务的用途授权要求。直接使用 Wrangler 发布时，也需设置同名变量，例如 `npm run deploy -- --var "BAIDU_MAP_AK:$BAIDU_MAP_AK"`。
+百度地图 AK 在 GitHub 仓库 Secret `BAIDU_MAP_AK` 中配置，Actions 将其传入 Worker；本地可放入 `.dev.vars`，Node 部署可放入 `.env`。浏览器端 AK 会由地图 SDK 使用，不属于服务器密钥；请在百度控制台启用 JavaScript API，并将实际访问域名加入 Referer 白名单。`BAIDU_MAP_HOSTS` 指定已在百度授权的主机名（逗号分隔），GitHub Actions 使用同名仓库 Variable；未配置时仅使用 `SITE_URL` 的主机名。未授权的临时域名保留联系方式，不加载会弹窗的 SDK。该配置不改变地图服务的用途授权要求。直接使用 Wrangler 发布时，也需设置同名变量，例如 `npm run deploy -- --var "BAIDU_MAP_AK:$BAIDU_MAP_AK"`。
 
 ## Node.js + MySQL
 

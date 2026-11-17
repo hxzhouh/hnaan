@@ -33,10 +33,10 @@ test('map metadata cannot escape its JSON script and invalid coordinates keep th
  assert.equal(attachContactMap(html,'<script>',config,'en'),html);
 });
 
-function mapHarness(fail=false){
+function mapHarness(fail=false,hostname='example.test'){
  const nodes:any[]=[];let timeout:()=>void=()=>{};let timerCleared=false;let instance:any;
  const element=()=>({textContent:'',attrs:{}as Record<string,string>,children:[]as any[],setAttribute(k:string,v:string){this.attrs[k]=v;},appendChild(child:any){this.children.push(child);},remove(){}});
- const target=element();const config={textContent:JSON.stringify({ak:'testAk',longitude:112.884368,latitude:28.216214,name:'Company <HQ>',address:'Address',phone:'123',locale:'en'})};
+ const target=element();const config={textContent:JSON.stringify({ak:'testAk',longitude:112.884368,latitude:28.216214,name:'Company <HQ>',address:'Address',phone:'123',locale:'en',hosts:['example.test']})};
  class MapStub{
   point:any;zoom=0;overlays:any[]=[];info:any;events:any={};
   constructor(){if(fail)throw Error('Map initialization failed');instance=this;}
@@ -46,7 +46,7 @@ function mapHarness(fail=false){
   openInfoWindow(info:any){this.info=info;}
  }
  const document={getElementById:(id:string)=>id==='dituContent'?target:config,head:{appendChild:(node:any)=>nodes.push(node)},createElement:()=>element()};
- const window:any={BMap:{Map:MapStub,Point:class{constructor(public lng:number,public lat:number){}},Marker:class{addEventListener(){}},NavigationControl:class{},ScaleControl:class{},InfoWindow:class{constructor(public content:any){}}}};
+ const window:any={location:{hostname},BMap:{Map:MapStub,Point:class{constructor(public lng:number,public lat:number){}},Marker:class{addEventListener(){}},NavigationControl:class{},ScaleControl:class{},InfoWindow:class{constructor(public content:any){}}}};
  vm.runInNewContext(fs.readFileSync('public/contact-map.js','utf8'),{window,document,encodeURIComponent,setTimeout:(fn:()=>void)=>{timeout=fn;return 1;},clearTimeout:()=>{timerCleared=true;}});
  return {target,window,nodes,expire:()=>timeout(),get instance(){return instance;},get timerCleared(){return timerCleared;}};
 }
@@ -55,6 +55,9 @@ test('asynchronous SDK success restores the marker and safe company details',()=
  h.window.hnaanMapReady();assert.equal(h.target.attrs.role,'region');assert.equal(h.target.attrs['data-map-state'],'loading');assert.ok(!h.timerCleared);h.instance.events.tilesloaded();assert.equal(h.target.attrs['data-map-state'],'ready');assert.equal(h.instance.point.lng,112.884368);assert.equal(h.instance.point.lat,28.216214);assert.equal(h.instance.overlays.length,1);
  assert.equal(h.instance.info.content.children[0].textContent,'Company <HQ>');assert.equal(h.instance.info.content.children[1].textContent,'Address: Address');assert.ok(h.timerCleared);
  h.expire();assert.equal(h.target.attrs['data-map-state'],'ready');
+});
+test('unapproved preview domains keep contact guidance without requesting the SDK',()=>{
+ const h=mapHarness(false,'unapproved.example.test');assert.equal(h.nodes.length,0);assert.equal(h.target.attrs['data-map-state'],'unavailable');assert.equal(h.instance,undefined);
 });
 test('SDK network failures, timeouts and initialization errors retain nonblocking contact guidance',()=>{
  for(const failure of ['network','timeout','init','tiles']){

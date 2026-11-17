@@ -229,7 +229,7 @@ test('configured maps carry safe localized metadata on contact and resource page
   for(const prefix of ['','/en'])for(const mobile of [false,true])for(const route of ['/contact/','/ziyuan/']){
    const html=await(await fetchApplication(request(prefix+route+(mobile?'?phone=1':'')),mapped)).text();
    const json=html.match(/<script type="application\/json" id="site-map-config">([^<]*)<\/script>/)?.[1];assert.ok(json);
-   const data=JSON.parse(json);assert.equal(data.ak,mapped.config.baiduMapAk);assert.equal(data.longitude,112.884368);assert.equal(data.latitude,28.216214);
+   const data=JSON.parse(json);assert.equal(data.ak,mapped.config.baiduMapAk);assert.equal(data.longitude,112.884368);assert.equal(data.latitude,28.216214);assert.deepEqual(data.hosts,['example.test']);
    assert.equal(data.locale,prefix?'en':'zh-CN');assert.equal((html.match(/src="\/contact-map.js"/g)||[]).length,1);
    if(prefix){assert.ok(!/[\u3400-\u9fff]/.test(data.name+data.address));assert.match(data.address,/229 Guyuan Road/);}
   }

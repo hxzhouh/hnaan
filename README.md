@@ -45,6 +45,8 @@ npm run deploy
 
 百度地图 AK 在 GitHub 仓库 Secret `BAIDU_MAP_AK` 中配置，Actions 将其传入 Worker；本地可放入 `.dev.vars`，Node 部署可放入 `.env`。浏览器端 AK 会由地图 SDK 使用，不属于服务器密钥；请在百度控制台启用 JavaScript API，并将实际访问域名加入 Referer 白名单。`BAIDU_MAP_HOSTS` 指定已在百度授权的主机名（逗号分隔），GitHub Actions 使用同名仓库 Variable；未配置时仅使用 `SITE_URL` 的主机名。未授权的临时域名保留联系方式，不加载会弹窗的 SDK。该配置不改变地图服务的用途授权要求。直接使用 Wrangler 发布时，也需设置同名变量，例如 `npm run deploy -- --var "BAIDU_MAP_AK:$BAIDU_MAP_AK"`。
 
+Cloudflare 入口在访问正式域名的 HTTP 地址时返回 308 永久跳转，保留原主机名（包含 www）、路径、查询参数及请求方法，目标为 HTTPS。规则根据 `SITE_URL` 的 HTTPS 主机名及其 www 形式确定范围，在读取数据库或静态资源前执行；本地开发不受影响。迁移到 Node 服务时，HTTPS 与对应跳转由前置 TLS 代理配置。
+
 ## Node.js + MySQL
 
 创建一个空的 MySQL 数据库，配置 `.env`：

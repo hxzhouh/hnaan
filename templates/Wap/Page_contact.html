@@ -39,26 +39,13 @@
 					.dituing img{max-width:none;max-height:none;}
 				</style>
 				<div class="dituing">
-					<script type="text/javascript" src="https://api.map.baidu.com/api?v=3.0&ak=0BtPf2pDiTIGxnPC7PQw2vqgCLWoGGFV&callback=map_init&s=1"></script>
 
 
-					<div id="dituContent" style="width:100%;height:350px;border:#ccc solid 1px;font-size:12px;">
-					</div>
 
-					<script>
-						// loadContactMap('dituContent', '{$site_name}', '{$address}', '{$tel}', '{$baiduxy}'.split(',')[0], '{$baiduxy}'.split(',')[1]);
-					</script>
-					 <script type="text/javascript">
-                        function map_init() {
-                            var markerArr = [{
-                                title: { name: '公司', value: "{$site_name}" },
-                                point: { name: '坐标', value: "{$baiduxy}" },
-                                address: { name: '地址', value: "{$address}" },
-                                tel: { name: '电话', value: "{$phone}" }
-                            },];
-                            map = new BMap.Map('dituContent'); map.centerAndZoom(new BMap.Point(<php> echo $baiduxy </php>), 15); loadContactMap('dituContent', markerArr, map);
-                        }
-                    </script>
+					<div id="dituContent" style="width:100%;height:350px;border:#ccc solid 1px;font-size:12px;" role="status">{$map_unavailable}</div>
+
+
+
 				</div>
 			</div>
 			<!--联系方式-->
@@ -100,7 +87,7 @@
 						</div>
 						<div class="clear"></div>
 					</li>
-				
+
 				</ul>
 			</div>
 		</div>

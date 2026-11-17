@@ -81,6 +81,9 @@ export async function renderSite(request:Request,services:Services){
   }else{Object.assign(c,record);c.seo_title=record.title;c.module_name=entity[0].toUpperCase()+entity.slice(1);template=c.module_name+'_'+((record.template&&record.template!=='0'?record.template:'')||cat.template_show||'show');}
  }
  c.catid=Number(cat?.id||0);c.arrchildid=cat?.arrchildid||'';
+ // The imported Baidu applications are unavailable. Keep contact information usable
+ // without executing an SDK that raises blocking authorization dialogs.
+ c.map_unavailable=locale==='en'?'Map unavailable. Please use the contact details on this page.':'地图暂时无法加载，请查看页面上的联系方式。';
  const view=mobile?'Wap':'Home';
  const fns=templates as Record<string,(c:Row,m:any,h:any)=>Promise<string>>;
  const get=(v:any,k:any)=>v?.[k]??'';

@@ -210,3 +210,13 @@ test('English title searches count and select published translations without lea
   await db.run('UPDATE cms_translations SET published=0 WHERE entity=? AND entity_id=?',[entity,590021]);assert.equal(await search('en','Harbor').count(),0);
  }
 });
+
+test('disabled Baidu integrations render nonblocking localized contact guidance without loading SDKs',async()=>{
+ for(const locale of ['','/en'])for(const mobile of [false,true])for(const path of ['/contact/','/ziyuan/']){
+  const response=await fetchApplication(request(locale+path+(mobile?'?phone=1':'')),services);assert.equal(response.status,200);const html=await response.text();
+  assert.ok(!/<script[^>]+src=["'][^"']*api\.map\.baidu\.com/i.test(html));assert.ok(!html.includes('0BtPf2pDiTIGxnPC7PQw2vqgCLWoGGFV'));assert.ok(!html.includes('new BMap.Map'));
+  assert.match(html,/id="dituContent"[^>]*role="status"|role="status"[^>]*id="dituContent"/);
+  assert.ok(html.includes(locale?'Map unavailable. Please use the contact details on this page.':'地图暂时无法加载，请查看页面上的联系方式。'));
+  if(path==='/contact/')assert.ok(html.includes(mobile?'https://map.baidu.com/mobile/webapp/place/detail/':'https://j.map.baidu.com/lQjh2'),path);
+ }
+});

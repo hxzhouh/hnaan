@@ -115,16 +115,10 @@
     </style>
     <div class="zt-ditu">
 
-            <script type="text/javascript" src="http://api.map.baidu.com/api?v=1.2"></script>
-        <div class="zt-ditu-in" id="dituContent">
-            </div>
-            <!--<div style="width:673px;height:478px;border:#ccc solid 1px;" id="dituContent"></div>-->
-            <script type="text/javascript" >
-                //创建和初始化地图函数：
 
-                loadContactMap('dituContent', '{$site_name}', '{$address}', '{$tel}', '{$baiduxy}'.split(',')[0], '{$baiduxy}'.split(',')[1]);
+        <div class="zt-ditu-in" id="dituContent" role="status">{$map_unavailable}</div>
+            <!--<div style="width:673px;height:478px;border:#ccc solid 1px;" id="dituContent" role="status">{$map_unavailable}</div>-->
 
-            </script>
 
         <div class="zt-ditu-left">
             <h4>联系方法</h4>

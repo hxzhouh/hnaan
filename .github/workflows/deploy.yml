@@ -62,6 +62,7 @@ jobs:
       CLOUDFLARE_API_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}
       CLOUDFLARE_ACCOUNT_ID: ${{ vars.CLOUDFLARE_ACCOUNT_ID }}
       SITE_URL: ${{ vars.CLOUDFLARE_SITE_URL }}
+      BAIDU_MAP_AK: ${{ secrets.BAIDU_MAP_AK }}
     steps:
       - uses: actions/checkout@d23441a48e516b6c34aea4fa41551a30e30af803 # v6
       - uses: actions/setup-node@249970729cb0ef3589644e2896645e5dc5ba9c38 # v6
@@ -70,6 +71,12 @@ jobs:
           cache: npm
       - run: npm ci
       - run: npm run db:remote
-      - run: npm run deploy
+      - name: Deploy website
+        run: |
+          if [ -n "$BAIDU_MAP_AK" ]; then
+            npm run deploy -- --var "BAIDU_MAP_AK:$BAIDU_MAP_AK"
+          else
+            npm run deploy
+          fi
       - name: Verify deployment
         run: curl --fail --retry 5 --retry-all-errors --retry-delay 5 --retry-max-time 90 --connect-timeout 10 --max-time 20 "${SITE_URL%/}/healthz"

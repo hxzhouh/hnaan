@@ -5,6 +5,7 @@ import type { Row, Services } from './ports';
 import { cleanHTML,cleanInlineHTML } from './api';
 import {localizeMarketingGraphics} from './english-media';
 import mediaDimensions from './generated/media-dimensions.json';
+import {attachContactMap} from './contact-map';
 
 export function legacyCut(value:unknown,length:number){const s=String(value||'');if(new TextEncoder().encode(s).length<=length)return s;let out='',width=0;for(const ch of s){const w=ch.codePointAt(0)!>127?2:1;if(width+w>length)break;out+=ch;width+=w;}return out.length<s.length?out+'...':out;}
 export function dateFormat(format:string,timestamp:unknown){const d=new Date(Number(timestamp)*1000+8*3600000);if(!Number.isFinite(d.getTime()))return '';const p=(n:number)=>String(n).padStart(2,'0');return format.replace(/[YmdHis]/g,k=>({Y:String(d.getUTCFullYear()),m:p(d.getUTCMonth()+1),d:p(d.getUTCDate()),H:p(d.getUTCHours()),i:p(d.getUTCMinutes()),s:p(d.getUTCSeconds())}[k]!));}
@@ -81,8 +82,7 @@ export async function renderSite(request:Request,services:Services){
   }else{Object.assign(c,record);c.seo_title=record.title;c.module_name=entity[0].toUpperCase()+entity.slice(1);template=c.module_name+'_'+((record.template&&record.template!=='0'?record.template:'')||cat.template_show||'show');}
  }
  c.catid=Number(cat?.id||0);c.arrchildid=cat?.arrchildid||'';
- // The imported Baidu applications are unavailable. Keep contact information usable
- // without executing an SDK that raises blocking authorization dialogs.
+ // Keep contact guidance visible until a configured SDK finishes loading.
  c.map_unavailable=locale==='en'?'Map unavailable. Please use the contact details on this page.':'地图暂时无法加载，请查看页面上的联系方式。';
  const view=mobile?'Wap':'Home';
  const fns=templates as Record<string,(c:Row,m:any,h:any)=>Promise<string>>;
@@ -119,6 +119,10 @@ export async function renderSite(request:Request,services:Services){
  html=html.replace('</head>',seo+'</head>');
  const other=(locale==='en'?pathname:'/en'+pathname)+url.search;
  html=html.replace('</body>',`<a class="site-language" href="${escapeHTML(other)}" lang="${locale==='en'?'zh-CN':'en'}">${locale==='en'?'简体中文':'English'}</a>${fallback?'<div class="translation-notice">English translation is being prepared. This page currently shows the Chinese original.</div>':''}</body>`);
+ if(['Page_contact','Page_ziyuan'].includes(template)){
+  const mapConfig=locale==='en'?{...cfg,site_name:englishPlainText(String(cfg.site_name||''),String(cfg['ui.en']||'')),address:englishPlainText(String(cfg.address||''),String(cfg['ui.en']||''))}:cfg;
+  html=attachContactMap(html,services.config.baiduMapAk,mapConfig,locale);
+ }
  return new Response(html,{headers:{'content-type':'text/html; charset=utf-8','content-language':locale,'cache-control':'no-store','vary':'User-Agent','x-content-type-options':'nosniff','referrer-policy':'strict-origin-when-cross-origin'}});
 }
 import uiDictionary from './generated/ui-en.json';
@@ -133,6 +137,12 @@ function compileEnglishUI(value:string){
  return {value,dict,pattern,script};
 }
 let compiledUI:ReturnType<typeof compileEnglishUI>|undefined;
+function englishPlainText(text:string,value:string){
+ if(!compiledUI||compiledUI.value!==value)compiledUI=compileEnglishUI(value);
+ const {dict,pattern}=compiledUI;
+ if(pattern)for(let i=0;i<2;i++)text=text.replace(pattern,key=>dict[key.replace(/\s+/g,' ')]??key);
+ return text;
+}
 export async function englishHTML(html:string,services:Services,prefetchedValue?:string){
  const custom=prefetchedValue===undefined?(await services.db.all('SELECT value FROM cms_settings WHERE name=?',['ui.en']))[0]:undefined;
  const value=prefetchedValue??String(custom?.value||'');

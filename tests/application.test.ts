@@ -220,3 +220,19 @@ test('disabled Baidu integrations render nonblocking localized contact guidance 
   if(path==='/contact/')assert.ok(html.includes(mobile?'https://map.baidu.com/mobile/webapp/place/detail/':'https://j.map.baidu.com/lQjh2'),path);
  }
 });
+
+test('configured maps carry safe localized metadata on contact and resource pages only',async()=>{
+ const mapped={...services,config:{...services.config,baiduMapAk:'browserAkForUnitTests1234567890'}};
+ await db.run("INSERT INTO jzw_config (varname,value,lang) VALUES ('baiduxy','112.884368,28.216214',1)");
+ await db.run("INSERT INTO jzw_config (varname,value,lang) VALUES ('address','长沙高新开发区谷苑路229号海凭园2栋3层316号',1)");
+ try{
+  for(const prefix of ['','/en'])for(const mobile of [false,true])for(const route of ['/contact/','/ziyuan/']){
+   const html=await(await fetchApplication(request(prefix+route+(mobile?'?phone=1':'')),mapped)).text();
+   const json=html.match(/<script type="application\/json" id="site-map-config">([^<]*)<\/script>/)?.[1];assert.ok(json);
+   const data=JSON.parse(json);assert.equal(data.ak,mapped.config.baiduMapAk);assert.equal(data.longitude,112.884368);assert.equal(data.latitude,28.216214);
+   assert.equal(data.locale,prefix?'en':'zh-CN');assert.equal((html.match(/src="\/contact-map.js"/g)||[]).length,1);
+   if(prefix){assert.ok(!/[\u3400-\u9fff]/.test(data.name+data.address));assert.match(data.address,/229 Guyuan Road/);}
+  }
+  assert.ok(!(await(await fetchApplication(request('/'),mapped)).text()).includes('site-map-config'));
+ }finally{await db.run("DELETE FROM jzw_config WHERE varname IN ('baiduxy','address')");}
+});
